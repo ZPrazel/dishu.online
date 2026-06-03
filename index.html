@@ -3,207 +3,313 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>地书 · dishu.online</title>
+<title>地书 · 知识库</title>
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  
   :root {
-    --bg: #faf8f5;
+    --bg: #faf8f3;
+    --card-bg: #fffef9;
     --text: #2c2416;
-    --muted: #8c8273;
-    --accent: #c7512e;
-    --card-bg: #fff;
-    --border: #e8e2d5;
+    --text-soft: #6b5e4a;
+    --accent: #8b5e3c;
+    --gold: #b8860b;
+    --border: #e5ddd0;
+    --shadow: 0 1px 4px rgba(0,0,0,.05);
+    --shadow-hover: 0 8px 30px rgba(0,0,0,.10);
+    --radius: 12px;
   }
 
+  *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+
   body {
-    font-family: "PingFang SC", "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+    font-family: "Noto Serif SC", "Source Han Serif SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.8;
+    line-height: 1.7;
     min-height: 100vh;
   }
 
-  .container {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 0 24px;
+  /* ── Background texture ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(184,134,11,0.03) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(139,94,60,0.03) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
   }
 
-  /* Hero */
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ── Hero ── */
   .hero {
-    padding: 120px 0 60px;
     text-align: center;
+    padding: 80px 0 48px;
+  }
+  .hero .mark {
+    display: inline-block;
+    font-size: 13px;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 3px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.1s ease-out forwards;
   }
   .hero h1 {
-    font-size: clamp(48px, 8vw, 80px);
+    font-size: clamp(36px, 6vw, 56px);
     font-weight: 400;
-    letter-spacing: 0.15em;
-    color: var(--text);
-    margin-bottom: 12px;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s ease-out forwards;
   }
-  .hero .subtitle {
-    font-size: 18px;
-    color: var(--muted);
+  .hero .sub {
+    font-size: 16px;
+    color: var(--text-soft);
     letter-spacing: 0.05em;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.3s ease-out forwards;
   }
-  .hero .domain-line {
-    margin-top: 16px;
-    font-size: 14px;
+  .hero .domain {
+    margin-top: 12px;
+    font-size: 13px;
     color: var(--accent);
     letter-spacing: 0.08em;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.35s ease-out forwards;
   }
 
-  /* Divider */
-  .divider {
-    width: 40px;
-    height: 1px;
-    background: var(--border);
-    margin: 0 auto 48px;
+  /* ── Stats row ── */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    padding: 24px 0 48px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.4s ease-out forwards;
   }
+  .stat { text-align: center; }
+  .stat .num { font-size: 28px; font-weight: 600; color: var(--accent); }
+  .stat .lbl { font-size: 12px; color: var(--text-soft); letter-spacing: 0.1em; margin-top: 4px; }
 
-  /* Section */
-  section {
-    margin-bottom: 64px;
-  }
-  section h2 {
-    font-size: 14px;
-    font-weight: 400;
-    text-transform: uppercase;
+  /* ── Section ── */
+  .section-title {
+    font-size: 13px;
     letter-spacing: 0.2em;
-    color: var(--muted);
-    margin-bottom: 20px;
+    color: var(--text-soft);
+    margin-bottom: 24px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    text-transform: uppercase;
   }
 
-  /* Cards */
+  /* ── Card Grid ── */
   .card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
     gap: 16px;
+    padding-bottom: 80px;
   }
   .card {
+    display: block;
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 24px;
-    transition: border-color 0.2s;
+    border-radius: var(--radius);
+    padding: 28px 24px 24px;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1.2);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.5s ease-out forwards;
+  }
+  .card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    border: 1px solid transparent;
+    transition: border-color 0.3s;
   }
   .card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+  }
+  .card:hover::after {
     border-color: var(--accent);
   }
   .card .icon {
-    font-size: 28px;
-    margin-bottom: 12px;
+    font-size: 32px;
+    margin-bottom: 14px;
+    display: block;
+    transition: transform 0.3s;
+  }
+  .card:hover .icon {
+    transform: scale(1.1);
   }
   .card h3 {
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 17px;
+    font-weight: 600;
     margin-bottom: 6px;
+    letter-spacing: 0.03em;
   }
-  .card p {
-    font-size: 14px;
-    color: var(--muted);
+  .card .desc {
+    font-size: 13px;
+    color: var(--text-soft);
     line-height: 1.6;
   }
+  .card .tags {
+    margin-top: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
   .card .tag {
-    display: inline-block;
-    margin-top: 10px;
     font-size: 11px;
     color: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 2px;
-    padding: 2px 8px;
-    letter-spacing: 0.05em;
+    background: rgba(139,94,60,0.06);
+    padding: 2px 10px;
+    border-radius: 10px;
+    letter-spacing: 0.04em;
   }
 
-  /* Footer */
+  /* ── Staggered delays ── */
+  .card:nth-child(1) { animation-delay: 0.15s; }
+  .card:nth-child(2) { animation-delay: 0.20s; }
+  .card:nth-child(3) { animation-delay: 0.25s; }
+  .card:nth-child(4) { animation-delay: 0.30s; }
+  .card:nth-child(5) { animation-delay: 0.35s; }
+  .card:nth-child(6) { animation-delay: 0.40s; }
+  .card:nth-child(7) { animation-delay: 0.45s; }
+  .card:nth-child(8) { animation-delay: 0.50s; }
+  .card:nth-child(9) { animation-delay: 0.55s; }
+
+  /* ── Footer ── */
   footer {
-    padding: 48px 0;
     text-align: center;
-    font-size: 13px;
-    color: var(--muted);
+    padding: 40px 0;
+    font-size: 12px;
+    color: var(--text-soft);
+    opacity: 0.6;
   }
-  footer a {
-    color: var(--accent);
-    text-decoration: none;
-  }
-  footer a:hover {
-    text-decoration: underline;
+  footer a { color: var(--accent); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  .quote {
-    font-style: italic;
-    color: var(--muted);
-    margin-bottom: 12px;
-  }
-
-  /* Responsive */
-  @media (max-width: 480px) {
-    .hero { padding: 80px 0 40px; }
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .hero { padding: 48px 0 32px; }
+    .stats { gap: 28px; }
     .card-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<main class="container">
+<div class="container">
 
   <!-- Hero -->
   <header class="hero">
-    <h1>地 书</h1>
-    <p class="subtitle">大地上的书写 · 数字中的诗意</p>
-    <p class="domain-line">dishu.online</p>
+    <div class="mark">dishu.online</div>
+    <h1>地书 · 知识库</h1>
+    <p class="sub">大地上的书写，数字中的沉淀</p>
+    <p class="domain">个人知识体系 · 持续生长中</p>
   </header>
 
-  <div class="divider"></div>
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat"><div class="num">9</div><div class="lbl">知识领域</div></div>
+    <div class="stat"><div class="num" style="color:var(--gold);">∞</div><div class="lbl">持续更新</div></div>
+  </div>
 
-  <!-- What -->
-  <section>
-    <h2>关于</h2>
-    <p style="font-size:16px; color:var(--muted); max-width:560px;">
-      这里收集那些<strong style="color:var(--text);">用代码和机器写在大地上的诗</strong>——
-      AI生成的图像、3D打印的触感、以及每日值得被记录的世界切片。
-    </p>
-  </section>
+  <!-- Articles -->
+  <div class="section-title">🧠 认知与技术</div>
+  <div class="card-grid">
+    <a href="kb/world-sense.html" class="card">
+      <span class="icon">🌍</span>
+      <h3>世界运行常识</h3>
+      <p class="desc">政治、经济、历史的底层逻辑框架——一个关于世界如何运行的入门地图</p>
+      <div class="tags"><span class="tag">常识</span><span class="tag">政治经济</span></div>
+    </a>
+    <a href="kb/ai-overview.html" class="card">
+      <span class="icon">🧠</span>
+      <h3>AI 全景图谱</h3>
+      <p class="desc">从算法原理到产业格局，从宏观趋势到技术细节的完整通识</p>
+      <div class="tags"><span class="tag">人工智能</span><span class="tag">通识</span></div>
+    </a>
+    <a href="kb/ai-agent.html" class="card">
+      <span class="icon">🤖</span>
+      <h3>AI Agent 入门</h3>
+      <p class="desc">理解智能体的架构、协作模式与未来——从 Hermes 到 QwenPaw</p>
+      <div class="tags"><span class="tag">Agent</span><span class="tag">技术</span></div>
+    </a>
+  </div>
 
-  <!-- Projects -->
-  <section>
-    <h2>正在做的事</h2>
-    <div class="card-grid">
+  <div class="section-title">📜 人文与地理</div>
+  <div class="card-grid">
+    <a href="kb/history-geo.html" class="card">
+      <span class="icon">🏯</span>
+      <h3>中国历史地理</h3>
+      <p class="desc">理解脚下这片土地的时空脉络——从王朝更迭到山河变迁</p>
+      <div class="tags"><span class="tag">历史</span><span class="tag">地理</span></div>
+    </a>
+    <a href="kb/artifacts.html" class="card">
+      <span class="icon">🏺</span>
+      <h3>器物志</h3>
+      <p class="desc">博物馆、文物与古建入门指南——读懂沉默千年的叙事</p>
+      <div class="tags"><span class="tag">文物</span><span class="tag">古建筑</span></div>
+    </a>
+    <a href="kb/travel.html" class="card">
+      <span class="icon">✈️</span>
+      <h3>全国旅行入门</h3>
+      <p class="desc">从规划到出发的实用指南——路线、季节、预算全覆盖</p>
+      <div class="tags"><span class="tag">旅行</span><span class="tag">攻略</span></div>
+    </a>
+  </div>
 
-      <div class="card">
-        <div class="icon">🎨</div>
-        <h3>AI 生图</h3>
-        <p>Stability AI 驱动的图像创作，探索算法与美学的边界。</p>
-        <span class="tag">创作中</span>
-      </div>
+  <div class="section-title">⚡ 身体与自然</div>
+  <div class="card-grid">
+    <a href="kb/combat.html" class="card">
+      <span class="icon">🥋</span>
+      <h3>格斗修炼手册</h3>
+      <p class="desc">从体能基础到技术体系的系统训练路径</p>
+      <div class="tags"><span class="tag">格斗</span><span class="tag">训练</span></div>
+    </a>
+    <a href="kb/outdoor.html" class="card">
+      <span class="icon">🏕️</span>
+      <h3>户外手册</h3>
+      <p class="desc">自驾、野炊、垂钓实战指南——从装备选择到野外生存</p>
+      <div class="tags"><span class="tag">户外</span><span class="tag">自驾</span></div>
+    </a>
+    <a href="kb/fluid-mechanics.html" class="card">
+      <span class="icon">🌊</span>
+      <h3>流体力学认知地图</h3>
+      <p class="desc">从基础理论到工程应用的学科全景——理解流动的世界</p>
+      <div class="tags"><span class="tag">物理</span><span class="tag">工程</span></div>
+    </a>
+  </div>
 
-      <div class="card">
-        <div class="icon">🖨️</div>
-        <h3>3D 打印</h3>
-        <p>从像素到触感——AI生成的画面变成可以触摸的板画与浮雕。</p>
-        <span class="tag">实验中</span>
-      </div>
-
-      <div class="card">
-        <div class="icon">📰</div>
-        <h3>浮生通讯</h3>
-        <p>AI记者、编辑、总编协作的个人新闻简报，读懂世界发生了什么。</p>
-        <span class="tag">连载中</span>
-      </div>
-
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- Quote -->
   <footer>
-    <p class="quote">"大地不言，写字的人替它说话。"</p>
-    <p>&copy; 2026 <a href="https://github.com/ZPrazel">ZPrazel</a> · dishu.online</p>
+    <p>© 2026 <a href="https://github.com/ZPrazel">ZPrazel</a> · 地书知识库 · 持续生长中</p>
   </footer>
 
-</main>
+</div>
 
 </body>
 </html>

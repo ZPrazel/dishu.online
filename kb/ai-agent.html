@@ -1,0 +1,771 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Agent 入门 — 本地Agent vs 网页聊天 · MCP/Skill/CLI 科普 · 三大Agent对比</title>
+<style>
+:root {
+  --bg: #f7f8fa; --bg2: #fff; --bg3: #eef1f5; --card: #fff;
+  --border: #dde1e8; --text: #2c3038; --text2: #5f6570;
+  --accent: #2563eb; --accent2: #7c3aed; --accent3: #059669;
+  --accent4: #dc2626; --gold: #b45309; --radius: 10px; --radius-sm: 6px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-hover: 0 4px 16px rgba(0,0,0,.08);
+  --nav-w: 220px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; font-size:16px; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  line-height:1.8; overflow-x:hidden;
+}
+
+/* ====== SIDEBAR NAV ====== */
+.sidebar {
+  position:fixed; top:0; left:0; width:var(--nav-w); height:100vh;
+  background:var(--bg2); border-right:1px solid var(--border);
+  z-index:200; overflow-y:auto; overflow-x:hidden;
+  display:flex; flex-direction:column; padding:20px 0;
+}
+.side-logo {
+  padding:8px 20px 20px; font-weight:800; font-size:1rem;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  border-bottom:1px solid var(--border); margin-bottom:8px;
+}
+.side-group { padding:8px 0; }
+.side-group-title {
+  font-size:0.7rem; font-weight:700; color:var(--text2); text-transform:uppercase;
+  letter-spacing:.06em; padding:4px 20px 6px;
+}
+.side-a {
+  display:block; padding:6px 20px; font-size:0.82rem; color:var(--text2);
+  text-decoration:none; border-left:3px solid transparent; transition:all .15s;
+}
+.side-a:hover { color:var(--accent); background:rgba(37,99,235,.06); border-left-color:var(--accent); }
+
+/* ====== MAIN CONTENT ====== */
+main { margin-left:var(--nav-w); padding:0 40px; max-width:1000px; }
+
+.hero { padding:72px 0 48px; }
+.hero h1 { font-size:clamp(1.8rem,4vw,2.6rem); font-weight:900; letter-spacing:-0.02em; margin-bottom:10px; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.hero .sub { font-size:1rem; color:var(--text2); max-width:660px; margin-bottom:24px; }
+.hero-badges { display:flex; gap:8px; flex-wrap:wrap; }
+.badge { padding:4px 14px; border-radius:18px; font-size:0.78rem; border:1px solid var(--border); color:var(--text2); background:var(--bg2); box-shadow:var(--shadow); }
+
+.section { padding:52px 0; }
+.sec-title { font-size:clamp(1.3rem,3vw,1.6rem); font-weight:800; margin-bottom:6px; color:var(--text); display:flex; align-items:center; gap:8px; }
+.sec-num { display:inline-flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; font-size:0.85rem; font-weight:800; flex-shrink:0; }
+.sec-desc { color:var(--text2); margin-bottom:28px; font-size:0.9rem; max-width:700px; }
+.sec-title-sm { color:var(--text); font-size:1.05rem; font-weight:700; margin:32px 0 12px; padding-left:12px; border-left:3px solid var(--accent); }
+
+.card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:14px; }
+.card-grid-2 { display:grid; grid-template-columns:repeat(auto-fill, minmax(380px,1fr)); gap:14px; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); transition:all .2s; }
+.card:hover { box-shadow:var(--shadow-hover); transform:translateY(-1px); }
+.card-icon { font-size:1.6rem; margin-bottom:8px; display:block; }
+.card h3 { font-size:1rem; font-weight:700; margin-bottom:6px; color:var(--text); }
+.card p { font-size:0.85rem; color:var(--text2); line-height:1.6; }
+
+.tag { display:inline-block; padding:2px 10px; border-radius:12px; font-size:0.7rem; margin-top:6px; font-weight:600; }
+.tb { background:rgba(37,99,235,.1); color:var(--accent); }
+.tg { background:rgba(5,150,105,.1); color:var(--accent3); }
+.tp { background:rgba(124,58,237,.1); color:var(--accent2); }
+.tr { background:rgba(220,38,38,.1); color:var(--accent4); }
+.ty { background:rgba(180,83,9,.1); color:var(--gold); }
+
+/* Info box */
+.info-box { background:var(--bg3); border-left:3px solid var(--accent); border-radius:var(--radius-sm); padding:16px 20px; margin:20px 0; font-size:0.88rem; color:var(--text2); }
+.info-box strong { color:var(--accent); }
+
+/* Comparison table */
+.tbl-wrap { overflow-x:auto; margin:20px 0; }
+table { width:100%; border-collapse:collapse; font-size:0.85rem; background:var(--card); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow); }
+thead th { background:var(--bg3); text-align:left; padding:12px 14px; font-weight:700; font-size:0.78rem; color:var(--text2); text-transform:uppercase; letter-spacing:.04em; }
+thead th:first-child { border-radius:var(--radius) 0 0 0; }
+thead th:last-child { border-radius:0 var(--radius) 0 0; }
+tbody td { padding:11px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
+tbody tr:last-child td { border-bottom:none; }
+.col-label { font-weight:700; color:var(--text); white-space:nowrap; }
+td .yes { color:var(--accent3); font-weight:600; }
+td .no  { color:var(--accent4); }
+td .partial { color:var(--gold); font-weight:600; }
+
+/* Quote */
+blockquote {
+  margin:20px 0; padding:16px 20px; background:var(--bg3);
+  border-left:3px solid var(--accent2); border-radius:var(--radius-sm);
+  font-size:0.88rem; color:var(--text2); font-style:italic;
+}
+
+/* Paradigm diagram */
+.paradigm-grid {
+  display:grid; grid-template-columns:1fr 80px 1fr; gap:0;
+  margin:24px 0; align-items:center;
+}
+.paradigm-col { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+.paradigm-arrow { text-align:center; font-size:1.8rem; color:var(--accent2); font-weight:900; }
+.paradigm-col h4 { font-size:0.95rem; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.paradigm-col ul { font-size:0.82rem; color:var(--text2); padding-left:18px; line-height:1.8; }
+
+/* Flow cards */
+.flow-row { display:flex; gap:20px; flex-wrap:wrap; margin:20px 0; }
+.flow-step { flex:1; min-width:180px; text-align:center; padding:20px 14px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); }
+.flow-step-num { display:inline-flex; align-items:center; justify-content:center; width:36px; height:36px; border-radius:50%; background:var(--accent); color:#fff; font-weight:800; font-size:1rem; margin-bottom:8px; }
+.flow-step h4 { font-size:0.9rem; margin-bottom:4px; }
+.flow-step p { font-size:0.78rem; color:var(--text2); }
+
+/* Highlight box */
+.hl-box {
+  border:1px solid var(--border); border-radius:var(--radius); padding:24px;
+  background:linear-gradient(135deg, rgba(37,99,235,.03), rgba(124,58,237,.03));
+  margin:24px 0;
+}
+.hl-box h3 { font-size:1.05rem; margin-bottom:10px; }
+
+/* 响应式 */
+@media (max-width:768px) {
+  .sidebar { display:none; }
+  main { margin-left:0; padding:0 16px; }
+  .card-grid { grid-template-columns:1fr; }
+  .card-grid-2 { grid-template-columns:1fr; }
+  .paradigm-grid { grid-template-columns:1fr; }
+  .paradigm-arrow { transform:rotate(90deg); }
+}
+
+footer { padding:40px 0; border-top:1px solid var(--border); margin-top:40px; text-align:center; color:var(--text2); font-size:0.78rem; }
+</style>
+<style>
+.kb-back-btn {
+  position: fixed; bottom: 28px; left: 28px; z-index: 99999;
+  background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 24px; padding: 8px 18px;
+  font-size: 13px; color: #8b5e3c; text-decoration: none;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: all 0.25s; display: inline-flex; align-items: center; gap: 6px;
+  letter-spacing: 0.04em;
+}
+.kb-back-btn:hover {
+  background: rgba(255,255,255,1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+  border-color: rgba(139,94,60,0.4);
+}
+</style>
+</head>
+<body>
+<a href="../index.html" class="kb-back-btn">鈫?鐭ヨ瘑搴?/a>
+
+
+<!-- ====== SIDEBAR NAV ====== -->
+<nav class="sidebar">
+  <div class="side-logo">AI Agent 入门</div>
+  <div class="side-group">
+    <div class="side-group-title">核心概念</div>
+    <a class="side-a" href="#paradigm">范式革命：本地 vs 网页</a>
+    <a class="side-a" href="#concepts">MCP · Skill · CLI</a>
+    <a class="side-a" href="#mcp-deep">MCP 深度解释</a>
+    <a class="side-a" href="#skill-deep">Skill 深入理解</a>
+    <a class="side-a" href="#cli-deep">CLI 到底好在哪</a>
+  </div>
+  <div class="side-group">
+    <div class="side-group-title">三方对比</div>
+    <a class="side-a" href="#compare">Hermes · QwenPaw · Codex</a>
+    <a class="side-a" href="#hermes-detail">Hermes Agent</a>
+    <a class="side-a" href="#qwenpaw-detail">QwenPaw</a>
+    <a class="side-a" href="#codex-detail">Codex CLI</a>
+  </div>
+  <div class="side-group">
+    <div class="side-group-title">实践指南</div>
+    <a class="side-a" href="#attitude">前沿用户态度</a>
+    <a class="side-a" href="#workflow">典型工作流</a>
+    <a class="side-a" href="#verdict">选择建议</a>
+  </div>
+</nav>
+
+<!-- ====== MAIN CONTENT ====== -->
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>AI Agent 入门完全指南</h1>
+  <p class="sub">
+    从「和 AI 聊天」到「AI 替你干活」——理解本地 Agent 工具的范式革命。
+    一篇讲清楚：为什么它们和 ChatGPT 网页版不是一回事、MCP/Skill/CLI 到底是什么、
+    Hermes / QwenPaw / Codex 怎么选。
+  </p>
+  <div class="hero-badges">
+    <span class="badge">📅 2026年6月</span>
+    <span class="badge">🏷️ AI Agent</span>
+    <span class="badge">🔧 本地工具</span>
+    <span class="badge">🌐 MCP协议</span>
+    <span class="badge">⚡ CLI革命</span>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 第一部分：范式革命 -->
+<!-- ================================================================ -->
+<section class="section" id="paradigm">
+  <h2 class="sec-title"><span class="sec-num">1</span> 范式革命：本地 Agent vs 网页聊天</h2>
+  <p class="sec-desc">
+    理解这轮 AI 工具变革的关键，不在「模型更强了」，而在「模型能动手了」。
+  </p>
+
+  <div class="paradigm-grid">
+    <div class="paradigm-col">
+      <h4>🖥️ 传统网页聊天</h4>
+      <p style="font-size:0.8rem; color:var(--text2); margin-bottom:10px;">ChatGPT / 豆包 / Kimi / DeepSeek 网页版</p>
+      <ul>
+        <li><strong>只能聊，不能做。</strong>你问它答，对话结束就结束。</li>
+        <li><strong>无文件系统权限。</strong>它看不到你的文件夹，不能读你的代码项目，不能操作你的本地文件。</li>
+        <li><strong>无工具链。</strong>不能执行 shell 命令、不能控制浏览器、不能调用 API、不能定时任务。</li>
+        <li><strong>无记忆延续。</strong>每次新会话从零开始，你反复交代同样的上下文。</li>
+        <li><strong>你手动搬运。</strong>AI 给方案 → 你复制 → 粘贴到终端/编辑器 → 执行 → 报错 → 复制报错 → 贴回聊天框。循环往复。</li>
+      </ul>
+    </div>
+    <div class="paradigm-arrow">→</div>
+    <div class="paradigm-col">
+      <h4>🤖 本地 Agent 工具</h4>
+      <p style="font-size:0.8rem; color:var(--text2); margin-bottom:10px;">Hermes Agent / QwenPaw / Codex CLI</p>
+      <ul>
+        <li><strong>能聊，更能做。</strong>AI 直接读写文件、执行命令、操作浏览器、发消息。</li>
+        <li><strong>有完整文件系统权限。</strong>它「看到」你的项目结构，直接在正确的目录里操作。</li>
+        <li><strong>有工具链。</strong>Shell、浏览器、API 调用、截图、定时任务——就像一个真正的操作系统级助手。</li>
+        <li><strong>有持久记忆。</strong>跨会话记忆（MEMORY.md/AGENTS.md），不断积累对你的认知，越用越懂你。</li>
+        <li><strong>AI 自主闭环。</strong>给目标 → AI 规划 → 执行 → 读结果 → 修正 → 再执行 → 直到完成。你只需验收。</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box">
+    <strong>一句话总结：</strong>网页聊天是「我问你答的参谋」，本地 Agent 是「能动手的执行官」。
+    前者给你答案，后者替你干活。
+  </div>
+
+  <h3 class="sec-title-sm">为什么这是质的飞跃？</h3>
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">🔓</span>
+      <h3>打破「复制粘贴」循环</h3>
+      <p>Agent 直接在你的终端里执行命令，读到报错自己修正，不再需要你把报错贴回去。这是效率提升最大的来源。</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">📂</span>
+      <h3>上下文即项目</h3>
+      <p>Agent 可以看到你的整个项目目录结构，理解文件之间的关系。不需要你解释「我有个项目，目录是……」——它自己看。</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">⏰</span>
+      <h3>从同步到异步</h3>
+      <p>你可以给 Agent 一个任务然后去睡觉。它定时执行、后台运行、通过 Telegram 向你汇报进度。你不再需要「盯着它干活」。</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">🧠</span>
+      <h3>越用越聪明</h3>
+      <p>每次交互都被记录。它记住你的偏好、项目结构、常见问题。三个月后，它比你的新同事更了解你的工作方式。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 第二部分：MCP / Skill / CLI 概念科普 -->
+<!-- ================================================================ -->
+<section class="section" id="concepts">
+  <h2 class="sec-title"><span class="sec-num">2</span> 三个核心概念：MCP · Skill · CLI</h2>
+  <p class="sec-desc">
+    这些词在 Agent 圈高频出现。它们不是 buzzword，每一个都对应一种关键能力。
+  </p>
+
+  <!-- MCP -->
+  <div id="mcp-deep">
+  <h3 class="sec-title-sm">🔌 MCP（Model Context Protocol）— AI 的「万能插头」</h3>
+  <div class="card-grid-2">
+    <div class="card">
+      <span class="card-icon">📡</span>
+      <h3>MCP 是什么</h3>
+      <p>由 Anthropic 于 2024年底提出的<strong>开放协议</strong>，定义了 AI 模型与外部工具/数据源之间的标准通信方式。可以理解为 AI 界的 USB-C 接口——不管什么工具，只要实现 MCP 协议，任何支持 MCP 的 Agent 都能直接调用。</p>
+      <span class="tag tb">Anthropic 提出</span>
+      <span class="tag tp">开放标准</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔧</span>
+      <h3>MCP 解决了什么</h3>
+      <p>没有 MCP 之前，每个 AI 工具要接入外部系统（数据库、文件系统、API、浏览器）都得<strong>单独开发集成</strong>。MCP 统一了接口：工具开发者写一次 MCP Server，所有 Agent 都能用。Agent 开发者不需要为每个工具写胶水代码。</p>
+      <span class="tag tg">一次开发，到处使用</span>
+    </div>
+  </div>
+  <div class="info-box">
+    <strong>类比：</strong>MCP 之于 AI Agent，就像 HTTP 之于浏览器、USB 之于外设。它是一个<strong>中间层协议</strong>，让「AI 能调用什么」不再是每个 Agent 单独实现的封闭生态，而是一个开放的、可互操作的标准。
+  </div>
+  <div class="flow-row">
+    <div class="flow-step">
+      <div class="flow-step-num">1</div>
+      <h4>MCP Server</h4>
+      <p>任何人写一个 MCP Server，封装某个工具（如数据库查询、文件操作、浏览器控制）</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">2</div>
+      <h4>Agent 加载</h4>
+      <p>Hermes / QwenPaw / Codex 等 Agent 框架加载这个 MCP Server</p>
+    </div>
+    <div class="flow-step">
+      <div class="flow-step-num">3</div>
+      <h4>模型调用</h4>
+      <p>AI 模型通过 MCP 协议标准化地发现、调用该工具，与它交互</p>
+    </div>
+  </div>
+  <p style="font-size:0.82rem; color:var(--text2);">目前 Hermes 和 QwenPaw 均支持 MCP。Codex CLI 以自有工具为主。MCP 生态正在快速膨胀，GitHub 上已有数千个 MCP Server。</p>
+  </div>
+
+  <!-- Skill -->
+  <div id="skill-deep">
+  <h3 class="sec-title-sm">🛠️ Skill — AI 的「可复用技能包」</h3>
+  <div class="card-grid-2">
+    <div class="card">
+      <span class="card-icon">📦</span>
+      <h3>Skill 是什么</h3>
+      <p>Skill 是一个<strong>包含提示词和配置的模块化能力包</strong>。每个 Skill 对应一个特定领域的能力（如「写 Python」「用 Docker」「做数据分析」），Agent 在需要时加载对应 Skill，从而在该领域表现更好。</p>
+      <span class="tag tb">领域能力</span>
+      <span class="tag tp">模块化</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔄</span>
+      <h3>Skill vs MCP 的区别</h3>
+      <p><strong>MCP 是「连接外部工具」</strong>——让 AI 能调用数据库、浏览器、文件系统。<br>
+      <strong>Skill 是「增强内部能力」</strong>——让 AI 在某个领域更专业，通过专门的提示词、工作流、知识嵌入。两者互补：MCP 给手，Skill 给脑。</p>
+      <span class="tag tg">一个管外面，一个管里面</span>
+    </div>
+  </div>
+  <div class="info-box">
+    <strong>Hermes 的杀手特性：</strong>Hermes Agent 不仅是「使用」Skill，还会在完成复杂任务后<strong>自动创建新 Skill</strong>，并在后续使用中<strong>自我改进</strong>已有 Skill。这是它和三方中最独特的能力——「越用技能越多、越好」。
+  </div>
+  </div>
+
+  <!-- CLI -->
+  <div id="cli-deep">
+  <h3 class="sec-title-sm">⌨️ CLI（Command Line Interface）— Agent 的「原生界面」</h3>
+  <div class="card-grid-2">
+    <div class="card">
+      <span class="card-icon">💻</span>
+      <h3>CLI 不是倒退</h3>
+      <p>很多人问：为什么不用网页？<strong>恰恰相反</strong>——CLI（命令行界面）是 AI Agent 的<strong>最自然交互方式</strong>。原因很简单：Agent 需要在你的本地环境执行命令、读写文件、启动进程。CLI 直接运行在你的操作系统里，拥有完整的系统权限。网页做不到这些。</p>
+      <span class="tag tb">本地执行</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">⚡</span>
+      <h3>CLI 相比 GUI 的优势</h3>
+      <p>对 AI 而言，CLI 更高效：文本输入输出天然适合 LLM 处理；可以管道串联；可以脚本化；可以被 Agent 自己调用。一个 GUI 按钮对 AI 来说需要视觉识别+坐标点击，CLI 命令直接就是结构化文本。所以 <strong>CLI 不是给人类用的复古界面，是给 AI 用的原生界面</strong>。</p>
+      <span class="tag tg">AI Native</span>
+    </div>
+  </div>
+  <div class="info-box">
+    <strong>三者关系：</strong>
+    CLI 是 Agent 的<strong>运行环境</strong>（它在哪里执行），MCP 是 Agent 的<strong>外部接口</strong>（它怎么连接世界），Skill 是 Agent 的<strong>能力模块</strong>（它擅长什么）。一个完整的 Agent 体系 = CLI 环境 + MCP 连接 + Skill 能力 + LLM 大脑。
+  </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 第三部分：三大 Agent 对比 -->
+<!-- ================================================================ -->
+<section class="section" id="compare">
+  <h2 class="sec-title"><span class="sec-num">3</span> 三大 Agent 详细对比</h2>
+  <p class="sec-desc">
+    Hermes Agent · QwenPaw · Codex CLI —— 定位不同、生态不同、适合的人也不同。
+  </p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:16%">维度</th>
+        <th style="width:28%">🪽 Hermes Agent</th>
+        <th style="width:28%">🐾 QwenPaw</th>
+        <th style="width:28%">🔷 Codex CLI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-label">开发者</td>
+        <td><strong>Nous Research</strong><br><span style="font-size:0.75rem;color:var(--text2)">独立 AI 研究机构，以 Hermes 系列开源模型闻名</span></td>
+        <td><strong>agentscope-ai</strong><br><span style="font-size:0.75rem;color:var(--text2)">阿里通义生态，AgentScope 框架团队</span></td>
+        <td><strong>OpenAI</strong><br><span style="font-size:0.75rem;color:var(--text2)">ChatGPT 背后的公司</span></td>
+      </tr>
+      <tr>
+        <td class="col-label">GitHub</td>
+        <td><span class="yes">⭐ 177k</span> · Fork 30.3k</td>
+        <td><span class="partial">⭐ 17.2k</span> · Fork 2.6k</td>
+        <td><span class="yes">⭐ 88k</span> · Fork 12.9k</td>
+      </tr>
+      <tr>
+        <td class="col-label">许可协议</td>
+        <td><span class="yes">MIT</span>（最宽松）</td>
+        <td>Apache 2.0</td>
+        <td>Apache 2.0</td>
+      </tr>
+      <tr>
+        <td class="col-label">核心定位</td>
+        <td><strong>通用自我进化 AI 助手</strong><br>「会成长的 Agent」</td>
+        <td><strong>个人多 Agent 助手</strong><br>「Agent 之间的协作」</td>
+        <td><strong>纯代码 Agent</strong><br>「终端里的程序员」</td>
+      </tr>
+      <tr>
+        <td class="col-label">模型支持</td>
+        <td><span class="yes">模型无关</span>，200+ 模型<br>OpenRouter / Nous Portal / OpenAI / GLM / Kimi / MiniMax / NVIDIA NIM / 自建端点</td>
+        <td><span class="partial">通义/Qwen 生态为主</span><br>也支持 OpenAI 兼容 API</td>
+        <td><span class="no">绑定 ChatGPT 订阅</span><br>或 OpenAI API key</td>
+      </tr>
+      <tr>
+        <td class="col-label">自我学习</td>
+        <td><span class="yes">⭐ 闭环学习系统</span><br>自动从经验创建 Skill · Skill 使用中自我改进 · Honcho 用户建模 · 主动提醒保存记忆</td>
+        <td><span class="no">被动记忆</span><br>AGENTS.md / MEMORY.md 需人工或 Agent 手动更新</td>
+        <td><span class="no">无</span><br>无跨会话学习机制</td>
+      </tr>
+      <tr>
+        <td class="col-label">记忆系统</td>
+        <td>FTS5 全文搜索 + LLM 摘要 + Honcho 辩证用户模型 + 跨会话持久化</td>
+        <td>AGENTS.md · SOUL.md · PROFILE.md · MEMORY.md · memory/ 每日笔记</td>
+        <td>基础会话上下文</td>
+      </tr>
+      <tr>
+        <td class="col-label">多端覆盖</td>
+        <td>Telegram · Discord · Slack · WhatsApp · Signal · CLI · 桌面 App · Web UI</td>
+        <td>Telegram · Discord · CLI</td>
+        <td>CLI · 桌面 App · Web · VS Code / Cursor / Windsurf IDE 插件</td>
+      </tr>
+      <tr>
+        <td class="col-label">工具能力</td>
+        <td>60+ 内置工具 · MCP · Shell · 浏览器 · 截图 · 定时任务 · 子 Agent · 语音</td>
+        <td>Shell · 浏览器 · 截图 · 多 Agent 通信 · 后台任务 · Skills</td>
+        <td>Shell · Git · Sandbox 沙箱 · IDE 深度集成</td>
+      </tr>
+      <tr>
+        <td class="col-label">多 Agent</td>
+        <td>支持子 Agent 派发，但非原生核心</td>
+        <td><span class="yes">⭐ 原生多 Agent 架构</span><br>chat_with_agent · submit_to_agent · 流水线</td>
+        <td><span class="no">无</span></td>
+      </tr>
+      <tr>
+        <td class="col-label">部署方式</td>
+        <td>$5 VPS · GPU 集群 · Serverless（Daytona, Modal）· 本地</td>
+        <td>本地 · 云服务器 · Docker</td>
+        <td>本地为主（macOS/Linux/Windows）</td>
+      </tr>
+      <tr>
+        <td class="col-label">中文支持</td>
+        <td>✅ 有中文 README</td>
+        <td><span class="yes">✅ 原生中文</span></td>
+        <td>基础</td>
+      </tr>
+      <tr>
+        <td class="col-label">代码能力</td>
+        <td>强（通用能力的一部分）</td>
+        <td>中等</td>
+        <td><span class="yes">⭐ 极致</span>（唯一焦点）</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<!-- Hermes Detail -->
+<section class="section" id="hermes-detail">
+  <h3 class="sec-title-sm">🪽 Hermes Agent — 「会自我进化的 Agent」</h3>
+  <div class="hl-box">
+    <h3>一句话：它是唯一有「闭环学习」的 Agent</h3>
+    <p style="color:var(--text2);font-size:0.88rem;">
+      Hermes 的差异化不在「功能更多」，而在<strong>机制不同</strong>。QwenPaw 和 Codex 是你告诉它怎么做，Hermes 是它自己在使用中学会怎么做。
+      完成复杂任务 → 自动提炼成 Skill → 下次复用 → 使用中继续改进。这个循环在别的 Agent 里不存在。
+    </p>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">🔄</span>
+      <h3>自动技能化</h3>
+      <p>完成一个复杂任务后，Hermes 会自动分析过程，提炼出可复用的 Skill。你不需要手动编写 Skill 配置。</p>
+      <span class="tag tp">核心差异</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">📈</span>
+      <h3>技能自我改进</h3>
+      <p>Skill 不是写死的——每次使用中如果发现更好的做法，Skill 会自动更新。技能库随时间越来越强。</p>
+      <span class="tag tp">持续进化</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">👤</span>
+      <h3>Honcho 用户建模</h3>
+      <p>不是简单的偏好记录，而是一套辩证模型，持续构建对你的深层理解——决策模式、工作习惯、思维偏好。</p>
+      <span class="tag tb">Nous 自研</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">💡</span>
+      <h3>主动提醒（Nudge）</h3>
+      <p>Agent 会在对话中主动提醒自己：「这个信息重要，需要保存」。不是被动等人说「记住这个」。</p>
+      <span class="tag tg">主动性</span>
+    </div>
+  </div>
+  <p style="margin-top:20px;font-size:0.85rem;color:var(--text2);">
+    <strong>适合谁：</strong>重度 Agent 用户 · 希望 AI 越用越懂自己的人 · 需要多模型切换的人 · 对「自我进化」理念认同的前沿用户。<br>
+    <strong>官网：</strong><a href="https://hermes-agent.nousresearch.com/docs/" target="_blank">hermes-agent.nousresearch.com</a> ·
+    <strong>GitHub：</strong><a href="https://github.com/NousResearch/hermes-agent" target="_blank">NousResearch/hermes-agent</a>
+  </p>
+</section>
+
+<!-- QwenPaw Detail -->
+<section class="section" id="qwenpaw-detail">
+  <h3 class="sec-title-sm">🐾 QwenPaw — 「多 Agent 协作的原生平台」</h3>
+  <div class="hl-box">
+    <h3>一句话：它是唯一原生支持「Agent 之间互相通信」的平台</h3>
+    <p style="color:var(--text2);font-size:0.88rem;">
+      QwenPaw 的独特之处在于多 Agent 架构。你可以创建 reporter→editor→chief 这样的流水线，
+      不同 Agent 各司其职、互相通信。Hermes 和 Codex 也能派生子 Agent，但 QwenPaw 是唯一把「Agent 间通信」
+      作为一等公民设计的——chat_with_agent（同步）、submit_to_agent（异步后台任务）、check_agent_task（轮询结果）。
+    </p>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">🤝</span>
+      <h3>Agent 间通信</h3>
+      <p>一个 Agent 可以给另一个 Agent 发消息、提交后台任务、轮询结果。这为复杂流水线提供了原语。</p>
+      <span class="tag tp">独有优势</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🇨🇳</span>
+      <h3>中文原生</h3>
+      <p>基于通义千问生态，对中文内容的理解和生成天然更优。如果你的工作语言主要是中文，这是不可忽视的优势。</p>
+      <span class="tag tb">语言优势</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">📋</span>
+      <h3>工作空间范式</h3>
+      <p>AGENTS.md + SOUL.md + PROFILE.md + MEMORY.md + memory/ 每日笔记——清晰的文件记忆体系，Agent 人格和行为可精细调控。</p>
+      <span class="tag tg">结构化记忆</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔧</span>
+      <h3>丰富的内置工具</h3>
+      <p>Shell 执行 · 浏览器操控 · 桌面截图 · 文件搜索(grep/glob) · 图片/视频查看 · 多 Agent 列表与管理。</p>
+      <span class="tag tb">开箱即用</span>
+    </div>
+  </div>
+  <p style="margin-top:20px;font-size:0.85rem;color:var(--text2);">
+    <strong>适合谁：</strong>需要多 Agent 协作流水线的用户 · 中文为主要工作语言 · 偏好阿里/通义生态 · 重视 Agent 人格可配置性。<br>
+    <strong>GitHub：</strong><a href="https://github.com/agentscope-ai/QwenPaw" target="_blank">agentscope-ai/QwenPaw</a>
+  </p>
+</section>
+
+<!-- Codex Detail -->
+<section class="section" id="codex-detail">
+  <h3 class="sec-title-sm">🔷 Codex CLI — 「终端里的程序员」</h3>
+  <div class="hl-box">
+    <h3>一句话：它是目前最强的纯代码 Agent</h3>
+    <p style="color:var(--text2);font-size:0.88rem;">
+      Codex CLI 的定位极度聚焦——它就是帮你写代码的。不做通用助手、不做多 Agent 编排、不做自我进化。
+      但它在代码这件事上做到极致：Sandbox 环境隔离、Git 深度集成、IDE（VS Code/Cursor/Windsurf）无缝体验、
+      ChatGPT 订阅直接可用。如果你主要用 AI 写代码，它是专为此生的。
+    </p>
+  </div>
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">🏖️</span>
+      <h3>Sandbox 沙箱</h3>
+      <p>代码在隔离沙箱中运行，不会污染你的本地环境。测试完确认安全后再合并——这是生产级代码 Agent 的必备能力。</p>
+      <span class="tag tp">安全隔离</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔗</span>
+      <h3>IDE 深度集成</h3>
+      <p>VS Code / Cursor / Windsurf 插件。在编辑器里直接与 Codex 对话，diff 预览、一键接受修改。</p>
+      <span class="tag tb">工作流顺畅</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔄</span>
+      <h3>Git 原生</h3>
+      <p>自动创建分支、提交、生成 PR 描述。Codex 对代码工作流的理解比其他 Agent 深一个层次。</p>
+      <span class="tag tg">版本控制</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">💳</span>
+      <h3>ChatGPT 订阅即用</h3>
+      <p>不需要额外付费、不需要配 API key。如果你已有 ChatGPT Plus/Pro，Codex CLI 直接可用。</p>
+      <span class="tag tb">零门槛</span>
+    </div>
+  </div>
+  <p style="margin-top:20px;font-size:0.85rem;color:var(--text2);">
+    <strong>适合谁：</strong>程序员 · 已有 ChatGPT 订阅 · 主要用 AI 写代码而非通用任务 · 需要 IDE 集成体验。<br>
+    <strong>官网：</strong><a href="https://developers.openai.com/codex" target="_blank">developers.openai.com/codex</a> ·
+    <strong>GitHub：</strong><a href="https://github.com/openai/codex" target="_blank">openai/codex</a>
+  </p>
+</section>
+
+<!-- ================================================================ -->
+<!-- 第四部分：前沿使用者态度与工作流 -->
+<!-- ================================================================ -->
+<section class="section" id="attitude">
+  <h2 class="sec-title"><span class="sec-num">4</span> 前沿使用者的态度与用法</h2>
+  <p class="sec-desc">
+    基于 GitHub Discussions、Discord 社区、以及实际使用者的反馈，总结当前 Agent 用户的态度和典型工作流。
+  </p>
+
+  <h3 class="sec-title-sm">🎯 前沿用户的三类态度</h3>
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">🚀</span>
+      <h3>「全押 Hermes」派</h3>
+      <p>理由：闭环学习是质的差异。他们相信 Agent 的核心价值不在当下的功能列表，而在<strong>未来的成长曲线</strong>。一个越用越强的 Agent 比一个功能完备但不成长的 Agent 更有长期价值。他们愿意接受 Hermes 尚在快速迭代中的不稳定性。</p>
+      <span class="tag tp">长期主义</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔀</span>
+      <h3>「双轨并行」派</h3>
+      <p>最常见的前沿用户策略。Hermes 做日常助理和探索性工作（利用学习能力），Codex 做重型编码（利用专业化），QwenPaw 做多 Agent 流水线（利用通信架构）。<strong>不对立，按场景选用</strong>。</p>
+      <span class="tag tb">实用主义</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔒</span>
+      <h3>「一套用到底」派</h3>
+      <p>选定一个平台深耕。这类用户认为切换成本大于差异化收益。常见于：重度 Codex 用户（编码是绝对核心需求）、QwenPaw 用户（中文和多 Agent 流水线是刚需）、以及不想折腾的实用派。</p>
+      <span class="tag tg">深度派</span>
+    </div>
+  </div>
+
+  <h3 class="sec-title-sm">⚡ 前沿用户的典型工作流</h3>
+  <div id="workflow">
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">🌅</span>
+      <h3>晨间简报（Agent 自动）</h3>
+      <p>Cron 定时任务：每天早上 Agent 自动抓取新闻、整理日程、总结未读消息，推送到 Telegram。人到桌前，简报已经在手机上了。</p>
+      <span class="tag tb">异步工作</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">💻</span>
+      <h3>Code Review 自动化</h3>
+      <p>Agent 监控 GitHub PR，自动进行代码审查、生成 Review 意见、甚至直接修复简单问题。人只需要审批关键决策。</p>
+      <span class="tag tp">代码辅助</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">📝</span>
+      <h3>文档与知识库维护</h3>
+      <p>Agent 持续维护 MEMORY.md、项目文档、知识库 HTML。不需要人手写——对话中产生的知识自动沉淀为结构化文档。</p>
+      <span class="tag tg">知识沉淀</span>
+    </div>
+    <div class="card">
+      <span class="card-icon">🔬</span>
+      <h3>研究调研（Agent 自主）</h3>
+      <p>给 Agent 一个调研主题，它自主搜索、阅读、整理、对比、输出报告。你只需定义问题和审核结论。</p>
+      <span class="tag tb">自动化研究</span>
+    </div>
+  </div>
+  </div>
+
+  <blockquote>
+    「最好的 Agent 不是你用得最多的，而是你忘了它在跑的那个。」
+    <br>—— Hermes Agent Discord 社区的常见观点
+  </blockquote>
+
+  <h3 class="sec-title-sm">🔑 前沿用户的共识</h3>
+  <div class="card-grid">
+    <div class="card">
+      <span class="card-icon">1</span>
+      <h3>Agent 不是替代聊天，是替代操作</h3>
+      <p>如果你只是问问题，用网页版就够了。Agent 的价值在于<strong>替你执行</strong>——操作文件、运行命令、维护项目。</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">2</span>
+      <h3>记忆系统决定天花板</h3>
+      <p>Agent 的长期价值取决于它多快能「懂你」。用一个月 Hermes 和用一个月 ChatGPT 网页版，前者已经建立了你的工作模型，后者每次都是从零开始。</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">3</span>
+      <h3>CLI 是 AI Native 界面</h3>
+      <p>不要试图让 Agent 用 GUI。CLI 是文本进文本出，天然适配 LLM。未来最好的 Agent 交互界面可能就是终端。</p>
+    </div>
+    <div class="card">
+      <span class="card-icon">4</span>
+      <h3>模型锁定是最大风险</h3>
+      <p>只绑一个模型供应商是危险的。Hermes 的模型无关性是它被前沿用户青睐的重要原因——随时切换到当时最好/最便宜的模型。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================================ -->
+<!-- 第五部分：选择建议 -->
+<!-- ================================================================ -->
+<section class="section" id="verdict">
+  <h2 class="sec-title"><span class="sec-num">5</span> 到底怎么选？</h2>
+  <p class="sec-desc">
+    没有标准答案，但有清晰的决策路径。
+  </p>
+
+  <div class="tbl-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>你的情况</th>
+        <th>推荐</th>
+        <th>理由</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="col-label">主要写代码</td>
+        <td><strong>Codex CLI</strong> + Hermes 辅助</td>
+        <td>Codex 的 IDE 集成和 Sandbox 无可替代；Hermes 管代码以外的所有事</td>
+      </tr>
+      <tr>
+        <td class="col-label">需要多 Agent 流水线</td>
+        <td><strong>QwenPaw</strong></td>
+        <td>原生多 Agent 通信是刚需，其他两个做不到同样流畅</td>
+      </tr>
+      <tr>
+        <td class="col-label">中文为主要工作语言</td>
+        <td><strong>QwenPaw</strong> 或 <strong>Hermes + Kimi/GLM</strong></td>
+        <td>QwenPaw 中文原生最优；Hermes 接 Kimi/GLM 也足够好</td>
+      </tr>
+      <tr>
+        <td class="col-label">追求「越用越懂我」</td>
+        <td><strong>Hermes Agent</strong></td>
+        <td>闭环学习系统是唯一选择，其他 Agent 不具备这个能力</td>
+      </tr>
+      <tr>
+        <td class="col-label">不想被模型绑定</td>
+        <td><strong>Hermes Agent</strong></td>
+        <td>200+ 模型随时切换，Codex 锁 ChatGPT，QwenPaw 偏通义</td>
+      </tr>
+      <tr>
+        <td class="col-label">已有 ChatGPT 订阅</td>
+        <td><strong>Codex CLI</strong> 起步</td>
+        <td>零额外成本就能体验 Agent 模式，是最低门槛的入口</td>
+      </tr>
+      <tr>
+        <td class="col-label">全部都要</td>
+        <td><strong>Hermes + QwenPaw 双轨</strong></td>
+        <td>Hermes 做日常助理（成长型），QwenPaw 做多 Agent 流水线（结构型），各取所长</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div class="info-box" style="margin-top:24px;">
+    <strong>当前建议（2026年6月）：</strong>先用好你已有的 QwenPaw。你的多 Agent 新闻社流水线
+    （reporter→editor→chief）是 QwenPaw 的强项场景，不需要迁移。同时可以在 Hermes 上
+    开一个并行实例，作为日常个人助理体验它的闭环学习。两者文件记忆体系互通
+    （AGENTS.md/SOUL.md/PROFILE.md 范式一致），迁移成本很低。
+  </div>
+</section>
+
+<footer>
+  <p>AI Agent 入门完全指南 · 2026年6月 · 基于 Hermes Agent / QwenPaw / Codex CLI 官方文档和 GitHub 仓库撰写</p>
+  <p style="margin-top:4px;">知识库位置：D:\战略长考\养心阁\知识库</p>
+</footer>
+
+</main>
+</body>
+</html>

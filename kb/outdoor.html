@@ -1,0 +1,2185 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>户外手册 — 自驾·野炊·垂钓·徒步·露营·摄影·水上</title>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --text: #2c2c2c;
+    --text-light: #555;
+    --accent: #c45a2c;
+    --accent-light: #fdf0e8;
+    --border: #e0dcd5;
+    --table-stripe: #f5f2ed;
+    --callout-bg: #f8f5f0;
+    --callout-border: #d4c8b0;
+    --warn-bg: #fff5f0;
+    --warn-border: #e8b896;
+    --tip-bg: #f0f7f0;
+    --tip-border: #a8c8a0;
+    --sidebar-bg: #f5f2ec;
+    --sidebar-width: 280px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: "Noto Serif SC", "Source Han Serif CN", "STSong", "SimSun", "Songti SC", Georgia, serif;
+    font-size: 16px;
+    line-height: 1.85;
+    color: var(--text);
+    background: var(--bg);
+    display: flex;
+  }
+
+
+  /* ── Collapsible itineraries ── */
+  details.itinerary {
+    margin: 12px 0 20px 0;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  details.itinerary summary {
+    cursor: pointer;
+    padding: 10px 16px;
+    background: var(--callout-bg);
+    font-weight: 600;
+    font-size: 15px;
+    user-select: none;
+    list-style: none;
+  }
+  details.itinerary summary::-webkit-details-marker { display: none; }
+  details.itinerary summary::before {
+    content: 'b6';
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 11px;
+    transition: transform 0.2s;
+  }
+  details.itinerary[open] summary::before {
+    transform: rotate(90deg);
+  }
+  details.itinerary pre {
+    margin: 0;
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid var(--border);
+    background: var(--bg);
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    position: fixed; left: 0; top: 0; bottom: 0;
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 24px 18px;
+    z-index: 10;
+    font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .sidebar h2 {
+    font-size: 16px; font-weight: 700; color: var(--accent);
+    margin-bottom: 16px; letter-spacing: 0.05em;
+    font-family: "Noto Serif SC", serif;
+  }
+  .sidebar a {
+    display: block; padding: 3px 8px; border-radius: 4px;
+    color: var(--text-light); text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .sidebar a:hover { background: #e8e2d8; color: var(--text); }
+  .sidebar a.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+  .sidebar .toc-section { margin-bottom: 12px; }
+  .sidebar .toc-section > a { font-weight: 600; color: var(--text); padding: 5px 8px; }
+  .sidebar .toc-sub { padding-left: 16px; }
+
+  /* ── Main ── */
+  .main {
+    margin-left: var(--sidebar-width);
+    max-width: 820px;
+    padding: 48px 56px 80px;
+  }
+  h1 {
+    font-size: 2.2em; font-weight: 900; line-height: 1.25;
+    margin-bottom: 8px; letter-spacing: 0.04em;
+    font-family: "Noto Serif SC", serif;
+  }
+  .subtitle {
+    font-size: 1.05em; color: var(--text-light);
+    margin-bottom: 40px; padding-bottom: 28px;
+    border-bottom: 2px solid var(--accent);
+    font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  h2 {
+    font-size: 1.5em; font-weight: 800; margin: 48px 0 16px;
+    padding-top: 10px; letter-spacing: 0.03em;
+  }
+  h3 {
+    font-size: 1.2em; font-weight: 700; margin: 32px 0 10px;
+    color: #3a3a3a;
+  }
+  h4 {
+    font-size: 1.05em; font-weight: 700; margin: 24px 0 8px;
+  }
+  p { margin: 10px 0; }
+  ul, ol { margin: 8px 0 8px 24px; }
+  li { margin: 4px 0; }
+
+  /* Table */
+  table {
+    width: 100%; border-collapse: collapse; margin: 16px 0 20px;
+    font-size: 0.95em; font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+  th {
+    background: var(--accent); color: #fff;
+    padding: 8px 12px; text-align: left; font-weight: 600;
+  }
+  td { padding: 7px 12px; border-bottom: 1px solid var(--border); }
+  tr:nth-child(even) td { background: var(--table-stripe); }
+
+  /* Callouts */
+  .callout {
+    margin: 16px 0; padding: 14px 18px; border-radius: 6px;
+    border-left: 4px solid var(--callout-border);
+    background: var(--callout-bg);
+    font-size: 0.95em;
+  }
+  .callout.warn {
+    background: var(--warn-bg); border-left-color: var(--warn-border);
+  }
+  .callout.tip {
+    background: var(--tip-bg); border-left-color: var(--tip-border);
+  }
+  .callout strong { color: var(--accent); }
+
+  /* Code blocks (for diagrams) */
+  pre {
+    background: #f4f1eb; padding: 14px 18px; border-radius: 6px;
+    font-size: 0.85em; line-height: 1.55; overflow-x: auto;
+    margin: 12px 0; border: 1px solid var(--border);
+    font-family: "SF Mono", "Consolas", "Courier New", monospace;
+  }
+
+  /* Separator */
+  hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+  blockquote {
+    border-left: 3px solid var(--accent); padding: 6px 16px;
+    margin: 14px 0; color: var(--text-light);
+    background: var(--accent-light); border-radius: 0 6px 6px 0;
+    font-style: italic;
+  }
+  blockquote strong { font-style: normal; }
+
+  .skill-tree { font-size: 0.82em; }
+
+  /* Print */
+  @media print {
+    .sidebar { display: none; }
+    .main { margin-left: 0; max-width: 100%; padding: 20px 30px; }
+    body { font-size: 13px; line-height: 1.6; }
+    h1 { font-size: 1.8em; }
+    h2 { page-break-before: always; margin-top: 20px; }
+    h3 { page-break-after: avoid; }
+    table { font-size: 0.85em; }
+    .callout { break-inside: avoid; }
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 24px 18px 60px; }
+    h1 { font-size: 1.6em; }
+    table { font-size: 0.85em; }
+    th, td { padding: 5px 7px; }
+  }
+</style>
+<style>
+.kb-back-btn {
+  position: fixed; bottom: 28px; left: 28px; z-index: 99999;
+  background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 24px; padding: 8px 18px;
+  font-size: 13px; color: #8b5e3c; text-decoration: none;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: all 0.25s; display: inline-flex; align-items: center; gap: 6px;
+  letter-spacing: 0.04em;
+}
+.kb-back-btn:hover {
+  background: rgba(255,255,255,1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+  border-color: rgba(139,94,60,0.4);
+}
+</style>
+</head>
+<body>
+<a href="../index.html" class="kb-back-btn">鈫?鐭ヨ瘑搴?/a>
+
+
+<!-- ═══════════ SIDEBAR ═══════════ -->
+<nav class="sidebar">
+  <h2>📖 目录</h2>
+  <div class="toc-section">
+    <a href="#preface">前言</a>
+  </div>
+  <div class="toc-section">
+    <a href="#s1">第一篇：自驾 — 移动基地</a>
+    <div class="toc-sub">
+      <a href="#s1-1">1.1 车辆选择</a>
+      <a href="#s1-2">1.2 后备箱收纳</a>
+      <a href="#s1-3">1.3 路线规划</a>
+      <a href="#s1-4">1.4 停车扎营选点</a>
+      <a href="#s1-5">1.5 车辆应急</a>
+      <a href="#s1-6">1.6 交通安全与纠纷</a>
+    </div>
+  </div>
+  <div class="toc-section">
+    <a href="#s2">第二篇：露营 — 帐篷与车中泊</a>
+    <div class="toc-sub">
+      <a href="#s2-1">2.1 帐篷露营</a>
+      <a href="#s2-2">2.2 车中泊</a>
+    </div>
+  </div>
+  <div class="toc-section">
+    <a href="#s3">第三篇：野炊 — 野外厨房</a>
+    <div class="toc-sub">
+      <a href="#s3-1">3.1 炉具系统</a>
+      <a href="#s3-2">3.2 锅具餐具</a>
+      <a href="#s3-3">3.3 食材保鲜</a>
+      <a href="#s3-4">3.4 经典食谱</a>
+    </div>
+  </div>
+  <div class="toc-section">
+    <a href="#s4">第四篇：垂钓 — 手杆专题</a>
+    <div class="toc-sub">
+      <a href="#s4-1">4.1 手杆装备</a>
+      <a href="#s4-2">4.2 调漂</a>
+      <a href="#s4-3">4.3 选点打窝</a>
+      <a href="#s4-4">4.4 季节策略</a>
+      <a href="#s4-5">4.5 鱼种应对</a>
+      <a href="#s4-6">4.6 问题排查</a>
+    </div>
+  </div>
+  <div class="toc-section">
+    <a href="#s5">第五篇：水上运动 — 皮划艇</a>
+    <div class="toc-sub">
+      <a href="#s5-1">5.1 选什么艇</a>
+      <a href="#s5-2">5.2 北京周边水域</a>
+      <a href="#s5-3">5.3 基本技术</a>
+      <a href="#s5-4">5.4 安全</a>
+      <a href="#s5-5">5.5 皮划艇钓鱼</a>
+      <a href="#s5-6">5.6 运输收纳</a>
+    </div>
+  </div>
+  <div class="toc-section">
+    <a href="#s6">第六篇：轻徒步入门</a>
+    <div class="toc-sub">
+      <a href="#s6-1">6.1 核心定位</a>
+      <a href="#s6-2">6.2 装备配置</a>
+      <a href="#s6-3">6.3 路线选择</a>
+      <a href="#s6-4">6.4 新手常见错误</a>
+      <a href="#s6-5">6.5 组合联动日</a>
+    </div>
+  </div>
+  <div class="toc-section">
+    <a href="#s7">第七篇：户外摄影</a>
+    <div class="toc-sub">
+      <a href="#s7-1">7.1 光线</a>
+      <a href="#s7-2">7.2 构图</a>
+      <a href="#s7-3">7.3 户外人像</a>
+      <a href="#s7-4">7.4 风景摄影</a>
+      <a href="#s7-5">7.5 实用技巧</a>
+    </div>
+  </div>
+  <div class="toc-section">
+    <a href="#s8">第八篇：融合 — 串联实战</a>
+    <div class="toc-sub">
+      <a href="#s8-1">8.1 一日游模板</a>
+      <a href="#s8-2">8.2 周末两日模板</a>
+      <a href="#s8-3">8.3 长假远征模板</a>
+    </div>
+  </div>
+  <div class="toc-section">
+    <a href="#s9">第九篇：能力全景 — 技能树与进阶</a>
+    <div class="toc-sub">
+      <a href="#s9-1">9.1 装备进阶路线</a>
+      <a href="#s9-2">9.2 场景升级路径</a>
+      <a href="#s9-3">9.3 技能树全图</a>
+    </div>
+  </div>
+  <div class="toc-section">
+    <a href="#s10">第十篇：生存基础</a>
+    <div class="toc-sub">
+      <a href="#s10-1">10.1 野外基本医疗</a>
+      <a href="#s10-2">10.2 方向判断</a>
+      <a href="#s10-3">10.3 危险识别规避</a>
+      <a href="#s10-4">10.4 野外决断原则</a>
+      <a href="#s10-5">10.5 必备生存工具</a>
+    </div>
+  </div>
+  <div class="toc-section">
+    <a href="#appendix-a">附录 A：检查清单</a>
+  </div>
+  <div class="toc-section">
+    <a href="#appendix-b">附录 B：推荐资源</a>
+  </div>
+  <div class="toc-section">
+    <a href="#appendix-c">附录 C：北京及周边地图</a>
+  </div>
+  <div class="toc-section">
+    <a href="#appendix-d">附录 D：季节出行指南</a>
+    <div class="toc-sub">
+      <a href="#appendix-d-1">D.1 六月 · 初夏 ⏳</a>
+      <a href="#appendix-d-2">D.2 七月 · 盛夏</a>
+      <a href="#appendix-d-3">D.3 九月 · 初秋</a>
+      <a href="#appendix-d-4">D.4 十月 · 深秋</a>
+      <a href="#appendix-d-5">D.5 冬春</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════ MAIN CONTENT ═══════════ -->
+<main class="main">
+
+<h1>户外手册</h1>
+<p class="subtitle">从自驾到野炊，从手杆垂钓到轻徒步，从帐篷露营到车中泊，从手机摄影到皮划艇探水——<strong>所有东西串成一条线，变成一种生活方式。</strong></p>
+
+<section id="preface">
+<h2>前言</h2>
+<p>六个方向，一条线：自驾把你带到水边，手杆垂钓让你安静下来，野炊填饱肚子也填满气氛，轻徒步释放双腿，帐篷或车中泊让夜晚属于你，手机或相机把这一切留下来——皮划艇带你划到水中央，从另一个角度看你的营地。</p>
+<p>它们各自是一个完整的世界。但串在一起——开车到水库，安安静静钓几条鱼再放回去，划艇到对岸探一个新钓点，背上小包走一段山路，在夕阳下做一顿热饭，天黑后钻进帐篷或是放平后排，第二天凌晨用镜头接住第一束光——这里面有一个独特的东西：<strong>节奏的自由。</strong></p>
+<p>从城市出发，自己掌握交通；在水边静下来，靠技术和耐心与自然对话；在山路上走，用脚丈量；在帐篷里听风声；在镜头后面重新发现光线。这个过程里没有人替你完成任何一个环节，也没有什么必须赶着去做的事。</p>
+<p>这本手册的组织逻辑是：<strong>先从后勤到活动（自驾→露营→野炊→垂钓→水上→徒步），再学记录（摄影），然后串起来（融合篇），最后看进阶路线（能力全景）和保命底线（生存基础）——以及从北京出发可以去哪。</strong></p>
+</section>
+
+<!-- ═══════════ S1: 自驾篇 ═══════════ -->
+<section id="s1">
+<h2>第一篇：自驾篇 — 你的移动基地</h2>
+<p>自驾在户外体系里的角色不是"交通工具"，而是<strong>移动仓库 + 应急庇护所 + 电力中心</strong>。</p>
+
+<!-- 1.1 -->
+<h3 id="s1-1">1.1 车辆选择：不需要硬派越野</h3>
+<p>对钓鱼+野炊场景来说，90% 的路况是铺装路面 + 最后一段土路/砂石路。不需要牧马人，但有一些硬指标：</p>
+
+<h4>核心指标</h4>
+<table>
+  <tr><th>指标</th><th>最低要求</th><th>理想配置</th></tr>
+  <tr><td>离地间隙</td><td>≥ 160mm</td><td>≥ 190mm（SUV）</td></tr>
+  <tr><td>后备箱</td><td>≥ 400L</td><td>≥ 550L（后排放倒后 ≥ 1000L）</td></tr>
+  <tr><td>后排座椅</td><td>可4/6放倒</td><td>完全放平</td></tr>
+  <tr><td>车顶行李架</td><td>有最好</td><td>纵轨式（可加横杆）</td></tr>
+  <tr><td>备胎</td><td>全尺寸最好</td><td>至少非全尺寸 + 补胎工具</td></tr>
+  <tr><td>电源</td><td>12V 点烟器口 ≥ 2个</td><td>+ 220V 逆变器插座</td></tr>
+</table>
+
+<h4>车型推荐（按预算）</h4>
+<ul>
+  <li><strong>10-15万</strong>：哈弗大狗、捷途旅行者 — 后备箱够大，离地间隙够用</li>
+  <li><strong>15-25万</strong>：坦克300、比亚迪唐 — 坦克越野能力强，唐有外放电（野炊神器）</li>
+  <li><strong>25万+</strong>：理想L系列、蔚来ES/EC系列 — 外放电 + 大空间 + 舒适性拉满</li>
+</ul>
+
+<div class="callout tip">
+  <strong>🔌 外放电（V2L）是野炊的革命。</strong>如果你的车支持 220V 外放电（比亚迪、理想、蔚来等新能源车都有），你可以在野外直接用电烤盘、电水壶、电磁炉。不再依赖气罐和炭火。这是自驾野炊的最高形态之一。
+</div>
+
+<h4>轿车玩家怎么办？</h4>
+<p>轿车的离地间隙和后备箱开口是硬伤，但不是不能玩：只选铺装路到水边的钓点；装备精简，用软包代替硬箱；加装车顶行李箱扩展储物。</p>
+
+<!-- 1.2 -->
+<h3 id="s1-2">1.2 后备箱收纳系统</h3>
+<p>这是最容易被忽视但最影响体验的环节。一个好的收纳系统让你到达钓点后 <strong>5 分钟</strong>内开始钓鱼，而不是翻半小时后备箱。</p>
+
+<h4>分区原则</h4>
+<pre>
+后备箱 = 四个区，互不干扰：
+
+┌─────────────────────────────┐
+│  A区：垂钓装备              │
+│  （竿包 + 钓箱/活鱼桶）     │
+├─────────────────────────────┤
+│  B区：野炊装备              │
+│  （炉具箱 + 食材保温箱）    │
+├──────────────┬──────────────┤
+│  C区：露营装备│ D区：杂物    │
+│  （帐篷/椅/桌）│（衣物/工具）│
+└──────────────┴──────────────┘</pre>
+
+<table>
+  <tr><th>用途</th><th>推荐</th><th>为什么</th></tr>
+  <tr><td>竿包</td><td>硬壳竿包（1.25m 三层）</td><td>保护竿身，可装 3-4 根手杆</td></tr>
+  <tr><td>钓箱</td><td>28L-36L 多功能钓箱</td><td>坐 + 储物 + 饵料盘 + 鱼护架</td></tr>
+  <tr><td>炉具</td><td>塑料周转箱（40×30×20cm）</td><td>卡式炉 + 气罐 + 锅具全套</td></tr>
+  <tr><td>食材</td><td>20L 车载冰箱/保温箱</td><td>夏天是必需品，不是选配</td></tr>
+  <tr><td>杂物</td><td>折叠收纳箱 × 2</td><td>一个装工具/配件，一个装个人物品</td></tr>
+</table>
+
+<h4>核心原则</h4>
+<ul>
+  <li><strong>所有东西有固定位置。</strong>钓箱永远放左侧、炉具箱永远放右侧。黑夜也能 30 秒取出任何东西。</li>
+  <li><strong>软包优先硬箱。</strong>软包可以挤压适配空间，硬箱浪费缝隙。</li>
+  <li><strong>重物靠前、靠下。</strong>急刹车时后面的重物会飞过来。</li>
+</ul>
+
+<!-- 1.3 -->
+<h3 id="s1-3">1.3 路线规划方法论</h3>
+<h4>规划流程</h4>
+<pre>确定目标水域 → 查卫星图确认可达性 → 查最后3公里路况 → 确认停车点 → 标记备选钓点 → 标记最近的加油站/医院</pre>
+
+<table>
+  <tr><th>工具</th><th>用途</th></tr>
+  <tr><td>高德/百度卫星图</td><td>看最后一段土路能不能走</td></tr>
+  <tr><td>奥维互动地图</td><td>户外路线规划和轨迹记录</td></tr>
+  <tr><td>钓鱼人APP / 本地钓友群</td><td>确认"这地方最近有口吗"</td></tr>
+  <tr><td>两步路户外助手</td><td>查看他人轨迹，确认路线真实可达</td></tr>
+</table>
+
+<div class="callout warn">
+  <strong>⛽ 最后一个加油站法则：</strong>进山/下水库前，在最后一个加油站加满油。让你在找到绝佳钓点后安心多待半天，不用担心回程油量。
+</div>
+
+<!-- 1.4 -->
+<h3 id="s1-4">1.4 野外停车与扎营选点</h3>
+<h4>停车选点</h4>
+<ul>
+  <li><strong>不要停在河滩/干涸河道上。</strong>上游下雨你完全不知道。</li>
+  <li><strong>车头朝外。</strong>方便紧急撤离，也方便搭电。</li>
+  <li><strong>远离孤树。</strong>雷雨天孤树是天然的避雷针。</li>
+  <li><strong>如果在斜坡停车：</strong>拉手刹 + 挂 P 挡 + 轮胎下垫石头，三重保险。</li>
+</ul>
+
+<h4>扎营离水距离</h4>
+<table>
+  <tr><th>距离</th><th>适合场景</th></tr>
+  <tr><td>紧贴水边（&lt; 5m）</td><td>白天短时间，方便看漂</td></tr>
+  <tr><td>稍退（10-20m）</td><td>过夜露营的安全距离</td></tr>
+  <tr><td>高处（&gt; 30m + 高差）</td><td>水库下游、河道旁 — 防夜间涨水</td></tr>
+</table>
+
+<div class="callout warn">
+  <strong>⚠️ 水库下游扎营，睡前一定看一眼水位线。</strong>水库半夜泄洪不需要通知你。
+</div>
+
+<!-- 1.5 -->
+<h3 id="s1-5">1.5 常见车辆问题应对</h3>
+
+<h4>电瓶亏电</h4>
+<p><strong>症状：</strong>打火时只有"哒哒"声，仪表盘变暗或闪烁。</p>
+<p><strong>解决：</strong>随车带一根搭电线；红接正极（+），黑接负极（-），先接亏电车再接救援车；搭完后让救援车轰油门 2-3 分钟再打火。</p>
+<p><strong>预防：</strong>车上常备一个<strong>应急启动电源</strong>（两百块左右），自救不求人。</p>
+
+<h4>陷车（泥地/沙地/松土）</h4>
+<p><strong>症状：</strong>轮胎空转，车身不动，越踩油门陷越深。</p>
+<p><strong>解决：</strong>①立即停止踩油门；②轮胎下塞脚垫、树枝、石头、木板增加摩擦力；③降低胎压（1.0-1.5 bar），出来后用随车充气泵打回去；④有脱困板最好。</p>
+<p><strong>预防：</strong>不确定路况时，先下车走一遍。人的脚是最好的探路器。</p>
+
+<h4>轮胎被扎</h4>
+<p><strong>症状：</strong>行驶中方向盘抖动、跑偏、异响，或停车后发现轮胎明显瘪了。</p>
+<p><strong>解决：</strong>有备胎 → 换备胎；没备胎 → 补胎液 + 充气泵组合；胎壁破损 → 只能叫救援。</p>
+
+<!-- 1.6 -->
+<h3 id="s1-6">1.6 交通安全与纠纷应对</h3>
+
+<h4>交通事故处理流程</h4>
+<p>野外出了事故，和城市里最大的区别是<strong>救援来得慢、信号可能差、围观者少</strong>。你的每一步都得自己拿主意。</p>
+
+<h4>轻微事故（能开、没人受伤、责任清楚）</h4>
+<ol>
+  <li><strong>开双闪、放三角牌。</strong>城市里放 50 米，高速公路 150 米，山路弯道要放在入弯前。</li>
+  <li><strong>拍照。</strong>拍全景（两车位置+路面标线）、拍碰撞点、拍对方车牌、拍对方驾照和行驶证。<strong>在挪车前拍。</strong></li>
+  <li><strong>挪车到安全位置。</strong>别堵在路上等交警，尤其在弯道和窄路上极其危险。</li>
+  <li><strong>报保险。</strong>现在大部分保险公司 App 支持视频定损，不需要等勘察员到现场。</li>
+  <li><strong>留对方电话，当场打过去确认不是假号。</strong></li>
+</ol>
+
+<h4>严重事故（有人受伤、车不能开、对方逃逸）</h4>
+<ol>
+  <li><strong>先救人，后报警。</strong>122（交通事故报警），120（急救）。报位置时：说你在哪条路上、从哪个方向往哪个方向走、最近的里程标志或村名。</li>
+  <li><strong>不要移动伤者</strong>（除非车辆着火等极端情况）。颈椎和脊柱损伤后不当移动可能造成终身瘫痪。</li>
+  <li><strong>保护现场。</strong>如果必须挪车救人，先拍好照片。</li>
+  <li><strong>对方逃逸：记住车牌，记住车型颜色，找目击者和监控。</strong>别追。</li>
+</ol>
+
+<h4>行车记录仪：不是选配</h4>
+<p>前后双录的行车记录仪，几百块钱。解决 90% 的纠纷。买的时候注意：</p>
+<ul>
+  <li>分辨率至少 1080P，能看清车牌</li>
+  <li>带夜视功能</li>
+  <li>存储卡定期格式化（每月一次），否则关键时刻发现没在录</li>
+</ul>
+
+<h4>与当地人纠纷</h4>
+<p>钓鱼和露营中最容易出现的不是交通事故，是<strong>和当地村民/管理人员的冲突</strong>——停在了人家地头、占了人家的钓位、被要求交不明不白的"停车费""过路费"。</p>
+
+<h4>处理原则</h4>
+<ul>
+  <li><strong>花了小钱能解决的事，别升级。</strong>对方要 20 块停车费，给了走人。你花两小时吵架的代价远超 20 块。</li>
+  <li><strong>但如果对方明显是敲诈（开口几百上千）→ 报警。</strong>打开手机录像，平心静气地说"我不确定这个收费是否合理，我们等警察来确认一下"。对方如果是敲诈，一听报警就怂。</li>
+  <li><strong>永远不先动手。</strong>不管对方多过分。先动手的一方在法律上天然劣势，而且你不知道对方有没有同伙。</li>
+  <li><strong>手机始终录像。</strong>从冲突开始就录，不用藏。录像的存在本身就能让大多数人收敛。</li>
+</ul>
+
+<h4>容易搞错的交规（野外场景）</h4>
+<table>
+  <tr><th>场景</th><th>规则</th><th>为什么容易搞错</th></tr>
+  <tr><td>山路会车</td><td>靠山体一侧的车让外侧车先行（外侧车更危险）</td><td>很多人以为是外侧让内侧</td></tr>
+  <tr><td>山路弯道超车</td><td><strong>绝对禁止。</strong>实线 + 弯道 = 不能超</td><td>老司机也常犯，赌对面没车</td></tr>
+  <tr><td>坡道停车</td><td>除了拉手刹挂P挡，前轮要打向路沿（上坡向外，下坡向里）</td><td>没几个人知道这个细节</td></tr>
+  <tr><td>非铺装路面限速</td><td>没有标志的情况下默认 30km/h</td><td>很多人以为没标志就没限速</td></tr>
+  <tr><td>水库大坝/堤顶路</td><td>很多禁止机动车通行，即使没栏杆</td><td>导航可能把你导上去</td></tr>
+  <tr><td>河滩/湖边野地停车</td><td>看有没有"禁止驶入""水源保护地"标牌。被罚的理由是"破坏植被"或"污染水源"</td><td>当地人可能告诉你"没事"，但被罚的是你</td></tr>
+  <tr><td>临时停车去钓鱼</td><td>不要在弯道、坡顶、窄桥、隧道口停车。即使在允许停的路段，人离开车超过规定时间也算违停</td><td>觉得"就停一会儿"没事</td></tr>
+  <tr><td>夜间行车</td><td>山路夜间远光灯遇到对向车 150 米内必须切换近光</td><td>忘了切/被对方晃了赌气</td></tr>
+</table>
+
+<div class="callout warn"><strong>⚠️ 水库大坝和堤顶路：</strong>很多水库的管理道路是禁止社会车辆通行的。导航不会告诉你。如果你看到"水源重地""非公务车辆禁止入内"的牌子，别抱着侥幸心理往里开。处罚比你想的重。</div>
+
+<h4>城市里也容易搞错的交规</h4>
+
+<h4>左转：什么时候看灯、什么时候不用</h4>
+<ul>
+  <li><strong>有左转箭头灯：</strong>只看左转箭头。红灯停、绿灯行。圆形灯跟你没关系。</li>
+  <li><strong>只有圆形绿灯（无左转箭头）：</strong>绿灯时可以左转，但<strong>必须让直行车辆和对向车</strong>。如果路口有"左转待转区"，直行绿灯亮时先驶入待转区，等左转灯亮或安全时再转。</li>
+  <li><strong>圆形红灯：</strong>绝对不能左转。除非路口有"红灯允许右转"的标志——但那也是右转不是左转。</li>
+  <li><strong>最容易搞错的情况：</strong>左转箭头灯灭了（不是变红），只剩圆形绿灯。此时可以左转，但要让行。很多人以为箭头灭了就不能转了，堵在路口被后面滴。</li>
+</ul>
+
+<h4>掉头：什么灯、什么地方可以掉</h4>
+<ul>
+  <li><strong>可以掉头（不需要看灯）：</strong>在路口停止线之前，道路中间有虚线或缺口，且没有"禁止掉头"标志 → 直接掉头，不需要等绿灯（因为掉头不过停止线）。</li>
+  <li><strong>必须等绿灯才能掉头：</strong>你需要越过停止线才能完成掉头 → 按左转信号走。</li>
+  <li><strong>绝对不能掉头：</strong>实线处、人行横道上、隧道内、桥梁上、急弯、陡坡、有"禁止掉头"标志。</li>
+</ul>
+
+<h4>停车小技巧</h4>
+<h4>侧方停车（城区路边）</h4>
+<ol>
+  <li>与前车并排，间距约 0.5 米，你的后视镜对齐前车的 B 柱</li>
+  <li>方向盘向右打满，缓慢倒车，直到你的左后视镜能看到后车的完整车头</li>
+  <li>方向盘回正，继续倒车，直到你的右前角与前车左后角错开</li>
+  <li>方向盘向左打满，继续倒车入位</li>
+  <li>微调前后距离</li>
+</ol>
+
+<h4>倒车入库（停车场/营地）</h4>
+<ul>
+  <li><strong>养成倒车入库的习惯。</strong>出发时直接开走比倒出来安全得多。</li>
+  <li>看后视镜判断距离：当后车的车头在你的后视镜底部消失时，距离约 30cm。</li>
+  <li>野外倒车：先下车看一遍后面有没有石头、树桩、陡坎。后视镜看不到低矮障碍物。</li>
+</ul>
+
+<h4>野外停车补充</h4>
+<ul>
+  <li>松软地面（草地、沙地、泥地）：停车前先踩一脚感受硬度。轮子陷进去再挖出来比你想象中难得多。</li>
+  <li>斜坡停车：拉手刹 + 挂 P 挡 + 前轮打向路沿（上坡向外，下坡向里）+ 轮胎下塞石头。四重保险。</li>
+  <li>长时间停车（过夜或徒步几小时）：考虑太阳方向。夏天回来时车内可能超过 60°C。尽量停在有遮阴的地方，或用车窗遮阳挡。</li>
+  <li>野地停车后：拍一张车和周围环境的照片。回来时你能从远处一眼看到车的位置。</li>
+</ul>
+
+<h4>疲劳驾驶：自驾钓鱼最大的隐形杀手</h4>
+<p>钓鱼的节奏天然容易导致疲劳驾驶：凌晨出发 → 钓一整天 → 傍晚返程。<strong>回去的路上比来的时候危险得多。</strong></p>
+<ul>
+  <li>症状：频繁眨眼、打哈欠、车道偏离、记不住刚才几分钟的路、眼睛不自觉地闭上。</li>
+  <li>出现任何一个症状 → <strong>立即找安全地方停车，睡 20 分钟。</strong></li>
+  <li>20 分钟的小睡比咖啡、红牛、开窗吹风都有效。</li>
+  <li>如果车上还有别人，<strong>让精神状态最好的人开返程。</strong></li>
+</ul>
+<div class="callout warn"><strong>🚨 钓鱼返程的疲劳驾驶是真实的事故高发场景。</strong>你没有想象中清醒。凌晨 4 点起床 + 户外一天 + 傍晚开车回家 = 你的反应速度可能比酒驾还差。如果感觉撑不住，宁可晚一小时到家。</div>
+</section>
+
+
+<!-- ═══════════ S2: 露营篇 ═══════════ -->
+<section id="s2">
+<h2>第二篇：露营基础 — 帐篷与车中泊</h2>
+<p>露营不是目的，是手段——让你能在外面多待一个晚上，换来第二天清晨最好的口、最柔的光、和不用赶路回家的从容。</p>
+<p>两种形态：<strong>帐篷露营</strong>（经典）和<strong>车中泊</strong>（睡在车里）。各有各的适用场景。</p>
+
+<!-- 1.1 -->
+<h3 id="s2-1">2.1 帐篷露营</h3>
+
+<h4>选帐篷：不看牌子，看场景</h4>
+<table>
+  <tr><th>类型</th><th>适合</th><th>优点</th><th>缺点</th></tr>
+  <tr><td><strong>自动速开帐篷</strong></td><td>新手、不过夜、好天气</td><td>3 秒打开，不费脑</td><td>重、体积大、防风差</td></tr>
+  <tr><td><strong>双层三季帐</strong></td><td><strong>绝大多数场景</strong></td><td>防雨防风、透气、性价比高</td><td>需要 5-10 分钟搭建</td></tr>
+  <tr><td><strong>四季帐/高山帐</strong></td><td>冬季、大风、高海拔</td><td>极端天气扛得住</td><td>重、贵、夏天闷热</td></tr>
+</table>
+
+<div class="callout"><strong>🎯 你只需要一顶双层三季帐。</strong>2-3 人款（实际睡 2 人舒适，3 人挤）。预算 300-600 元足够。品牌：牧高笛、凯乐石、Naturehike 都行。</div>
+
+<h4>搭帐篷：找对地方比搭得快重要</h4>
+<ol>
+  <li><strong>平整地面。</strong>把石头、树枝清掉。你不清，它们半夜会从防潮垫下面顶你。</li>
+  <li><strong>不要搭在低洼处。</strong>半夜下雨你就是睡在水坑里。</li>
+  <li><strong>帐篷门背对风向。</strong>门迎着风，一拉开全灌进来。</li>
+  <li><strong>地布要比帐篷底小一圈。</strong>地布露在外面 → 下雨时雨水顺着地布流到帐篷底下 → 你睡在水床上。</li>
+  <li><strong>风绳拉紧、地钉打满。</strong>很多帐篷被吹跑不是因为风大，是因为主人偷懒少打了两根钉。</li>
+</ol>
+
+<h4>睡眠系统：三件套</h4>
+<table>
+  <tr><th>物品</th><th>推荐</th><th>说明</th></tr>
+  <tr><td><strong>防潮垫</strong></td><td>蛋巢垫（便宜）或充气垫（舒服）</td><td>隔绝地面冷气和湿气。比睡袋更重要</td></tr>
+  <tr><td><strong>睡袋</strong></td><td>信封式（春夏秋）或木乃伊式（冬）</td><td>看温标，别信"极限温度"。舒适温度 +5°C 才够用</td></tr>
+  <tr><td><strong>枕头</strong></td><td>充气枕或把衣服卷起来</td><td>别用背包当枕头——你会后悔的</td></tr>
+</table>
+
+<div class="callout tip"><strong>💡 保暖的关键不是厚睡袋，是隔绝地面。</strong>地面的冷气比空气的冷气厉害得多。一个好的防潮垫 + 普通睡袋，远好于一个高级睡袋 + 没有防潮垫。</div>
+
+<h4>帐篷内的小细节</h4>
+<ul>
+  <li>鞋放在帐篷门厅里（不是帐篷里——鞋底的泥和味道）。用塑料袋套好防虫。</li>
+  <li>头灯挂帐篷顶上，比放枕头边好用。</li>
+  <li>手机、眼镜、水放在伸手就能够到的地方。</li>
+  <li>睡前上厕所。凌晨三点从温暖的睡袋里爬出来上厕所，是露营最痛苦的体验。</li>
+</ul>
+
+<!-- 1.2 -->
+<h3 id="s2-2">2.2 车中泊 — 把车变成卧室</h3>
+<p>车中泊 = 睡在车里，不搭帐篷。和帐篷露营比：<strong>不用搭不用收、不怕下雨、更安全、更暖和。</strong></p>
+
+<h4>哪些车可以？</h4>
+<ul>
+  <li><strong>SUV/MPV（后排能放平）：</strong>最理想。后排放倒后长度 ≥ 1.7m 就能睡。</li>
+  <li><strong>轿车：</strong>后排不能放平的话，副驾座椅放倒 + 后排勉强斜躺，质量很差。不建议。</li>
+  <li><strong>新能源车：</strong>空调可以一直开着（油车不行，会一氧化碳中毒）。这是车中泊的革命。</li>
+</ul>
+
+<h4>基本配置</h4>
+<table>
+  <tr><th>物品</th><th>推荐</th></tr>
+  <tr><td>床垫</td><td>5cm 自充气垫或折叠海绵垫（比充气垫舒服）</td></tr>
+  <tr><td>睡袋/被子</td><td>车内有保温，普通被子就行</td></tr>
+  <tr><td>遮阳挡</td><td>全车玻璃遮阳挡（隐私 + 遮光 + 隔热）</td></tr>
+  <tr><td>纱窗</td><td>套在车窗上的纱网——开窗通风不怕蚊虫</td></tr>
+  <tr><td>USB 小风扇</td><td>夏天没它你会在车里蒸熟</td></tr>
+</table>
+
+<h4>安全要点</h4>
+<ul>
+  <li><strong>油车睡觉必须熄火。</strong>怠速开空调 → 一氧化碳中毒。每年都有这样的悲剧。</li>
+  <li><strong>车窗必须留缝通风。</strong>至少 2cm，两个窗都开（一个进一个出）。配合纱窗防虫。</li>
+  <li><strong>停在平坦、安全、合法的地方。</strong>不是所有能停车的地方都允许过夜。景区停车场、服务区一般可以。路边野地不一定。</li>
+  <li><strong>贵重物品从仪表盘上拿下来。</strong>不要在车里留任何从窗外能看到的诱人物品。</li>
+</ul>
+
+<h4>帐篷 vs 车中泊：怎么选？</h4>
+<table>
+  <tr><th>场景</th><th>推荐</th></tr>
+  <tr><td>好天气 + 有平整地面 + 想体验"真正露营"</td><td>帐篷</td></tr>
+  <tr><td>雨天 / 地面湿 / 懒得搭收</td><td>车中泊</td></tr>
+  <tr><td>冬天 / 大风天</td><td>车中泊（暖和太多）</td></tr>
+  <tr><td>两个人以上</td><td>帐篷（车里睡不下）</td></tr>
+  <tr><td>一个人 + 只是想多钓半天</td><td>车中泊（零额外装备）</td></tr>
+</table>
+</section>
+
+
+<!-- ═══════════ S3: 野炊篇 ═══════════ -->
+<section id="s3">
+<h2>第三篇：野炊篇 — 野外厨房</h2>
+
+<h3 id="s3-1">3.1 炉具系统：火从哪里来</h3>
+<table>
+  <tr><th>方案</th><th>优点</th><th>缺点</th><th>适合场景</th></tr>
+  <tr><td><strong>卡式炉</strong></td><td>便宜、方便、火力大</td><td>气罐占地方，低温性能下降</td><td>90% 场景的首选</td></tr>
+  <tr><td><strong>柴火炉</strong></td><td>燃料免费、有氛围感</td><td>生火慢、锅底会黑</td><td>想体验"真正的野炊"</td></tr>
+  <tr><td><strong>分体式气炉</strong></td><td>轻便、收纳小、高海拔可用</td><td>稳定性不如卡式炉</td><td>徒步露营 / 空间紧张</td></tr>
+  <tr><td><strong>车辆外放电 + 电器</strong></td><td>无明火、干净</td><td>依赖车辆电量</td><td>新能源车用户最佳方案</td></tr>
+</table>
+
+<h4>推荐配置</h4>
+<p><strong>基础方案（300 元以内）：</strong>岩谷/脉鲜卡式炉 × 1 + 丁烷气罐 × 4 + 点火器。</p>
+<p><strong>进阶方案（3 人以上做饭）：</strong>双头卡式炉或猛火炉 + 普通卡式炉（一炒一煮）。</p>
+
+<div class="callout warn">
+  <strong>🔥 一个炉子做不了一桌菜。</strong>如果要做米饭 + 炖鱼 + 炒菜，至少需要两个火头。
+</div>
+
+<h4>使用注意事项</h4>
+<ul>
+  <li>卡式炉<strong>不要用大于炉架直径的锅</strong>，锅底热量反射到气罐会导致爆炸。</li>
+  <li>气罐<strong>不要暴晒</strong>，夏天车内温度可能超过 50°C。</li>
+  <li>丁烷气罐 0°C 以下性能急剧下降，冬季换用异丁烷混合气（高山气罐）。</li>
+</ul>
+
+<!-- 1.2 -->
+<h3 id="s3-2">3.2 锅具与餐具</h3>
+<h4>最小可行配置（2-3 人）</h4>
+<table>
+  <tr><th>物品</th><th>建议</th><th>用途</th></tr>
+  <tr><td>炒锅/煎锅</td><td>30cm 不粘锅</td><td>炒菜、煎鱼</td></tr>
+  <tr><td>汤锅</td><td>2.5-3L 带盖</td><td>煮汤、煮面、煮米饭</td></tr>
+  <tr><td>烧水壶</td><td>0.8-1L 铝/不锈钢</td><td>烧水泡茶（不跟锅混用）</td></tr>
+  <tr><td>菜板</td><td>折叠塑料菜板</td><td>切菜、处理鱼</td></tr>
+  <tr><td>刀</td><td><strong>中式菜刀一把就够</strong></td><td>别带整套西式刀</td></tr>
+  <tr><td>碗/盘</td><td>不锈钢深盘 × 3</td><td>不碎、好洗</td></tr>
+  <tr><td>调料包</td><td>小分装瓶 × 6</td><td>盐、酱油、油、醋、辣椒面、孜然</td></tr>
+</table>
+
+<h4>进阶</h4>
+<ul>
+  <li><strong>铸铁煎锅：</strong>煎牛排、煎鱼皮效果秒杀不粘锅。唯一缺点：重。</li>
+  <li><strong>荷兰锅（铸铁炖锅）：</strong>营地之王。炖、焖、烤、炸、做面包全行。但 5kg+。</li>
+  <li><strong>折叠水桶：</strong>洗碗、洗手、取水，折叠后不占地方。</li>
+</ul>
+
+<!-- 1.3 -->
+<h3 id="s3-3">3.3 食材采购与保鲜</h3>
+<table>
+  <tr><th>类别</th><th>买什么</th><th>在哪买</th></tr>
+  <tr><td><strong>耐放食材</strong></td><td>米、面、挂面、罐头、火腿肠、榨菜、调料</td><td>超市，提前一天</td></tr>
+  <tr><td><strong>鲜食材</strong></td><td>蔬菜、鸡蛋、肉类</td><td>出发当天早上</td></tr>
+  <tr><td><strong>就地获取</strong></td><td>鱼！水边的野菜（如果你认识）</td><td>现场</td></tr>
+</table>
+
+<table>
+  <tr><th>季节</th><th>方案</th><th>能撑多久</th></tr>
+  <tr><td>春秋</td><td>保温箱 + 冰袋 × 2</td><td>12-24 小时</td></tr>
+  <tr><td>夏季</td><td><strong>车载冰箱是刚需</strong></td><td>无限（只要车有电）</td></tr>
+  <tr><td>冬季</td><td>保温箱即可，天然冷藏</td><td>几天都没问题</td></tr>
+</table>
+
+<!-- 1.4 -->
+<h3 id="s3-4">3.4 经典野炊食谱</h3>
+
+<h4>食谱一：野葱煎蛋（5分钟，零失败）</h4>
+<p>鸡蛋 4 个打散 + 葱花/野葱 + 盐，油热下锅，两面煎至金黄。鸡蛋不需要冷藏，葱提前买好，全程一个锅搞定。</p>
+
+<h4>食谱二：泉水煮面（10分钟）</h4>
+<p>水烧开 → 下面条 → 加盐、酱油、香油 → 卧一个鸡蛋 → 撒葱花。升级版：加肉末/火腿肠/榨菜。这面的灵魂在于——你是坐在水边吃的。</p>
+
+<h4>食谱三：炭火/柴火烤红薯土豆（30分钟，零操作）</h4>
+<p>红薯/土豆用锡纸包好，丢进炭火或柴火余烬里。30 分钟后扒出来，掰开冒热气。<strong>野炊的终极氛围组。</strong></p>
+
+<h4>食谱四：番茄鸡蛋汤（10分钟）</h4>
+<p>番茄切块，油热炒出汁，加水烧开，倒入打散的鸡蛋，加盐和葱花。在野外喝一碗热汤的幸福感远超想象。</p>
+</section>
+
+
+<!-- ═══════════ S4: 垂钓篇 ═══════════ -->
+<section id="s4">
+<h2>第四篇：垂钓篇 — 手杆专题</h2>
+
+<h3 id="s4-1">4.1 手杆装备体系</h3>
+<p>手杆 = 不带渔轮的钓竿，靠竿身的弹性直接搏鱼。是中国淡水钓的主流。手杆讲究<strong>灵敏</strong>——鱼咬钩的每一丝动静都通过浮漂传递到你眼里。这是手杆最让人上瘾的地方。</p>
+
+<h4>新手第一根竿怎么选？</h4>
+<table>
+  <tr><th>参数</th><th>推荐</th><th>原因</th></tr>
+  <tr><td>长度</td><td><strong>4.5m</strong></td><td>最通用，大部分野钓场景都够</td></tr>
+  <tr><td>调性</td><td><strong>28调</strong></td><td>不硬不软，大小通吃</td></tr>
+  <tr><td>材质</td><td>碳素</td><td>轻、硬、灵敏</td></tr>
+  <tr><td>预算</td><td>150-300 元</td><td>这个价位的碳素竿已经够用了</td></tr>
+</table>
+
+<h4>竿长使用场景</h4>
+<table>
+  <tr><th>长度</th><th>场景</th></tr>
+  <tr><td>3.6m</td><td>近岸浅滩、小河沟、春天钓鲫鱼</td></tr>
+  <tr><td>4.5m</td><td><strong>万能长度</strong>，大部分水库/河流通用</td></tr>
+  <tr><td>5.4m</td><td>需要打远一点的水库、深水区</td></tr>
+  <tr><td>6.3m+</td><td>大水面、深水钓大鱼，但重，需要支架</td></tr>
+</table>
+
+<h4>调性解释</h4>
+<ul>
+  <li><strong>19调（极硬）：</strong>竿尖弯一点点，其余全是腰。适合黑坑抢鱼，不适合野钓新手</li>
+  <li><strong>28调（硬）：</strong>前端 20% 弯曲。<strong>野钓最推荐</strong></li>
+  <li><strong>37调（中硬）：</strong>前端 30% 弯曲。手感好，适合钓鲫鱼</li>
+  <li><strong>46调（软）：</strong>整根竿都弯。适合玩手感</li>
+</ul>
+
+<h4>线组</h4>
+<pre>竿稍 → 主线 → 浮漂座 → 太空豆×4 → 铅皮座 → 八字环 → 子线 → 鱼钩</pre>
+
+<table>
+  <tr><th>目标鱼</th><th>主线号数</th><th>子线号数</th><th>钩号</th></tr>
+  <tr><td>鲫鱼/白条</td><td>1.0-1.5#</td><td>0.6-0.8#</td><td>袖3-5#</td></tr>
+  <tr><td>鲫鲤混钓</td><td>1.5-2.0#</td><td>0.8-1.2#</td><td>伊势尼3-5#</td></tr>
+  <tr><td>主攻大鲤/草鱼</td><td>2.5-3.5#</td><td>1.5-2.5#</td><td>伊势尼6-9#</td></tr>
+</table>
+
+<div class="callout tip"><strong>🔑 子线比主线小 0.5-1 号。</strong>挂底或中大鱼时，断的是子线而不是主线。换一副子线几毛钱，换一套主线 + 浮漂就是几十块。</div>
+
+<h4>浮漂</h4>
+<p>新手记住：<strong>吃铅量 1.5-2.0g</strong> 的枣核漂，适合 4.5m 竿配 1.5-2.5m 水深，覆盖 80% 的野钓场景。吃铅太小（&lt; 1g）风一吹就走水，太大（&gt; 3g）鱼口不明显。</p>
+
+<h4>其他必配</h4>
+<table>
+  <tr><th>物品</th><th>用途</th><th>优先级</th></tr>
+  <tr><td>炮台（竿支架）</td><td>架竿，解放双手</td><td><strong>必须有</strong></td></tr>
+  <tr><td>抄网</td><td>大鱼上岸的最后一步</td><td>必须有</td></tr>
+  <tr><td>鱼护/活鱼桶</td><td>把钓的鱼养起来</td><td>必须有</td></tr>
+  <tr><td>马扎/钓箱</td><td>坐</td><td>必须有</td></tr>
+  <tr><td>失手绳</td><td>竿被大鱼拖走时的最后防线</td><td>强烈推荐</td></tr>
+  <tr><td>偏光镜</td><td>消除水面反光看漂</td><td>强烈推荐</td></tr>
+  <tr><td>遮阳帽/钓鱼伞</td><td>防晒</td><td>夏天必须有</td></tr>
+</table>
+
+<!-- 1.2 -->
+<h3 id="s4-2">4.2 线组搭配与调漂</h3>
+<p>调漂的目的是让浮漂准确反映鱼咬钩的信号。原理：<strong>浮漂的浮力 = 铅坠 + 钩饵的重力（或略小于铅坠重力）。</strong></p>
+
+<h4>调四钓二（经典入门调法）</h4>
+<ol>
+  <li><strong>重铅找底：</strong>铅皮座上卷足够重的铅，抛入水中，浮漂完全沉入水中。</li>
+  <li><strong>上推浮漂至平水：</strong>逐步把浮漂往上推，直到漂尖刚好露出水面 → 此时知道了水深。</li>
+  <li><strong>下拉浮漂一个子线长度：</strong>距离 = 子线长度 + 10cm → 此时钩子离底约 10cm。</li>
+  <li><strong>修剪铅皮至 4 目：</strong>剪铅皮，每次少剪，直到浮漂露出 4 格（4目）。</li>
+  <li><strong>挂饵，微调至 2 目：</strong>挂上饵料抛入水中，上推浮漂直到露出 2 目 → <strong>调四钓二完成。</strong></li>
+</ol>
+<blockquote>此时状态：一钩触底、一钩悬浮（或轻触底），灵敏度最高。</blockquote>
+
+<h4>野钓实际调漂</h4>
+<ul>
+  <li><strong>初学者：</strong>调平水钓 2 目（比调四钓二稍钝，但信号真实不忽悠）</li>
+  <li><strong>有水流：</strong>调平水钓 3-4 目，甚至跑铅（让铅坠躺底）</li>
+  <li><strong>大鱼專攻：</strong>调 2 钓 4，钝一点，过滤小信号等大黑漂</li>
+</ul>
+<div class="callout"><strong>核心心法：灵了有口打不中是调太灵，钝了没口是调太钝。</strong>野钓没有固定公式，在灵和钝之间找平衡。</div>
+
+<!-- 1.3 -->
+<h3 id="s4-3">4.3 选点与打窝</h3>
+<h4>四季口诀</h4>
+<blockquote><strong>春钓滩，夏钓潭，秋钓阴，冬钓阳。</strong></blockquote>
+<ul>
+  <li><strong>春（3-5月）：</strong>鱼游向浅滩产卵觅食，钓 1-2m 浅水</li>
+  <li><strong>夏（6-8月）：</strong>鱼躲深水，钓 2-4m，早晚可钓浅</li>
+  <li><strong>秋（9-11月）：</strong>鱼回深水备冬，钓 2-3m</li>
+  <li><strong>冬（12-2月）：</strong>找向阳背风的深水区，钓 3m+</li>
+</ul>
+
+<h4>具体选点</h4>
+<table>
+  <tr><th>地形特征</th><th>原因</th></tr>
+  <tr><td>进水口两侧</td><td>溶氧高 + 冲来食物 = 鱼的食堂</td></tr>
+  <tr><td>水草边缘</td><td>鱼躲藏 + 觅食（别钓草中间，会挂钩）</td></tr>
+  <tr><td>水下障碍物旁</td><td>鱼的安全屋（但容易挂底）</td></tr>
+  <tr><td>铧尖（伸入水中的半岛）</td><td>鱼道，鱼巡游必经之路</td></tr>
+  <tr><td>深浅交界处</td><td>最佳伏击点</td></tr>
+  <tr><td>桥墩/码头旁</td><td>结构物聚集鱼群</td></tr>
+</table>
+
+<h4>打窝：把鱼引过来</h4>
+<p>手杆野钓<strong>必须先打窝</strong>。不打窝 = 等运气。</p>
+<table>
+  <tr><th>目标鱼</th><th>窝料</th><th>用量</th></tr>
+  <tr><td>鲫鱼</td><td>酒米（中药酒泡小米）</td><td>一小把，补窝每次半把</td></tr>
+  <tr><td>鲤鱼</td><td>玉米粒/颗粒饲料</td><td>2-3 把</td></tr>
+  <tr><td>草鱼</td><td>玉米粒/青草捆</td><td>视水域大小</td></tr>
+  <tr><td>杂食通用</td><td>商品底窝料（腥香型）</td><td>拳头大的团 2-3 个</td></tr>
+</table>
+<p><strong>技巧：少量多次、定点打（浮漂周围 30cm）、提前打效果翻倍。</strong></p>
+
+<!-- 1.4 -->
+<h3 id="s4-4">4.4 季节策略</h3>
+
+<h4>春季（3-5月）— 黄金季节</h4>
+<ul><li>时间：上午 9 点到下午 3 点最好 | 水深：1-2m | 饵料：腥味（红虫、蚯蚓）| 目标：鲫鱼为主</li></ul>
+
+<h4>夏季（6-8月）— 大鱼活跃</h4>
+<ul><li>时间：早 5-8 点、傍晚 5-8 点（中午基本没口）| 水深：2-4m | 饵料：素饵为主 | <strong>夜钓是夏季的正确答案</strong></li></ul>
+
+<h4>秋季（9-11月）— 和春季并列最好</h4>
+<ul><li>时间：全天都有口 | 水深：2-3m | 饵料：腥香各半 | <strong>一年中最容易爆护的季节</strong></li></ul>
+
+<h4>冬季（12-2月）— 难度最高</h4>
+<ul><li>时间：上午 10 点到下午 3 点 | 水深：3m+ | 饵料：<strong>活饵为王</strong>（红虫、蚯蚓）| 线组精细：0.8+0.4 | <strong>浮漂可能只下沉半目，注意力 100%。</strong></li></ul>
+
+<!-- 1.5 -->
+<h3 id="s4-5">4.5 常见鱼种应对表</h3>
+<table>
+  <tr><th>鱼种</th><th>常见水域</th><th>最佳季节</th><th>饵料</th><th>钓法要点</th></tr>
+  <tr><td>鲫鱼</td><td>几乎所有淡水</td><td>春秋</td><td>蚯蚓/红虫/商品饵</td><td>底钓，调灵，看小顿口</td></tr>
+  <tr><td>鲤鱼</td><td>水库/大河</td><td>夏秋</td><td>玉米/颗粒</td><td>底钓，调钝等黑漂，中鱼后遛鱼</td></tr>
+  <tr><td>草鱼</td><td>水库/养殖塘</td><td>夏</td><td>玉米/青草/芦苇</td><td>可底可浮，会截口</td></tr>
+  <tr><td>白条/翘嘴</td><td>全水域</td><td>夏秋</td><td>腥饵/小虫</td><td>浮钓 50cm-1m，快节奏</td></tr>
+  <tr><td>鲢鳙</td><td>水库</td><td>夏</td><td>酸臭饵（特制）</td><td>浮钓 1-2m，需要专门线组</td></tr>
+  <tr><td>黄颡鱼</td><td>河流/水库底</td><td>夏夜</td><td>蚯蚓/鸡肝</td><td>底钓，夜钓最佳，取钩小心刺</td></tr>
+</table>
+
+<!-- 1.6 -->
+<h3 id="s4-6">4.6 问题排查手册</h3>
+<table>
+  <tr><th>症状</th><th>可能原因</th><th>解决方法</th></tr>
+  <tr><td>浮漂一直不动</td><td>没鱼 / 钓太深或太浅 / 窝料不对</td><td>换位 &gt; 调水深 &gt; 换饵</td></tr>
+  <tr><td>浮漂一直动但提竿不中鱼</td><td>小杂鱼闹窝 / 调太灵 / 钩太大</td><td>饵搓硬 / 换大漂调钝 / 换小钩</td></tr>
+  <tr><td>浮漂缓慢上顶后停住</td><td>鱼已吃饵并抬头</td><td><strong>标准顶漂信号，立即提竿！</strong></td></tr>
+  <tr><td>浮漂抖动/黑漂又马上浮起</td><td>小杂鱼抢食</td><td>加大铅坠让饵快速到底</td></tr>
+  <tr><td>连续切线</td><td>子线太细 / 有牙齿的鱼 / 线有伤</td><td>换粗子线、检查磨损</td></tr>
+  <tr><td>挂底</td><td>水底有障碍物</td><td>别硬拽（会断竿梢），从不同方向轻拉</td></tr>
+  <tr><td>鱼拉到岸边跑了</td><td>没抄网 / 钩没刺牢</td><td>大鱼一定用抄网！从鱼头方向抄</td></tr>
+  <tr><td>饵料到水底就散</td><td>饵水比不对</td><td>加拉丝粉重新开饵</td></tr>
+  <tr><td>钓着钓着突然停口</td><td>惊鱼了 / 大鱼进窝</td><td>安静等待 10 分钟</td></tr>
+  <tr><td>浮漂走水严重</td><td>有流 / 有风</td><td>换大漂加重铅 / 跑铅钓法</td></tr>
+  <tr><td>竿梢断了</td><td>提竿过猛 / 线组超限 / 竿有暗伤</td><td>提竿用手腕发力；线组不超竿的标注</td></tr>
+</table>
+
+<h4>提竿时机判断</h4>
+<ul>
+  <li><strong>顿口</strong>（浮漂突然下顿半目到一目）→ 最标准的鲫鱼信号，立刻提竿！</li>
+  <li><strong>黑漂</strong>（浮漂完全沉入水中）→ 大鱼信号，沉住气等 1 秒确认</li>
+  <li><strong>顶漂</strong>（浮漂缓慢上升后停止）→ 鱼吃饵后抬头，刚停时提竿</li>
+  <li><strong>走漂</strong>（浮漂横移）→ 草鱼或大鲫的经典信号</li>
+  <li><strong>点动</strong>（轻微上下抖动）→ 小杂鱼或试探，不提竿，等后续动作</li>
+</ul>
+<div class="callout"><strong>🎯 宁可错过一百个小信号，也不错过一个真口。</strong>拿不准的时候，不提。</div>
+</section>
+
+
+<!-- ═══════════ S5: 水上篇 ═══════════ -->
+<section id="s5">
+<h2>第五篇：水上运动 — 皮划艇入门</h2>
+<p>你已经在水边了。为什么不划出去？</p>
+<p>皮划艇不是极限运动。对户外玩家来说，它是<strong>水上的徒步</strong>——用自己的力量，换一个从岸上永远看不到的视角。而且，从皮划艇上钓鱼，你能到达岸钓永远够不着的钓点。</p>
+
+<!-- 1.1 -->
+<h3 id="s5-1">5.1 选什么艇：先搞清楚你要什么</h3>
+
+<table>
+  <tr><th>类型</th><th>优点</th><th>缺点</th><th>适合谁</th></tr>
+  <tr>
+    <td><strong>充气皮划艇</strong></td>
+    <td>收纳小（一个背包）、便宜（1000-3000）、轿车后备箱随便放</td>
+    <td>充气 10 分钟、速度慢、怕尖锐物、风大时漂</td>
+    <td>新手、轿车车主、偶尔玩</td>
+  </tr>
+  <tr>
+    <td><strong>折叠皮划艇</strong></td>
+    <td>比充气快、收纳中等、质感接近硬壳</td>
+    <td>贵（5000+）、组装需要练习</td>
+    <td>进阶玩家、SUV 但不想装车顶架</td>
+  </tr>
+  <tr>
+    <td><strong>硬壳皮划艇</strong></td>
+    <td>速度快、操控好、耐用、钓鱼最稳</td>
+    <td>贵（3000-15000）、需要车顶架、存放占地方</td>
+    <td>发烧友、有车库/院子、SUV+车顶架</td>
+  </tr>
+  <tr>
+    <td><strong>钓鱼皮划艇</strong></td>
+    <td>宽体稳如平台、有竿座、可站立抛竿</td>
+    <td>重、慢、贵（5000-20000+）</td>
+    <td>以钓鱼为目的的玩家</td>
+  </tr>
+</table>
+
+<div class="callout"><strong>🎯 新手建议：从充气皮划艇开始。</strong>Intex、Aquaglide 等入门款 1000-2000 元，试试自己是不是真的喜欢。不喜欢的话，收进柜子里不占地。确认喜欢了，再升级。</div>
+
+<!-- 1.2 -->
+<h3 id="s5-2">5.2 北京及周边可以划的水域</h3>
+
+<table>
+  <tr><th>水域</th><th>类型</th><th>距离</th><th>说明</th></tr>
+  <tr><td><strong>金海湖</strong></td><td>水库</td><td>平谷，~1.5h</td><td>北京最适合皮划艇的水域之一，水面开阔，有专门的划艇区</td></tr>
+  <tr><td><strong>官厅水库</strong></td><td>水库</td><td>延庆/怀来，~1.5h</td><td>巨大水面，风可能大。适合有经验的。可露营可钓鱼</td></tr>
+  <tr><td><strong>白河堡水库</strong></td><td>水库</td><td>延庆，~2h</td><td>安静，水质好，周边可露营。秘密级别偏高</td></tr>
+  <tr><td><strong>潮白河（部分河段）</strong></td><td>河道</td><td>顺义/通州，~1h</td><td>近、平缓、安全。适合新手练习和短途划行</td></tr>
+  <tr><td><strong>怀柔水库上游</strong></td><td>河道/水库</td><td>怀柔，~1.5h</td><td>水质好、风景好。部分河段水流平缓</td></tr>
+  <tr><td><strong>密云水库（外围）</strong></td><td>水库</td><td>密云，~2h</td><td>饮用水源地，核心区禁入。外围部分河道可划</td></tr>
+  <tr><td><strong>秦皇岛沿海</strong></td><td>海域</td><td>河北，~3.5h</td><td>海上皮划艇，完全不同体验。需要额外安全准备</td></tr>
+</table>
+
+<div class="callout warn"><strong>⚠️ 重要：下水前确认是否允许。</strong>很多水库是饮用水源地，禁止水上活动。到了先问当地人、看标识。不要硬闯——罚款事小，污染水源事大。</div>
+
+<!-- 1.3 -->
+<h3 id="s5-3">5.3 基本技术：够用就行</h3>
+
+<h4>上下艇</h4>
+<p>最危险的不是在水中间，是在岸边。上下艇时最容易翻。</p>
+<ol>
+  <li><strong>上岸边下水：</strong>艇一半在水里一半在岸上，人坐进艇里，用桨把艇推进水里。屁股不离座位。</li>
+  <li><strong>从码头下水：</strong>更难。核心是把重心保持在艇的正上方。一只手撑码头，慢慢把自己放进去。</li>
+</ol>
+
+<h4>基本桨法</h4>
+<table>
+  <tr><th>动作</th><th>怎么做</th><th>干什么用</th></tr>
+  <tr><td><strong>前进划</strong></td><td>桨面垂直入水，用躯干旋转（不是手臂拉），从前往后推</td><td>正常行进</td></tr>
+  <tr><td><strong>后退划</strong></td><td>反过来，从后往前</td><td>停住、避开障碍</td></tr>
+  <tr><td><strong>扫桨（转向）</strong></td><td>桨面平着在水面画一个大弧</td><td>原地掉头</td></tr>
+  <tr><td><strong>低位支撑</strong></td><td>快翻的时候，用桨面平拍水面把自己撑回来</td><td>防止翻艇</td></tr>
+</table>
+
+<div class="callout tip"><strong>💡 新手最爱犯的错误：用胳膊划。</strong>胳膊会酸死的。正确发力来自躯干旋转——肚子和背部发力，手臂只是传力工具。如果你划了 20 分钟肩膀就开始疼，你就在用胳膊。</div>
+
+<!-- 1.4 -->
+<h3 id="s5-4">5.4 安全：水上的规矩必须比地上的硬</h3>
+
+<h4>永远带着</h4>
+<ul>
+  <li><strong>救生衣。</strong>不是"会游泳就不用穿"。水温低、离岸远、突然抽筋——再好的水性也可能不够用。穿救生衣不是弱者的表现，是懂水的人的习惯。</li>
+  <li><strong>哨子。</strong>挂在救生衣上。需要求救的时候，哨声比你喊破嗓子传得远。</li>
+  <li><strong>手机防水袋。</strong>挂在脖子上或固定在艇上。不是放口袋里。</li>
+  <li><strong>饮用水。</strong>水面上日晒比地面厉害——反射+没有遮挡。很容易脱水。</li>
+</ul>
+
+<h4>铁律</h4>
+<ol>
+  <li><strong>新手别一个人划。</strong>至少两个人，各划各的艇。互相照应。</li>
+  <li><strong>离岸不超过你能游回来的距离。</strong>除非你对艇、对水、对自己有足够信心。</li>
+  <li><strong>看天气预报。</strong>风速 > 15km/h 就别下水了。充气艇被风吹走的案例每年都有。</li>
+  <li><strong>机动船 > 你。</strong>水库里可能有快艇、游船。它们的浪不是你的桨能对抗的。保持距离。</li>
+  <li><strong>冷了立刻回岸。</strong>水温 + 气温低 → 失温风险。别逞强。</li>
+</ol>
+
+<!-- 1.5 -->
+<h3 id="s5-5">5.5 皮划艇钓鱼：水上狙击位</h3>
+<p>皮划艇 + 钓鱼 = 你可以到达任何岸钓够不到的钓点。水中间的暗岛、对岸的浅滩、芦苇丛后面的深坑——这些都是皮划艇的红利。</p>
+
+<h4>皮划艇钓鱼 vs 岸钓</h4>
+<table>
+  <tr><th></th><th>岸钓</th><th>皮划艇钓鱼</th></tr>
+  <tr><td>可达范围</td><td>岸边 10-15m</td><td>整个水域</td></tr>
+  <tr><td>选点灵活度</td><td>换钓点 = 收竿 + 走路</td><td>划过去就行</td></tr>
+  <tr><td>抛竿角度</td><td>只能从岸边往水里抛</td><td>360°，可以围着一个结构从各个方向抛</td></tr>
+  <tr><td>稳定性</td><td>地面，稳如泰山</td><td>水面，晃。需要适应</td></tr>
+</table>
+
+<h4>艇上钓鱼技巧</h4>
+<ul>
+  <li><strong>用短竿。</strong>1.8-2.4m 的短手竿或路亚竿在艇上更好操控。长竿在狭小空间里是灾难。</li>
+  <li><strong>固定你的装备。</strong>竿、饵盒、抄网——全部用绑绳或卡扣固定在艇上。翻艇的时候你不会想捞装备。</li>
+  <li><strong>锚是神器。</strong>一个小锚（1-2kg）定住艇，你就能专心钓鱼。没有锚，你永远在漂→划→漂的死循环里。</li>
+  <li><strong>放流更方便。</strong>鱼不用上岸就能放回去——摘钩 → 往水里一松 → 继续钓。对鱼的伤害更小。</li>
+</ul>
+
+<!-- 1.6 -->
+<h3 id="s5-6">5.6 运输与收纳</h3>
+
+<h4>充气艇（最省心）</h4>
+<p>折叠后一个背包大小，放后备箱就行。需要：充气泵（电动 > 脚踩）、修补包（永远带着）。</p>
+
+<h4>硬壳艇（需要车顶架）</h4>
+<ul>
+  <li>SUV 需要横杆 + 艇架（J 型架或鞍型架）</li>
+  <li>绑带两根：前绑带 + 后绑带，各拉到车头车尾的眼环上</li>
+  <li>一个人装卸硬壳艇很痛苦（20-40kg 举过头顶）。建议两个人</li>
+  <li>高速上注意限速——车顶有艇，风阻大得多</li>
+</ul>
+
+<h4>存放</h4>
+<ul>
+  <li>充气艇：放气后阴干再收纳（别湿着塞进包里——会发霉）</li>
+  <li>硬壳艇：挂在车库墙上或放在架子上。别直接放地上——变形</li>
+</ul>
+</section>
+
+<!-- ═══════════ S6: 轻徒步篇 ═══════════ -->
+<section id="s6">
+<h2>第六篇：轻徒步入门 — 开车到山脚下，走一走</h2>
+<p>这一篇不是教你穿越无人区。是教你：开车到了一个地方，停好车，背上一个小包，花 2-6 小时走一条山路或野路，看一些开车看不到的风景，然后回到车上——<strong>毫发无伤、心情愉快。</strong></p>
+<p>你和你的小团队没有徒步经验，这完全没问题。<strong>轻徒步的门槛极低，但有几个关键认知一旦错了，后果可以很严重。</strong></p>
+
+<!-- 1.1 -->
+<h3 id="s6-1">6.1 轻徒步的核心定位</h3>
+<p>和重装穿越的区别：</p>
+<table>
+  <tr><th></th><th>重装徒步</th><th>轻徒步（你在这一列）</th></tr>
+  <tr><td>时间</td><td>多日，背包 15-25kg</td><td>半天到一天，背包 &lt; 5kg</td></tr>
+  <tr><td>路线</td><td>野外无补给</td><td>有路径或明显方向，离车不超过 3 小时</td></tr>
+  <tr><td>装备</td><td>帐篷、睡袋、炉具、大量食物水</td><td>水、零食、外套、手机充电宝</td></tr>
+  <tr><td>风险</td><td>迷路、失温、补给耗尽</td><td><strong>迷路、崴脚、天气突变</strong></td></tr>
+  <tr><td>心态</td><td>挑战自我</td><td><strong>换个方式散步</strong></td></tr>
+</table>
+
+<div class="callout"><strong>🎯 轻徒步的黄金法则：你在任何时刻都应该能在天黑前回到车上。</strong>如果做不到这一点，你就已经进入了"重装"或"冒险"的范畴，需要完全不同的准备。</div>
+
+<!-- 1.2 -->
+<h3 id="s6-2">6.2 装备：最精简但有底线的配置</h3>
+
+<h4>鞋 — 唯一不能省的装备</h4>
+<p>不要穿帆布鞋、跑步鞋、板鞋去走野路。<strong>一双入门级徒步鞋（300-500 元）是你和崴脚之间唯一的屏障。</strong></p>
+<ul>
+  <li><strong>低帮徒步鞋：</strong>适合成熟步道和干燥路面。轻便。</li>
+  <li><strong>中帮徒步鞋：</strong>适合碎石路和轻度野路。保护脚踝。<strong>新手推荐这个。</strong></li>
+  <li><strong>高帮登山鞋：</strong>重装用的，轻徒步不需要。</li>
+  <li>品牌推荐：凯乐石、探路者、Merrell、Columbia 的入门款就够了。</li>
+</ul>
+
+<h4>登山杖 — 膝盖的保险</h4>
+<p>年轻人觉得"我不用那玩意儿"。但登山杖不是拐杖——它把一部分体重从膝盖转移到手臂，<strong>下山时尤其重要。</strong></p>
+<ul>
+  <li>一根还是两根？新手至少一根，预算够就两根。</li>
+  <li>选外锁式的（比旋转锁可靠）。</li>
+  <li>几十块钱一根的铝合金杖就够用了。</li>
+  <li>用法：上山调短、下山调长；永远用腕带承重，不是用手死握。</li>
+</ul>
+
+<h4>背包</h4>
+<ul>
+  <li>15-25L 的日用背包即可，不需要专业登山包。</li>
+  <li>必须有胸带和腰带（没有的话，下坡包会往前甩）。</li>
+  <li>有防水罩最好，没有的话包里所有东西用塑料袋分装。</li>
+</ul>
+
+<h4>衣物</h4>
+<ul>
+  <li><strong>分层原则：</strong>速干内衣 + 保暖中层（抓绒/薄羽绒）+ 防风外层（冲锋衣/软壳）。</li>
+  <li><strong>纯棉是户外的大忌。</strong>棉T恤吸汗后不干，风一吹就是移动的失温装置。</li>
+  <li>多带一件外套。山顶比山脚可以低 5-10°C。</li>
+  <li>帽子 + 太阳镜。</li>
+</ul>
+
+<h4>水与食物</h4>
+<ul>
+  <li>春夏秋：每人每小时 500ml 水。半天徒步带 2L。</li>
+  <li>冬天消耗少但更容易忘喝水，带 1.5L。</li>
+  <li>食物：高热量零食（巧克力、坚果、能量棒），不需要正餐。</li>
+</ul>
+
+<h4>导航与安全</h4>
+<ul>
+  <li>手机提前下载离线地图（两步路/六只脚 App）。野山可能没信号。</li>
+  <li>充电宝充满。</li>
+  <li>口哨（挂脖子上，不是放包里。见 6.5）。</li>
+  <li>头灯（即使计划天黑前返回——计划赶不上变化）。</li>
+  <li>急救包精简版：创可贴、碘伏、弹性绷带。</li>
+</ul>
+
+<!-- 1.3 -->
+<h3 id="s6-3">6.3 路线选择：怎么找到适合新手的路线</h3>
+
+<h4>难度自评</h4>
+<table>
+  <tr><th>难度</th><th>标准</th><th>适合</th></tr>
+  <tr><td>⭐ 休闲</td><td>铺装路面或木栈道，&lt; 5km，爬升 &lt; 200m</td><td>穿帆布鞋也没问题，散步级别</td></tr>
+  <tr><td>⭐⭐ 轻松</td><td>土路/碎石路，5-10km，爬升 200-500m</td><td><strong>新手从这里开始</strong></td></tr>
+  <tr><td>⭐⭐⭐ 中等</td><td>有明显路径的野山，10-15km，爬升 500-1000m</td><td>走过几次 ⭐⭐ 之后再碰</td></tr>
+  <tr><td>⭐⭐⭐⭐ 挑战</td><td>路径不清晰、需要手脚并用、15km+</td><td>轻徒步到此为止，再往上不是你的目标</td></tr>
+</table>
+
+<h4>找路线的工具</h4>
+<table>
+  <tr><th>App</th><th>怎么用</th></tr>
+  <tr><td><strong>两步路户外助手</strong></td><td>搜"北京 + 新手徒步"，看别人的轨迹。关注：里程、爬升、用时、<strong>最近三个月内有没有人走过</strong></td></tr>
+  <tr><td><strong>六只脚</strong></td><td>类似，轨迹库更偏向北方路线</td></tr>
+  <tr><td><strong>小红书</strong></td><td>搜"XX山 徒步"，看最近的实拍图了解路况。<strong>注意：小红书的"轻松""适合新手"经常不准</strong>——交叉验证两步路的里程和爬升数据</td></tr>
+</table>
+
+<h4>出发前必做的三件事</h4>
+<ol>
+  <li><strong>看最近两周的轨迹。</strong>如果一条路线两个月没人走了，可能路径已经长满了、塌了、或被封了。</li>
+  <li><strong>查天气。</strong>下雨或雨后 24 小时内不要去土路野山——路滑 + 你的鞋不是专业防滑的。</li>
+  <li><strong>下载离线轨迹。</strong>出发前在两步路/六只脚里把别人的轨迹下载好。没信号时这就是你的导航。</li>
+</ol>
+
+<!-- 1.4 -->
+<h3 id="s6-4">6.4 走起来：新手最容易犯的错</h3>
+
+<h4>错误一：上山太快</h4>
+<p>新手精力充沛，一开始冲太快。结果：20 分钟后喘不上气，后面全废。</p>
+<p><strong>正确做法：</strong>找一个你能边走边完整说一句话的配速。如果说到一半需要喘气，就慢了。</p>
+
+<h4>错误二：下山不当回事</h4>
+<p>下山时觉得"轻松了"，开始小跑、跳跃、玩手机。<strong>80% 的徒步受伤发生在下山。</strong></p>
+<ul>
+  <li>下山时膝盖承受的冲击是体重的 3-5 倍。</li>
+  <li>用登山杖分担冲击。</li>
+  <li>走"之"字形，不要直下。</li>
+  <li>每一步踩稳了再走下一步。</li>
+</ul>
+
+<h4>错误三：不知道什么时候该回头</h4>
+<p>走了一半发现路不见了、天快黑了、有人体力不行了——继续走还是回头？</p>
+<p><strong>触发回头的硬条件（满足任意一条）：</strong></p>
+<ul>
+  <li>找不到路径超过 10 分钟</li>
+  <li>有人开始明显体力不支</li>
+  <li>到预定的折返时间了（出发时定一个"最晚折返时间"，比如下午 2 点）</li>
+  <li>天气变差（起雾、起风、远处有雷声）</li>
+  <li>天黑前 1.5 小时还没到目的地</li>
+</ul>
+<div class="callout"><strong>🎯 登顶不是目标，安全回去才是。</strong>山永远在那里，下次再来。</div>
+
+<h4>错误四：团队走散了</h4>
+<p>你在 3-5 人的小团队里，不同人的体力可能差很多。</p>
+<ul>
+  <li><strong>最慢的人走最前面。</strong>这是团队徒步最重要的规则。如果最快的人领队，队伍会越拉越长直到断裂。</li>
+  <li>指定一个<strong>收队</strong>（体力最好的人走最后面，确保没有人掉队）。</li>
+  <li>约定岔路口等待规则：遇到岔路，前面的人必须等到后面的人看到你。</li>
+  <li>每个人手机里都有离线轨迹。</li>
+</ul>
+
+<h4>错误五：垃圾留在山上</h4>
+<p>所有垃圾带下山。包括果皮、纸巾——"可降解"在干燥的山上降解需要数年。带走所有不属于山的东西。</p>
+
+<!-- 1.5 -->
+<h3 id="s6-5">6.5 组合联动：钓鱼+野炊+轻徒步的一天</h3>
+<p>这是一个新的模板——把轻徒步嵌入到你已经会的一日游里：</p>
+
+<pre>
+06:00  出发
+07:30  到达水库/山脚下
+07:45  先钓鱼，打好窝子，享受早口
+10:30  早口结束。把鱼护放好，竿收起来
+10:45  背上小包，开始轻徒步（2-3 小时路线）
+13:00  回到车上/营地
+13:15  开始野炊午餐
+14:30  饭后休息，下午再钓一会儿或直接返程
+16:00  返程</pre>
+
+<blockquote>这个组合日的精髓：<strong>钓鱼满足静，徒步满足动，野炊把两者串起来。</strong>一天之内三种体验，比单纯钓鱼或单纯徒步更丰富。</blockquote>
+
+<!-- ═══════════ S7: 摄影篇 ═══════════ -->
+<section id="s7">
+<h2>第七篇：户外摄影入门 — 风景与人像</h2>
+<p>你已经在最好的地方、最好的光线里了。用手机或相机把这些留下来，不是为了发朋友圈，是为了<strong>让你记住那一刻的感觉</strong>。</p>
+<p>这一篇从零开始——假设你只有手机。因为最好的相机是你带在身边的那台。</p>
+
+<!-- 1.1 -->
+<h3 id="s7-1">7.1 光线：摄影 80% 的功力在这里</h3>
+
+<h4>黄金时刻</h4>
+<p>日出后和日落前的一小时，光线是金色的、柔和的、有方向的。在这段时间拍任何东西——风景、人像、水面——都比中午好看三倍。</p>
+<p>你已经在户外了。钓鱼的早口和黄昏口，恰好就是摄影的黄金时刻。<strong>你的爱好天然对齐。</strong></p>
+
+<h4>阴天不是灾难</h4>
+<p>阴天的光是天然柔光箱——没有硬阴影，人的皮肤拍出来特别柔和。阴天拍人像比大晴天好得多。别因为阴天就收起手机。</p>
+
+<h4>中午别拍</h4>
+<p>正午阳光从头顶直射，人脸全是阴影，风景没有层次。中午是用来钓鱼、吃饭、睡觉的，不是用来拍照的。</p>
+
+<!-- 1.2 -->
+<h3 id="s7-2">7.2 构图：三条规则吃掉 90% 的场景</h3>
+
+<h4>三分法则</h4>
+<p>把画面想象成九宫格。把最重要的东西放在四条线的交叉点上。天空占 1/3 或 2/3（看你更想强调地面还是天空）。</p>
+<p>手机设置里打开"网格线"。立刻能用。</p>
+
+<h4>引导线</h4>
+<p>一条路、一条河、一排树、一道山脊——任何能引导眼睛从画面边缘走向中心的线。让照片有纵深感。</p>
+
+<h4>前景</h4>
+<p>在镜头前放一个东西（一块石头、一丛花、你的钓竿、一杯咖啡）。它制造层次感：前景 → 中景 → 远景。一张有前景的风景照和没有前景的，差距就是你开始"知道自己在拍什么"的标志。</p>
+
+<!-- 1.3 -->
+<h3 id="s7-3">7.3 户外人像：把人放在自然里</h3>
+
+<h4>基本心法</h4>
+<ul>
+  <li><strong>人小景大。</strong>把人放在画面的三分之一处，让风景占大头。人在风景里，而不是风景当背景布。</li>
+  <li><strong>拍背影和侧脸。</strong>不需要表情管理，不需要摆拍。走路的背影、看风景的侧脸、低头绑钩的瞬间——比正面比剪刀手好一百倍。</li>
+  <li><strong>互动比看镜头好。</strong>拍女朋友在看风景、在弄炉子、在看浮漂。人在专注的时候最好看。</li>
+  <li><strong>别怕逆光。</strong>落日从背后照过来，头发边缘发光。手机点人脸对焦，背景过曝也没关系——那叫"氛围感"。</li>
+</ul>
+
+<h4>女朋友的拍照速成法</h4>
+<ol>
+  <li>让她站在光里（侧光或逆光），不要站在阴影里。</li>
+  <li>蹲下来拍。手机放到她腰部高度或更低——显高、显腿长。</li>
+  <li>黄金时刻连拍。让她慢慢走、回头看、拨一下头发。你在旁边连拍 50 张，里面一定有 3 张好看的。</li>
+  <li>把环境拍进去。不是特写大头照——是"她在湖边"、"她在山路上"、"她在篝火旁"。</li>
+</ol>
+
+<!-- 1.4 -->
+<h3 id="s7-4">7.4 风景摄影：水边和山野</h3>
+
+<h4>水面拍摄</h4>
+<ul>
+  <li><strong>清晨有雾的水面：</strong>户外摄影的圣杯。平如镜的水面 + 薄雾 + 日出金色。你的手机用默认模式直接拍就行——光线已经帮你做完了一切。</li>
+  <li><strong>倒影：</strong>水面平静时，把水平线放在画面正中间。上下对称。</li>
+  <li><strong>涟漪和波光：</strong>侧光（早上或傍晚）时水面有碎金。用手机的人像模式或大光圈模式拍水面的光斑。</li>
+</ul>
+
+<h4>山野拍摄</h4>
+<ul>
+  <li><strong>站在高处拍山谷：</strong>找前景（一棵树、一块石头）→ 山谷 → 远处的山脊。三层。</li>
+  <li><strong>云海：</strong>如果你起得够早，在山顶看到云海——广角拍全景，长焦拍云海中露出的山尖。</li>
+  <li><strong>路上的风景：</strong>蜿蜒的公路、穿过树林的光束、车窗外的山——这些是"在路上"的感觉，不只是"到了"。</li>
+</ul>
+
+<!-- 1.5 -->
+<h3 id="s7-5">7.5 实用技巧</h3>
+
+<h4>手机就够了——如果你做对这些</h4>
+<ul>
+  <li><strong>擦镜头。</strong>大部分人手机拍照模糊是因为镜头上全是手指印。养成习惯。</li>
+  <li><strong>不要用数码变焦。</strong>捏屏幕放大 = 画质直线下降。走近一点，或者拍了再裁。</li>
+  <li><strong>曝光补偿。</strong>手机点屏幕对焦后，旁边的小太阳上下滑——调亮或调暗。这是手机摄影最重要的操作。</li>
+  <li><strong>开 HDR。</strong>大光比场景（天空很亮、地面很暗），HDR 能同时保留天空和地面的细节。</li>
+  <li><strong>拍 RAW。</strong>如果手机支持（iPhone 的 ProRAW、安卓的专业模式），拍 RAW 格式后期调节空间大得多。但不是必须。</li>
+</ul>
+
+<h4>从手机到相机</h4>
+<p>当手机满足不了你的时候（想要虚化、拍星空、打印大尺寸），再考虑相机：</p>
+<ul>
+  <li><strong>入门推荐：</strong>二手索尼 A6x00 系列 + 一个变焦镜头（16-50mm）。轻、小、够用。</li>
+  <li><strong>户外相机要点：</strong>轻（你会背着的）、防抖（手持够稳）、电池够用（户外没地方充电）。</li>
+  <li><strong>不必一步到位。</strong>先用手机拍 1000 张，找到你最常拍的场景和风格，再针对性买设备。</li>
+</ul>
+
+<h4>最后一条</h4>
+<p><strong>最好的照片不是你计划好的那张，是你在路上刚好看到的那张。</strong>所以你不需要成为一个"摄影人"。你只需要在户外的时候，多看一眼光线的方向——然后举起你手里那个一直在口袋里的手机。</p>
+</section>
+
+
+<!-- ═══════════ S8: 融合篇 ═══════════ -->
+<section id="s8">
+<h2>第八篇：融合篇 — 串联实战</h2>
+<p>前面分别讲透了几种玩法。现在把它们串起来。<strong>不给你精确到小时的时刻表——你的目的地距离、出行习惯、每个人的节奏都不一样，死板的时间线没用。</strong>这里讲的是原则和顺序。</p>
+
+<!-- 1.1 -->
+<h3 id="s8-1">8.1 单日出行：钓鱼 + 野炊（+ 轻徒步）</h3>
+<p>最轻量的出行形态。开车到水边，钓一钓，做顿饭，想走就走一段山路。</p>
+
+<h4>节奏原则</h4>
+<ol>
+  <li><strong>到了先打窝。</strong>不管后面做什么，窝子需要 15-30 分钟发窝。这个时间刚好做其他事——支炉子、摆椅子、换鞋准备徒步。</li>
+  <li><strong>黄金窗口别做饭。</strong>早口和傍晚口是一天中鱼情最好的时段。做饭和徒步放在这两个窗口之间。</li>
+  <li><strong>中午是"自由时段"。</strong>鱼口最差的时间，正好用来认认真真做饭、或者背上包走一段山路。如果只钓鱼不徒步，中午也是补窝、调整策略的好时机。</li>
+  <li><strong>给自己设一个"最晚收竿时间"。</strong>出发前定好，比如天黑前 1.5 小时。到了就收。避免在疲惫状态下摸黑收拾装备+开车。</li>
+</ol>
+
+<h4>组合示例：钓鱼 + 轻徒步 + 野炊</h4>
+<p>到达 → 打窝 → 钓早口 → 中午把竿收好、背上小包走 2-3 小时山路 → 回到营地 → 做饭吃饭 → 下午看状态再钓一会儿或直接收工。一天之内三种节奏，互不冲突。</p>
+
+<h4>组合示例：皮划艇 + 钓鱼 + 野炊</h4>
+<p>到达水边 → 充气/卸艇 → 先划一圈熟悉水域、找钓点 → 抛锚开始艇钓 → 中午划回岸边做饭 → 饭后可以再划出去，也可以岸钓。皮划艇让这一天多了一个维度：<strong>你既是钓鱼人，也是划手。</strong></p>
+
+<!-- 1.2 -->
+<h3 id="s8-2">8.2 过夜出行：两天一夜</h3>
+<p>多出的那个晚上，不是"延长版的一日游"。过夜改变了整个节奏。</p>
+
+<h4>节奏原则</h4>
+<ol>
+  <li><strong>第一天下午到达时，先扎营再钓鱼。</strong>天黑前把帐篷、炉具、桌椅全部就位。天黑后摸黑搭帐篷是纯粹的折磨。</li>
+  <li><strong>晚上的黄金用途：</strong>天黑后鱼口变差 → 做一顿用心的晚餐 → 篝火/喝茶/聊天/看星星。晚上不是用来钓鱼的，是用来享受"已经在这里了"的感觉的。</li>
+  <li><strong>第二天早口是过夜的红利。</strong>不用开车、不用赶路，醒来就在水边。这是过夜最大的优势。别睡懒觉浪费了。</li>
+  <li><strong>上午收营趁凉快。</strong>太阳出来后帐篷里像烤箱，不如早起钓完早口就收。</li>
+</ol>
+
+<h4>过夜装备提示</h4>
+<ul>
+  <li>和一日游的区别不大，多带帐篷、睡袋、防潮垫、头灯。</li>
+  <li>具体装备清单见附录A——出发前过一遍。</li>
+</ul>
+
+<h4>过夜注意事项</h4>
+<ul>
+  <li><strong>头灯/露营灯：</strong>带两个，一个备用。</li>
+  <li><strong>驱蚊：</strong>水边 + 晚上 = 蚊子的天堂。蚊香 + 驱蚊液 + 长袖长裤。</li>
+  <li><strong>保暖：</strong>水边后半夜会凉，带一件外套。</li>
+  <li><strong>安全：</strong>贵重物品放车里。帐篷离水 10m 以上。</li>
+</ul>
+
+<!-- 1.3 -->
+<h3 id="s8-3">8.3 长假远征：3-5 天</h3>
+<p>去一个远方的目的地。核心变化：你需要<strong>建立营地而不是摆摊</strong>。</p>
+
+<h4>节奏原则</h4>
+<pre>
+前几天：到达 + 建营 + 试钓/试走（了解环境）
+中间：最完整的户外日（钓鱼、徒步、做饭火力全开）
+最后：休整半天 + 收营 + 返程</pre>
+
+<p><strong>不要想着三天爆钓。</strong>长假的节奏不是把三个一日游压缩在一起。给自己留出"什么都不做"的时间——睡个懒觉、晒着太阳看一本书、慢慢炖一锅东西。那不是浪费时间，那是长假的意义。</p>
+
+<h4>装备升级</h4>
+<p>长假的装备差异主要体现在：</p>
+<ul>
+  <li><strong>食材计划：</strong>前两天靠自带，后面靠中途补给点或者沿途采购。提前查好最近的小镇/超市在哪。</li>
+  <li><strong>能源：</strong>卡式炉气罐多带（至少 4-6 罐）。如果车有外放电，带着电烤盘/电磁炉能省很多气。</li>
+  <li><strong>舒适装备：</strong>月亮椅代替折叠凳、天幕代替暴晒、折叠桌比蹲在地上舒服太多。长假值得在舒适度上多投入。</li>
+  <li><strong>备用品：</strong>多带一根备用竿、备用线组、备用头灯。在远方断竿的代价比在家门口高得多。</li>
+</ul>
+
+<blockquote><strong>🧘 长假的核心心态：你不是来打鱼的，你是来生活的。</strong>慢下来。</blockquote>
+</section>
+
+
+<!-- ═══════════ S9: 能力全景 ═══════════ -->
+<section id="s9">
+<h2>第九篇：能力全景 — 技能树与进阶路线</h2>
+
+<h3 id="s9-1">9.1 装备进阶路线图</h3>
+
+<h4>垂钓装备进阶</h4>
+<pre>
+Level 1：一根综合竿（4.5m 28调）打天下
+   ↓
+Level 2：多竿配置（3.6m + 5.4m + 7.2m）
+   ↓
+Level 3：场景化套装（溪流 / 水库 / 夜钓）
+   ↓
+Level 4：自制改装（做浮漂、绑钩、配窝料）
+   ↓
+Level 5：有自己的"秘方"（别人钓不到你钓得到）</pre>
+
+<h4>野炊装备进阶</h4>
+<pre>
+Level 1：卡式炉 + 一个锅
+   ↓
+Level 2：双炉系统 + 专业锅具
+   ↓
+Level 3：车辆外放电 + 电器，厨房电动化
+   ↓
+Level 4：荷兰锅 + 柴火灶，慢炖、烤面包
+   ↓
+Level 5：有自己的招牌菜，朋友主动报名</pre>
+
+<h4>自驾装备进阶</h4>
+<pre>
+Level 1：普通SUV + 后备箱乱堆
+   ↓
+Level 2：模块化收纳 + 车载冰箱
+   ↓
+Level 3：车中泊改装（后排变床 + 遮阳帘）
+   ↓
+Level 4：太阳能 + 副电瓶 + 独立供电
+   ↓
+Level 5：一台专门为户外生活改装的车</pre>
+
+<h4>徒步装备进阶</h4>
+<pre>
+Level 1：一双徒步鞋 + 小背包
+   ↓
+Level 2：登山杖 + 防水外套 + 离线导航 App
+   ↓
+Level 3：专业分层衣物 + GPS 设备
+   ↓
+Level 4：轻量化装备 + 多日路线能力
+   ↓
+Level 5：探路能力——自己规划并走通新路线</pre>
+
+<h4>摄影装备进阶</h4>
+<pre>
+Level 1：手机 + 知道怎么构图
+   ↓
+Level 2：入门微单 + 一个变焦镜头
+   ↓
+Level 3：多个定焦镜头 + 三脚架 + 滤镜
+   ↓
+Level 4：无人机 + 后期处理
+   ↓
+Level 5：有自己的风格，照片能讲故事</pre>
+
+<h4>水上装备进阶</h4>
+<pre>
+Level 1：充气皮划艇（1000-2000），在后备箱里随时下水
+   ↓
+Level 2：升级救生衣 + 锚 + 竿座，开始艇钓
+   ↓
+Level 3：折叠/硬壳艇 + 车顶架，速度与操控
+   ↓
+Level 4：钓鱼皮划艇（宽体、站立抛竿、探鱼器）
+   ↓
+Level 5：有自己的秘密水道，知道哪片水域什么时候出鱼</pre>
+
+<!-- 1.2 -->
+<h3 id="s9-2">9.2 场景升级路径</h3>
+<p><strong>从近到远：</strong>城市周边 → 省内目的地 → 跨省远征 → 无人区探路</p>
+<p><strong>从易到难：</strong>单日单活动 → 单日多活动 → 过夜 → 多日连玩</p>
+<p><strong>从单一到复合：</strong>只做一件事 → 钓鱼+野炊 → +徒步 → +露营 → +摄影 → +皮划艇 → <strong>一种完整的生活方式</strong></p>
+
+<!-- 1.3 -->
+<h3 id="s9-3">9.3 技能树全图</h3>
+<pre class="skill-tree">
+                              ┌──────────┐
+                              │ 户外生活  │
+                              └─────┬────┘
+                                    │
+     ┌──────┬──────┬──────┬───────┼───────┬──────┬──────┐
+     │      │      │      │       │       │      │      │
+┌────▼─┐ ┌─▼──┐ ┌▼──┐ ┌─▼──┐ ┌─▼───┐ ┌─▼──┐ ┌─▼──┐ ┌─▼──┐
+│ 自驾 │ │野炊│ │垂钓│ │徒步│ │ 露营 │ │摄影│ │水上│
+└────┬─┘ └─┬──┘ └┬──┘ └─┬──┘ └─┬───┘ └─┬──┘ └─┬──┘
+     │     │     │      │       │       │      │
+  收纳应急 炉具  调漂   装备    帐篷    构图   艇型
+  外放电  保鲜  选点   路线    车中泊  光线   桨法
+  车中泊  火候  遛鱼   安全    睡眠    人像   艇钓</pre>
+
+<h4>交叉技能（串联的精髓）</h4>
+<table>
+  <tr><th>交叉点</th><th>技能</th><th>说明</th></tr>
+  <tr><td>自驾 × 露营</td><td><strong>车中泊</strong></td><td>把车变成移动的卧室</td></tr>
+  <tr><td>野炊 × 自驾</td><td><strong>移动厨房</strong></td><td>车载电源 + 模块化收纳</td></tr>
+  <tr><td>自驾 × 垂钓</td><td><strong>探钓</strong></td><td>用车辆拓展钓鱼半径</td></tr>
+  <tr><td>自驾 × 水上</td><td><strong>艇运</strong></td><td>车顶架把艇带到任何水域</td></tr>
+  <tr><td>垂钓 × 水上</td><td><strong>艇钓</strong></td><td>皮划艇到达岸钓够不着的钓点</td></tr>
+  <tr><td>徒步 × 摄影</td><td><strong>山野人像</strong></td><td>在自然光最好的地方拍出最好的人</td></tr>
+  <tr><td>垂钓 × 摄影</td><td><strong>水边风景</strong></td><td>清晨薄雾 + 水面倒影 + 鱼获瞬间</td></tr>
+  <tr><td>野炊 × 摄影</td><td><strong>美食记录</strong></td><td>野外餐桌上的仪式感</td></tr>
+  <tr><td>露营 × 摄影</td><td><strong>星空摄影</strong></td><td>远离城市光污染的夜空</td></tr>
+  <tr><td>水上 × 摄影</td><td><strong>水上视角</strong></td><td>从水面中央拍岸上的营地——岸上拍不到的角度</td></tr>
+  <tr><td>全部叠加</td><td><strong>营地管理</strong></td><td>一天中高效切换多种模式</td></tr>
+</table>
+</section>
+
+
+<!-- ═══════════ S10: 生存基础 ═══════════ -->
+<section id="s10">
+<h2>第十篇：生存基础 — 底线能力</h2>
+<p>户外玩法的前提是：你能安全地出去、安全地回来。这一篇教你"怎么不出事"。</p>
+<p>这不是让你去荒野求生。钓鱼露营 99% 的情况用不到生存技能——但剩下 1%，你手里有什么决定结果。</p>
+
+<!-- 1.1 -->
+<h3 id="s10-1">10.1 野外基本医疗</h3>
+
+<h4>割伤与擦伤</h4>
+<p><strong>最最常见的野外伤。</strong>处理食材时刀滑了一下、被石头划了、挂底拉线时被鱼线割手。</p>
+<ul>
+  <li><strong>冲洗：</strong>用清水（饮用水）彻底冲洗伤口。野外水源可能有菌，最后一步用饮用水。</li>
+  <li><strong>止血：</strong>干净的纱布/纸巾直接按压 3-5 分钟。别反复揭开看。</li>
+  <li><strong>消毒：</strong>碘伏棉签（推荐带，不疼且效果好）或酒精棉片涂伤口周围，别涂伤口里面。</li>
+  <li><strong>包扎：</strong>创可贴或纱布 + 医用胶带。保持干燥。</li>
+  <li><strong>什么时候必须去医院：</strong>伤口深 &gt; 0.5cm、出血不止按压 10 分钟无效、伤口里有异物取不出来、被生锈金属割伤（需要打破伤风）。</li>
+</ul>
+
+<h4>烫伤（野炊最常见的事故）</h4>
+<ul>
+  <li><strong>冲：</strong>立刻用流动的冷水冲 10-15 分钟。越快越久越好。</li>
+  <li><strong>脱：</strong>在水里把烫伤部位的衣物脱掉（如果粘住了别硬扯，剪开）。</li>
+  <li><strong>盖：</strong>用干净的纱布或保鲜膜盖住。</li>
+  <li><strong>别涂牙膏、酱油、醋、面粉。</strong>民间偏方全部别用，只会增加感染风险。</li>
+  <li><strong>起水泡了不要挑破。</strong>水泡是天然的保护层。</li>
+</ul>
+
+<h4>扭伤与骨折</h4>
+<p>水边石头滑，一脚踩空崴了脚。</p>
+<ul>
+  <li><strong>RICE 原则：</strong>Rest（休息）+ Ice（冰敷，保温箱里的冰袋就是干这个的）+ Compression（加压包扎）+ Elevation（抬高伤处）。</li>
+  <li><strong>怀疑骨折：</strong>不要移动伤处，用树枝 + 绷带/衣服撕成条做临时夹板固定。固定时关节上下都要绑。</li>
+  <li><strong>能不能走：</strong>轻微的崴脚可以缓慢移动回车上。严重的（脚不能沾地）→ 找人帮忙，不要硬撑。</li>
+</ul>
+
+<h4>虫蛇咬伤</h4>
+<table>
+  <tr><th>类型</th><th>特征</th><th>处理</th></tr>
+  <tr><td>蚊子/蠓虫</td><td>红肿、痒</td><td>肥皂水清洗 + 止痒药膏。别抓。</td></tr>
+  <tr><td>蜜蜂</td><td>剧痛、红肿，可能留螫针</td><td>用卡片/指甲刮掉螫针（别用镊子捏，会把毒液挤进去）。肥皂水清洗，冷敷。</td></tr>
+  <tr><td>蜱虫</td><td>钻入皮肤，可能传播疾病</td><td>用尖头镊子夹住头部贴近皮肤处，垂直缓慢拔出。<strong>别捏肚子、别涂酒精、别用火烧。</strong>拔完后消毒。</td></tr>
+  <tr><td>蛇咬</td><td>两个明显的牙印（毒蛇）或多排细齿印（无毒）</td><td><strong>保持冷静，减少活动。</strong>记住蛇的样子。取下伤处附近的饰品（会肿胀）。尽快去医院。<strong>不要：</strong>吸伤口、绑止血带、切伤口、追蛇。</td></tr>
+</table>
+
+<div class="callout warn">
+  <strong>🐍 中国野外最危险的蛇：</strong>蝮蛇（短粗，三角头，颜色像落叶）和竹叶青（绿色，常在树上）。水边草丛是蛇的高频出没区。<strong>穿高帮鞋、不踩看不清的草丛、夜间带手电看路。</strong>
+</div>
+
+<h4>中暑与脱水</h4>
+<p><strong>预防远好于救治。钓鱼一坐几小时，不知不觉就中招。</strong></p>
+<p><strong>症状：</strong>头晕、恶心、大量出汗或突然不出汗、皮肤发烫、心跳加速。</p>
+<ul>
+  <li>立即移到阴凉处</li>
+  <li>脱掉多余衣物</li>
+  <li>用湿毛巾敷额头、腋下、脖子</li>
+  <li>小口喝水（别猛灌）</li>
+  <li>如果意识模糊 → 紧急就医</li>
+</ul>
+
+<h4>失温（即使夏天也可能发生）</h4>
+<p>下雨 + 刮风 + 衣服湿了 = 夏天也能失温。水面上的风带走热量的速度远超你的直觉。</p>
+<p><strong>症状：</strong>发抖（轻度）、说话不清楚、动作笨拙（中度，危险信号）、停止发抖（重度，极度危险）。</p>
+<ul>
+  <li>立即脱离冷环境（进车里、搭帐篷）</li>
+  <li>换掉湿衣服</li>
+  <li>裹上保温毯（那个银色的小方块，几块钱，救命用）</li>
+  <li>喝热糖水（不是咖啡，不是酒）</li>
+  <li>中度以上失温 → 紧急就医</li>
+</ul>
+
+<h4>鱼钩刺入皮肤</h4>
+<p>钓鱼的专属伤害。处理有一个诀窍：</p>
+<ul>
+  <li>如果钩尖只是浅浅刺入 → 直接退出来</li>
+  <li>如果倒刺已经进去 → <strong>不要直接拔。</strong>用钳子把钩柄剪断，然后把钩尖从另一侧推出来（顺着钩的弧度走）</li>
+  <li>处理后消毒、打破伤风（鱼钩上有水里的细菌）</li>
+  <li>如果钩在脸上/眼睛周围 → 别自己处理，去医院</li>
+</ul>
+
+<h4>基础急救包配置</h4>
+<table>
+  <tr><th>物品</th><th>用途</th></tr>
+  <tr><td>碘伏棉签 × 10</td><td>伤口消毒（首选）</td></tr>
+  <tr><td>创可贴 × 10（多种大小）</td><td>小伤口</td></tr>
+  <tr><td>医用纱布卷 × 2</td><td>包扎、止血</td></tr>
+  <tr><td>医用胶带 × 1</td><td>固定纱布</td></tr>
+  <tr><td>弹性绷带 × 1</td><td>扭伤加压包扎</td></tr>
+  <tr><td>止血带 × 1</td><td>严重出血（最后手段）</td></tr>
+  <tr><td>尖头镊子 × 1</td><td>取蜱虫、取碎片</td></tr>
+  <tr><td>剪刀 × 1</td><td>剪纱布、剪衣物</td></tr>
+  <tr><td>保温毯 × 2</td><td>失温急救</td></tr>
+  <tr><td>布洛芬/对乙酰氨基酚</td><td>止痛、退烧</td></tr>
+  <tr><td>抗过敏药（氯雷他定）</td><td>虫咬过敏、花粉过敏</td></tr>
+  <tr><td>藿香正气水/口服补液盐</td><td>中暑、脱水</td></tr>
+</table>
+
+<!-- 1.2 -->
+<h3 id="s10-2">10.2 方向判断</h3>
+<p>大多数时候你有手机。但手机可能没电、没信号、掉水里。这时候你需要知道怎么不依赖电子设备判断方向。</p>
+
+<h4>用手表判断方向（北半球）</h4>
+<p>将手表平放，时针指向太阳。时针与 12 点刻度之间的夹角的<strong>平分线</strong>指向南方（反向即北方）。</p>
+<ul>
+  <li>上午：时针在 12 点左边，夹角平分线 = 南</li>
+  <li>下午：时针在 12 点右边，夹角平分线 = 南</li>
+  <li>没有指针表？在地上画一个表盘，用树枝当指针。</li>
+</ul>
+
+<h4>用太阳判断方向</h4>
+<ul>
+  <li><strong>日出东方，日落西方。</strong>早上你的影子指向西，下午指向东。</li>
+  <li><strong>插棍法（最可靠）：</strong>地上插一根直棍。标记棍子影子的顶端。等 15-30 分钟，再标记影子顶端的新位置。两个标记之间的连线大致是<strong>东西方向</strong>（第一个标记是西，第二个是东）。</li>
+</ul>
+
+<h4>晚上用北极星</h4>
+<p>先找到北斗七星（大熊座），勺口的两颗星连线延伸约 5 倍距离，找到的那颗亮星就是北极星。北极星永远指向正北。</p>
+
+<h4>自然标志（辅助，不可单独依赖）</h4>
+<ul>
+  <li>树木南侧通常枝叶更茂密（北半球）</li>
+  <li>树桩年轮较宽的一侧一般是南侧</li>
+  <li>苔藓通常长在树木/岩石的北侧（阴面）</li>
+  <li>中国大部分地区冬季积雪南侧先融化</li>
+</ul>
+<div class="callout warn"><strong>自然标志只能辅助，不能当唯一依据。</strong>一棵被旁边大树挡光的树，南侧也可能长苔藓。组合使用多个指标，任何单一指标都不可靠。</div>
+
+<h4>如果你真的迷路了</h4>
+<ol>
+  <li><strong>STOP。</strong>不要乱走。走丢的人往往越走越远。</li>
+  <li>如果你能找到一条溪流，<strong>跟着水流方向往下游走。</strong>下游通常会汇入更大的水体会遇到人类活动痕迹。</li>
+  <li>如果你记得公路/村庄的大致方向，用太阳或手表确认方向后朝那个方向走。</li>
+  <li>如果完全不知道方位，<strong>待在原地等救援是最好的选择。</strong>找一个显眼的地方，发出信号（见 6.5 信号工具）。</li>
+</ol>
+
+<!-- 1.3 -->
+<h3 id="s10-3">10.3 危险识别与规避</h3>
+
+<h4>天气判断</h4>
+<table>
+  <tr><th>现象</th><th>意味着什么</th><th>行动</th></tr>
+  <tr><td>积雨云（高耸如塔，顶部扁平像铁砧）</td><td>雷暴即将到来</td><td><strong>立即收竿离开水边。</strong>碳素竿 = 避雷针。</td></tr>
+  <tr><td>云层快速降低、风力突然增大</td><td>冷锋过境，可能伴随暴雨</td><td>加固帐篷，准备撤回车里</td></tr>
+  <tr><td>远处山后乌云翻滚</td><td>暴雨将至</td><td>不要在河滩和干涸河道逗留</td></tr>
+  <tr><td>水面出现大量气泡或水变浑浊</td><td>上游可能已经下雨</td><td>警惕水位突然上涨</td></tr>
+  <tr><td>持续的闷热 + 无风</td><td>强对流天气的前兆</td><td>提高警觉</td></tr>
+</table>
+
+<h4>雷电安全</h4>
+<ul>
+  <li><strong>碳素鱼竿是优良导体。听到雷声立刻收竿！</strong>雷雨天钓鱼是户外活动中最危险的行为之一。</li>
+  <li>如果在空旷地带遇到雷电，双脚并拢蹲下（减少跨步电压），不要躺平，不要站在孤树下。</li>
+  <li>车里是安全的（法拉第笼效应），但不要触摸车内的金属部件。</li>
+</ul>
+
+<h4>水边危险</h4>
+<ul>
+  <li><strong>别站在湿滑的石头和长苔藓的岸边钓鱼。</strong>一脚滑下去，水不深但可能会撞到头。</li>
+  <li><strong>涉水前先探水深。</strong>水色越深，底下的地形可能越复杂。用抄网柄或树枝探路。</li>
+  <li><strong>如果鱼线被水下重物挂住，别下水去解。</strong>切线换线组比下水安全一万倍。</li>
+  <li><strong>水库排水口附近绝对不要去。</strong>不管鱼多大。暗流能把你吸下去。</li>
+</ul>
+
+<h4>野生动物</h4>
+<ul>
+  <li><strong>野猪：</strong>比蛇更危险。听到灌木丛中有哼哼声和树枝折断声 → 慢慢后退，不要挡在它和它的幼崽之间。不要跑（你跑不过它）。爬树是有效的（野猪不会爬树）。</li>
+  <li><strong>蛇：</strong>不主动攻击人。大多数蛇咬伤是因为人不小心踩到或伸手碰到它。</li>
+  <li><strong>流浪狗：</strong>偏远水库/村庄常有。别对视、别跑、用低沉声音喊"走"。手里拿一根抄网竿或登山杖。</li>
+  <li><strong>蜱虫：</strong>穿越草丛后检查全身，尤其是腋下、腹股沟、头发里。穿浅色长裤，裤脚塞进袜子里。</li>
+</ul>
+
+<h4>火灾安全</h4>
+<ul>
+  <li>野炊用火后，离开前<strong>浇三遍水</strong>，直到灰烬摸上去是凉的。</li>
+  <li>有风的天气不要用柴火（火星飘到干燥草地上你可能完全不知道）。</li>
+  <li>气罐和打火机远离明火和高温。</li>
+</ul>
+
+<!-- 1.4 -->
+<h3 id="s10-4">10.4 野外决断原则</h3>
+
+<h4>STOP 原则（遇到任何意外时先做这个）</h4>
+<ol>
+  <li><strong>S — Stop（停下来）：</strong>不管发生了什么，先停。别慌。</li>
+  <li><strong>T — Think（想一想）：</strong>我现在的处境是什么？有哪些可用资源？</li>
+  <li><strong>O — Observe（观察）：</strong>天气如何？地形如何？自己的身体状态？</li>
+  <li><strong>P — Plan（计划）：</strong>想清楚下一步再行动。</li>
+</ol>
+<blockquote>大多数户外事故不是死于最初的意外，而是死于慌乱中的错误决策。</blockquote>
+
+<h4>何时放弃（The Abort Rule）</h4>
+<p>知道<strong>什么时候该走</strong>，比知道怎么钓鱼更重要。</p>
+<p><strong>立刻终止行程的信号（满足任意一条）：</strong></p>
+<ul>
+  <li>天气预报发布雷暴/暴雨/大风预警</li>
+  <li>有人受伤（需要医疗处理级别的）</li>
+  <li>车辆出现无法自行解决的故障</li>
+  <li>天黑前无法返回的情况下手机没电/没信号且没有备用方案</li>
+  <li>水位突然上涨或水质明显变化</li>
+  <li><strong>直觉告诉你不对劲。</strong>相信它。人类的潜意识能捕捉到理性分析漏掉的信号。</li>
+</ul>
+
+<h4>风险评估框架</h4>
+<p>面对任何一个不确定的选择，在心里做这个计算：</p>
+<pre>
+风险 = 发生概率 × 后果严重程度
+
+例1：天快黑了，我还想再钓半小时
+  概率：天黑前能走完土路吗？中
+  后果：夜间在土路陷车或迷路？高
+  结论：收拾走人
+
+例2：那块石头看上去很稳，站上去能打到更好的点
+  概率：石头真的不稳？低（但不确定）
+  后果：掉水里撞到石头？极高
+  结论：别上去</pre>
+
+<h4>通讯计划（出发前必做）</h4>
+<ol>
+  <li>告诉一个<strong>不跟你一起去的人</strong>：你去哪、大概什么时候回来、车牌号。</li>
+  <li>约定一个时间点：如果到了这个时间你还没联系他，让他执行下一步（比如联系救援）。</li>
+  <li>在手机里存好当地的救援电话（不只是 110，景区管理处、水库管理站的电话也存上）。</li>
+</ol>
+<div class="callout warn"><strong>单人出行的最大风险不是技术不足，而是出事了没人知道你在哪。</strong>通讯计划是零成本的保险。</div>
+
+<!-- 1.5 -->
+<h3 id="s10-5">10.5 必备生存工具</h3>
+<p>以下工具的价值不在于"每次都用"，在于<strong>那一次需要的时候你有</strong>。按优先级排列：</p>
+
+<table>
+  <tr><th>工具</th><th>推荐</th><th>为什么</th><th>优先级</th></tr>
+  <tr><td>多功能钳/工具刀</td><td>Leatherman Wave+ 或国产户外多功能钳</td><td>刀、钳子、螺丝刀、剪刀合一。修装备、剪线、处理伤口全能用。</td><td>⭐⭐⭐</td></tr>
+  <tr><td>打火棒（镁棒）</td><td>带刮片的镁棒</td><td>打火机可能没气/受潮，镁棒永远能用。即使掉进水里捞出来擦干照用。</td><td>⭐⭐⭐</td></tr>
+  <tr><td>防水火柴 + 打火机</td><td>各带一份</td><td>生火三件套：打火机（最方便）、防水火柴（备用）、镁棒（终极备份）。</td><td>⭐⭐⭐</td></tr>
+  <tr><td>头灯 + 备用电池</td><td>黑钻或国产防水头灯</td><td>双手自由。晚上上厕所、找东西、走夜路全靠它。</td><td>⭐⭐⭐</td></tr>
+  <tr><td>急救包</td><td>见 6.1 配置清单</td><td>划伤、烫伤、扭伤的基本处理能力。</td><td>⭐⭐⭐</td></tr>
+  <tr><td>保温毯</td><td>银色急救毯 × 2</td><td>几块钱，折叠后比烟盒还小。失温时裹上能救命，还能当反光信号。</td><td>⭐⭐⭐</td></tr>
+  <tr><td>口哨</td><td>高分贝户外口哨</td><td>你的嗓子最多喊 15 分钟就哑了。口哨声传得远得多，且不费力。</td><td>⭐⭐⭐</td></tr>
+  <tr><td>伞绳（Paracord）</td><td>550 伞绳 10m</td><td>绑东西、搭天幕、晾衣服、临时鞋带、紧急止血带。用途无穷。</td><td>⭐⭐</td></tr>
+  <tr><td>充电宝（大容量）</td><td>20000mAh 以上</td><td>手机导航、求救、拍照都靠它。带一根短线。</td><td>⭐⭐</td></tr>
+  <tr><td>信号镜</td><td>亚克力信号镜或镜子碎片</td><td>白天对阳光反射，几十公里外都能看到。求救时比喊有用。</td><td>⭐</td></tr>
+  <tr><td>净水药片/微型滤水器</td><td>净水片 × 20 片</td><td>饮用水耗尽时的最后保障。1 片净 1L 水，等 30 分钟。</td><td>⭐</td></tr>
+  <tr><td>工兵铲</td><td>折叠工兵铲</td><td>挖排水沟、平整营地、陷车时挖土、防身。自驾场景下强烈推荐。</td><td>⭐⭐</td></tr>
+  <tr><td>求生手环/指南针</td><td>带指南针的伞绳手环</td><td>轻、便宜、一直戴在手上不会忘。</td><td>⭐</td></tr>
+</table>
+
+<h4>生存工具收纳</h4>
+<p>以上所有东西（除工兵铲外）可以全部塞进一个<strong>小腰包或收纳袋</strong>里。平时放在驾驶座门板储物格或手套箱里——不是后备箱。紧急情况下，后备箱可能是你到不了的地方（车翻了）。</p>
+
+<div class="callout tip"><strong>💡 一个很重要的心态转变：</strong>不要把生存工具当成"万一出事才用的东西"。很多工具日常就在用——多功能钳修装备、头灯夜钓、伞绳绑东西、工兵铲平整营地。用得多了，紧急情况下你才不会手忙脚乱。</div>
+</section>
+
+
+<!-- ═══════════ APPENDIX A ═══════════ -->
+<section id="appendix-a">
+<h2>附录 A：检查清单（可打印）</h2>
+
+<h3>出发前检查</h3>
+
+<h4>车辆</h4>
+<ul class="checklist">
+  <li>□ 油量/电量充足</li>
+  <li>□ 四条轮胎目视正常</li>
+  <li>□ 备胎有气</li>
+  <li>□ 搭电线/应急启动电源在车上</li>
+  <li>□ 手机支架、充电线</li>
+</ul>
+
+<h4>垂钓</h4>
+<ul>
+  <li>□ 竿包（竿 + 备用竿）</li>
+  <li>□ 线组盒（主线 + 子线 + 钩）</li>
+  <li>□ 浮漂盒</li>
+  <li>□ 炮台（竿支架）</li>
+  <li>□ 抄网</li>
+  <li>□ 鱼护/活鱼桶</li>
+  <li>□ 马扎/钓箱</li>
+  <li>□ 饵料（商品饵/蚯蚓/玉米）</li>
+  <li>□ 窝料（酒米/颗粒）</li>
+  <li>□ 剪刀、铅皮、太空豆等小配件</li>
+  <li>□ 毛巾</li>
+</ul>
+
+<h4>野炊</h4>
+<ul>
+  <li>□ 卡式炉 + 气罐（至少 2 罐）</li>
+  <li>□ 锅（炒锅 + 汤锅）</li>
+  <li>□ 菜刀 + 菜板</li>
+  <li>□ 碗筷勺</li>
+  <li>□ 调料包</li>
+  <li>□ 食材（提前一天列出清单）</li>
+  <li>□ 饮用水（至少 5L/人/天）</li>
+  <li>□ 保温箱/车载冰箱 + 冰袋</li>
+  <li>□ 洗洁精 + 洗碗布</li>
+  <li>□ 垃圾袋（多带几个）</li>
+</ul>
+
+<h4>露营（如果过夜）</h4>
+<ul>
+  <li>□ 帐篷 + 地布 + 风绳地钉</li>
+  <li>□ 睡袋/被子</li>
+  <li>□ 防潮垫</li>
+  <li>□ 头灯/露营灯 + 备用电池</li>
+  <li>□ 折叠桌椅</li>
+  <li>□ 驱蚊用品</li>
+  <li>□ 外套（后半夜会凉）</li>
+</ul>
+
+<h4>车中泊（如果睡车里）</h4>
+<ul>
+  <li>□ 床垫（自充气或海绵垫）</li>
+  <li>□ 全车遮阳挡</li>
+  <li>□ 车窗纱网</li>
+  <li>□ USB 小风扇（夏天）</li>
+  <li>□ 睡袋/被子</li>
+</ul>
+
+<h4>皮划艇（如果下水）</h4>
+<ul>
+  <li>□ 皮划艇 + 桨</li>
+  <li>□ 救生衣（每人一件，必须穿）</li>
+  <li>□ 充气泵（充气艇）或绑带（硬壳艇）</li>
+  <li>□ 哨子（挂救生衣上）</li>
+  <li>□ 手机防水袋</li>
+  <li>□ 锚 + 锚绳（艇钓用）</li>
+  <li>□ 修补包（充气艇必备）</li>
+  <li>□ 饮用水（水面日晒脱水快）</li>
+</ul>
+
+<h4>摄影（如果带了相机或想认真拍照）</h4>
+<ul>
+  <li>□ 手机/相机 + 备用电池/充电宝</li>
+  <li>□ 镜头布（擦镜头和手机镜头）</li>
+  <li>□ 小三脚架（拍合影和弱光场景）</li>
+</ul>
+
+<h4>生存包（永远放车上，不拿下来）</h4>
+<ul>
+  <li>□ 多功能钳</li>
+  <li>□ 急救包（含碘伏、创可贴、纱布、保温毯）</li>
+  <li>□ 口哨</li>
+  <li>□ 打火机 + 镁棒</li>
+  <li>□ 伞绳</li>
+  <li>□ 充电宝（满电）</li>
+  <li>□ 工兵铲</li>
+</ul>
+
+<h4>轻徒步（如果当天有计划走一段山路）</h4>
+<ul>
+  <li>□ 徒步鞋（不要穿帆布鞋/跑步鞋）</li>
+  <li>□ 登山杖（至少一根）</li>
+  <li>□ 小背包（15-25L）</li>
+  <li>□ 水（每人 2L）</li>
+  <li>□ 高热量零食（巧克力/坚果/能量棒）</li>
+  <li>□ 外套（山顶比山脚低 5-10°C）</li>
+  <li>□ 手机离线轨迹已下载</li>
+  <li>□ 头灯（即使计划天黑前回来）</li>
+</ul>
+
+<h4>个人</h4>
+<ul>
+  <li>□ 偏光镜</li>
+  <li>□ 遮阳帽</li>
+  <li>□ 防晒霜</li>
+  <li>□ 雨衣/雨伞（查天气）</li>
+  <li>□ 纸巾/湿巾</li>
+  <li>□ 已告知某人去向和预计返回时间</li>
+</ul>
+
+<h3>离开前检查（不留下痕迹）</h3>
+<ul>
+  <li>□ 所有垃圾装袋带走</li>
+  <li>□ 火完全熄灭（浇三遍水，灰烬摸上去是凉的）</li>
+  <li>□ 营地恢复原状</li>
+  <li>□ 检查有无遗漏物品</li>
+  <li>□ 鱼获确认（全部放流）</li>
+</ul>
+</section>
+
+<!-- ═══════════ APPENDIX B ═══════════ -->
+
+<!-- ═══════════ APPENDIX B ═══════════ -->
+<section id="appendix-b">
+<h2>附录 B：推荐资源</h2>
+
+<h3>书籍</h3>
+<table>
+  <tr><th>书名</th><th>方向</th><th>推荐理由</th></tr>
+  <tr><td>《钓鱼指南》中国钓鱼协会</td><td>钓鱼</td><td>权威教材，可当工具书查</td></tr>
+  <tr><td>《垂钓宝典大全集》</td><td>钓鱼</td><td>百科全书式，适合全面扫盲</td></tr>
+  <tr><td>《台钓技巧大全》</td><td>钓鱼</td><td>手杆玩家必读，调漂和线组讲得最细</td></tr>
+  <tr><td>《怀斯曼生存手册》</td><td>生存</td><td>SAS 教官写的，急救和应急部分值得每人都知道</td></tr>
+  <tr><td>《露营之书》</td><td>露营</td><td>入门友好</td></tr>
+</table>
+
+<h3>App</h3>
+<table>
+  <tr><th>App</th><th>用途</th></tr>
+  <tr><td>钓鱼人</td><td>钓点信息、天气、潮汐、钓友社区</td></tr>
+  <tr><td>奥维互动地图</td><td>卫星图 + 户外轨迹</td></tr>
+  <tr><td>两步路户外助手</td><td>查看他人轨迹</td></tr>
+  <tr><td>墨迹天气/彩云天气</td><td>精确到小时的降水预报</td></tr>
+</table>
+
+<h3>社群</h3>
+<ul>
+  <li><strong>本地钓友微信群：</strong>最有价值的信息源。鱼情是动态的，一本书管一年，一个微信群管一天。</li>
+  <li><strong>钓鱼人 APP 本地板块：</strong>可以看到最近谁在哪钓到了什么鱼。</li>
+  <li><strong>B站：</strong>搜索"手杆野钓""野炊钓鱼"，有大量实战视频。</li>
+</ul>
+</section>
+
+<!-- ═══════════ APPENDIX C ═══════════ -->
+
+<!-- ═══════════ APPENDIX C ═══════════ -->
+<section id="appendix-c">
+<h2>附录 C：北京及周边户外地图</h2>
+<p>以北京城区为起点。近到一脚油门的半日出行，远到 4-5 小时车程的长周末远征。覆盖北京各区县 + 河北 + 天津。</p>
+<p>图例：🎣 = 可钓鱼 | 🥾 = 有徒步路线 | ⛺ = 适合露营 | 🚗 = 适合纯自驾观光</p>
+
+<h3>北京 · 近程（车程 0-2h）— 当天来回无压力</h3>
+
+<h4>昌平区（车程 1-1.5h）</h4>
+<table>
+  <tr><th>地点</th><th>车程</th><th>🎣</th><th>🥾</th><th>⛺</th><th>最佳季节</th><th>备注</th></tr>
+  <tr><td><strong>十三陵水库</strong></td><td>1h</td><td>⚠️ 禁钓，周边有塘</td><td>✅ 环湖 🚗</td><td>❌</td><td>全年</td><td>最近的出城选择，适合突然想出去的半天</td></tr>
+  <tr><td><strong>蟒山</strong></td><td>1h</td><td>❌</td><td>✅ ⭐⭐</td><td>❌</td><td>全年</td><td>俯瞰十三陵水库，新手入门级登山</td></tr>
+</table>
+
+<h4>门头沟区（车程 1-2h）</h4>
+<table>
+  <tr><th>地点</th><th>车程</th><th>🎣</th><th>🥾</th><th>⛺</th><th>最佳季节</th><th>备注</th></tr>
+  <tr><td><strong>妙峰山</strong></td><td>1h</td><td>❌</td><td>✅ ⭐⭐</td><td>❌</td><td>全年</td><td>离市区最近的山。山路驾驶有乐趣 🚗</td></tr>
+  <tr><td><strong>永定河沿线</strong></td><td>1h</td><td>✅</td><td>⚠️ 河边散步</td><td>⚠️</td><td>4-10月</td><td>离市区最近的野钓。水质一般</td></tr>
+  <tr><td><strong>爨底下→一线天</strong></td><td>2h</td><td>❌</td><td>✅ ⭐</td><td>❌</td><td>4-11月</td><td>明清古村落，轻松文化游</td></tr>
+  <tr><td><strong>灵山</strong></td><td>2.5h</td><td>❌</td><td>✅ ⭐⭐⭐</td><td>✅</td><td>6-9月</td><td>北京最高峰。高山草甸壮丽</td></tr>
+</table>
+
+<h3>北京 · 中程（车程 1.5-3h）— 周末首选</h3>
+
+<h4>怀柔区</h4>
+<table>
+  <tr><th>地点</th><th>车程</th><th>🎣</th><th>🥾</th><th>⛺</th><th>最佳季节</th><th>备注</th></tr>
+  <tr><td><strong>白河湾</strong></td><td>1.5h</td><td>✅ 鲫鱼、溪哥</td><td>✅ ⭐</td><td>✅</td><td>5-10月</td><td><strong>综合评分最高。</strong>钓鱼+徒步+露营一站式</td></tr>
+  <tr><td><strong>雁栖湖周边</strong></td><td>1h</td><td>⚠️ 限区域</td><td>✅ ⭐</td><td>❌</td><td>全年</td><td>公园级，适合带女朋友拍照散步</td></tr>
+  <tr><td><strong>青龙峡</strong></td><td>1.5h</td><td>✅ 收费钓场</td><td>✅ ⭐⭐</td><td>❌</td><td>4-10月</td><td>景区化，安全但不够野</td></tr>
+  <tr><td><strong>喇叭沟门</strong></td><td>2.5h</td><td>⚠️ 山间小溪</td><td>✅ ⭐⭐</td><td>✅</td><td>9-10月</td><td>北京最北，秋色天花板</td></tr>
+  <tr><td><strong>琉璃庙/汤河口</strong></td><td>2h</td><td>✅</td><td>✅ ⭐⭐</td><td>✅</td><td>5-10月</td><td>比白河湾安静，商业化低</td></tr>
+</table>
+
+<h4>密云区</h4>
+<table>
+  <tr><th>地点</th><th>车程</th><th>🎣</th><th>🥾</th><th>⛺</th><th>最佳季节</th><th>备注</th></tr>
+  <tr><td><strong>密云水库环湖路</strong></td><td>1.5h</td><td>⚠️ 库区禁钓</td><td>✅ 🚗</td><td>❌</td><td>全年</td><td>纯自驾日首选，环湖风景极佳</td></tr>
+  <tr><td><strong>古北水镇→司马台</strong></td><td>2h</td><td>❌</td><td>✅ ⭐⭐⭐</td><td>❌</td><td>4-11月</td><td>长城徒步，情侣热门</td></tr>
+  <tr><td><strong>雾灵山</strong></td><td>2.5h</td><td>⚠️ 山脚溪流</td><td>✅ ⭐⭐⭐</td><td>✅</td><td>6-9月</td><td>京郊高峰，山顶盛夏也凉</td></tr>
+  <tr><td><strong>不老屯/半城子</strong></td><td>2h</td><td>✅ 小众钓点</td><td>⚠️</td><td>✅</td><td>4-10月</td><td>安静避世之选</td></tr>
+</table>
+
+<h4>延庆区</h4>
+<table>
+  <tr><th>地点</th><th>车程</th><th>🎣</th><th>🥾</th><th>⛺</th><th>最佳季节</th><th>备注</th></tr>
+  <tr><td><strong>官厅水库</strong></td><td>1.5h</td><td>✅ 经典钓场</td><td>⚠️</td><td>✅</td><td>4-10月</td><td>北京钓友"老地方"，水面大</td></tr>
+  <tr><td><strong>百里山水画廊</strong></td><td>2h</td><td>✅ 白河沿线</td><td>✅ ⭐</td><td>✅</td><td>5-10月</td><td>北京最美自驾路线之一 🚗</td></tr>
+  <tr><td><strong>野鸭湖</strong></td><td>1.5h</td><td>❌ 保护区</td><td>✅ ⭐</td><td>❌</td><td>春秋候鸟季</td><td>观鸟+散步，带女朋友轻松日</td></tr>
+  <tr><td><strong>玉渡山</strong></td><td>2h</td><td>⚠️ 山间小溪</td><td>✅ ⭐⭐</td><td>✅</td><td>5-10月</td><td>高山草甸野餐+徒步</td></tr>
+</table>
+
+<h4>房山区</h4>
+<table>
+  <tr><th>地点</th><th>车程</th><th>🎣</th><th>🥾</th><th>⛺</th><th>最佳季节</th><th>备注</th></tr>
+  <tr><td><strong>十渡</strong></td><td>2h</td><td>✅ 拒马河沿线</td><td>✅ ⭐</td><td>✅</td><td>5-9月</td><td>经典。夏天可漂流。周末人多</td></tr>
+  <tr><td><strong>上方山</strong></td><td>1.5h</td><td>❌</td><td>✅ ⭐⭐</td><td>❌</td><td>4-11月</td><td>森林公园，古树参天避暑好</td></tr>
+</table>
+
+<h4>平谷区</h4>
+<table>
+  <tr><th>地点</th><th>车程</th><th>🎣</th><th>🥾</th><th>⛺</th><th>最佳季节</th><th>备注</th></tr>
+  <tr><td><strong>金海湖</strong></td><td>1.5h</td><td>✅ 收费钓场</td><td>✅ ⭐</td><td>✅</td><td>4-10月</td><td>管理规范，可租船</td></tr>
+  <tr><td><strong>京东大峡谷</strong></td><td>2h</td><td>❌</td><td>✅ ⭐⭐</td><td>❌</td><td>5-10月</td><td>峡谷+瀑布，夏天凉快</td></tr>
+</table>
+
+<h3>天津 · 蓟州（车程 1.5-2.5h）</h3>
+<table>
+  <tr><th>地点</th><th>车程</th><th>🎣</th><th>🥾</th><th>⛺</th><th>最佳季节</th><th>备注</th></tr>
+  <tr><td><strong>盘山</strong></td><td>1.5h</td><td>❌</td><td>✅ ⭐⭐</td><td>❌</td><td>4-11月</td><td>"京东第一山"。景区步道成熟，适合新手</td></tr>
+  <tr><td><strong>于桥水库（翠屏湖）</strong></td><td>2h</td><td>✅</td><td>⚠️</td><td>⚠️</td><td>4-10月</td><td>天津钓友的热门钓点</td></tr>
+  <tr><td><strong>黄崖关长城</strong></td><td>2.5h</td><td>❌</td><td>✅ ⭐⭐</td><td>❌</td><td>4-11月</td><td>长城+徒步，比八达岭人少太多</td></tr>
+</table>
+
+<h3>河北 · 张家口方向（车程 2.5-4.5h）— 长周末远征</h3>
+<table>
+  <tr><th>地点</th><th>车程</th><th>🎣</th><th>🥾</th><th>⛺</th><th>最佳季节</th><th>备注</th></tr>
+  <tr><td><strong>草原天路</strong></td><td>3h</td><td>❌</td><td>✅ ⭐</td><td>✅</td><td>6-9月</td><td>中国大陆最美公路之一 🚗。风车+草原+天路，自驾圣地。沿途多个停车点可短徒</td></tr>
+  <tr><td><strong>崇礼（太子城/太舞）</strong></td><td>2.5h</td><td>❌</td><td>✅ ⭐⭐</td><td>✅</td><td>6-10月</td><td>冬奥遗产。夏天是高山草甸徒步，冬天是滑雪。高速直达，路况极好</td></tr>
+  <tr><td><strong>官厅水库（张家口侧）</strong></td><td>2h</td><td>✅</td><td>⚠️</td><td>✅</td><td>4-10月</td><td>和延庆侧同一片水，不同的钓点</td></tr>
+</table>
+
+<h3>河北 · 承德方向（车程 2.5-4h）</h3>
+<table>
+  <tr><th>地点</th><th>车程</th><th>🎣</th><th>🥾</th><th>⛺</th><th>最佳季节</th><th>备注</th></tr>
+  <tr><td><strong>避暑山庄周边</strong></td><td>2.5h</td><td>⚠️</td><td>✅ ⭐</td><td>❌</td><td>5-10月</td><td>文化+园林，适合带女朋友/家人的轻松出行</td></tr>
+  <tr><td><strong>塞罕坝/乌兰布统</strong></td><td>4.5h</td><td>⚠️ 有湖泊</td><td>✅ ⭐⭐</td><td>✅</td><td>7-9月（夏）9-10月（秋）</td><td>森林+草原+湖泊。秋天是摄影天堂。适合 3-4 天长周末</td></tr>
+  <tr><td><strong>金山岭长城</strong></td><td>2h</td><td>❌</td><td>✅ ⭐⭐</td><td>❌</td><td>4-11月</td><td>比八达岭野、比司马台成熟。长城徒步的平衡之选</td></tr>
+</table>
+
+<h3>河北 · 秦皇岛方向（车程 3-4h）</h3>
+<table>
+  <tr><th>地点</th><th>车程</th><th>🎣</th><th>🥾</th><th>⛺</th><th>最佳季节</th><th>备注</th></tr>
+  <tr><td><strong>北戴河/南戴河</strong></td><td>3h</td><td>✅ 海钓（需装备）</td><td>✅ ⭐ 海边散步</td><td>⚠️</td><td>6-9月</td><td>离北京最近的海。夏天人极多。海钓需要不同装备</td></tr>
+  <tr><td><strong>山海关→老龙头</strong></td><td>3.5h</td><td>✅ 海钓</td><td>✅ ⭐</td><td>⚠️</td><td>5-10月</td><td>长城入海处，历史+风景。可以结合北戴河一起</td></tr>
+</table>
+
+<h3>按玩法打包</h3>
+
+<h4>🎣 核心钓鱼日</h4>
+<p><strong>近程首选：</strong>白河湾、官厅水库、十渡拒马河。</p>
+<p><strong>中程备选：</strong>琉璃庙/汤河口、不老屯、于桥水库（天津）。</p>
+
+<h4>🥾 核心徒步日（新手友好）</h4>
+<p><strong>近程首选：</strong>蟒山、雁栖湖环湖、百里山水画廊停车点短徒。</p>
+<p><strong>中程进阶：</strong>妙峰山、玉渡山、盘山、金山岭长城。</p>
+
+<h4>🚗 纯自驾观光日</h4>
+<p><strong>半天：</strong>妙峰山山路、密云水库环湖路。</p>
+<p><strong>一天：</strong>百里山水画廊。</p>
+<p><strong>长周末：</strong><strong>草原天路</strong>——北京周边最值得专门跑一趟的自驾路线。夏天绿、秋天金，沿途停车点可以短徒、野餐。</p>
+
+<h4>🔥 全套餐（钓鱼+徒步+野炊+露营）</h4>
+<p><strong>白河湾是近程最佳选择。</strong>能钓、能走、能扎营、能做火做饭。</p>
+<p><strong>长周末远征：</strong>塞罕坝/乌兰布统——森林湖泊草原，开车本身就是享受，到了之后有徒步路线、有湖能钓鱼（需要确认当地规定）。</p>
+
+<h4>💑 带女朋友的轻松日</h4>
+<p><strong>近程：</strong>野鸭湖（候鸟季）、雁栖湖、爨底下。</p>
+<p><strong>中程：</strong>古北水镇、避暑山庄。</p>
+<p><strong>核心原则：</strong>风景好、路好走、拍照好看、有卫生间。舒适度比"野趣"重要十倍。</p>
+
+<div class="callout tip"><strong>📍 路线建议：</strong>从白河湾开始你的第一次。去过两三次之后，逐步扩展半径——草原天路（自驾）、塞罕坝（长周末远征）、盘山（换个方向）。北京的地理位置其实很好：向西是山、向北是草原、向东是海。三小时车程能到的世界，比你以为的大得多。</div>
+</section>
+
+<!-- ═══════════ APPENDIX D ═══════════ -->
+<section id="appendix-d">
+<h2>附录 D：季节出行指南</h2>
+<p>手册里的知识是通用的，但「这周末去哪」需要看季节。这一篇按月份给出从<strong>北四环西</strong>出发的周末方案，当前季节排最前面。</p>
+
+<!-- D.1 -->
+<h3 id="appendix-d-1">D.1 六月 · 初夏（当前季节）⏳</h3>
+
+<div class="callout"><strong>🌤️ 天气：</strong>气温 20-32°C，早晚凉中午晒，雨季未到晴天多。植被全绿，山里水量适中。户外黄金窗口——不冷不热、虫子不多。</div>
+
+<h4>十渡 — 拒马河峡谷</h4>
+
+<p>下了 G5 高速拐进房易路，太行山的崖壁开始从两侧压过来。拒马河贴着公路蜿蜒，水色在六月是青绿的。峡谷里的回声让一切声音都变得比平时大——桨划开水面的声音、鱼跳出水的扑通、对岸有人喊了一嗓子。</p>
+
+<p>北四环西 → G5京昆 → 房易路，约 1.5h。峡谷 + 漂流 + 野炊 + 溪流钓 + 徒步。六月初水温正好，不冷不过热。拒马河有溪哥、马口、鲫鱼，手杆 3.6m 短竿小钩细线。孤山寨、东湖港有成熟步道，2-3h 轻徒步。</p>
+
+<details class="itinerary">
+<summary>两日方案</summary>
+<pre>
+<strong>D1</strong>
+8:30  出发
+10:00 到十渡，扎营或农家院
+10:30 孤山寨步道（峡谷地貌，2-3h）
+13:00 河边野炊午餐
+14:30 漂流（3-5km，1-1.5h）
+16:00 河边钓鱼 / 休息 / 拍照
+18:00 傍晚野炊——河边烧烤是两日游的高光
+
+<strong>D2</strong>
+清晨  拒马河薄雾 + 水面倒影
+上午  晨钓或徒步东湖港
+12:00 午餐
+13:30 返程</pre>
+</details>
+
+<details class="itinerary">
+<summary>一日方案</summary>
+<pre>
+8:00  出发
+9:30  到十渡
+10:00 孤山寨步道
+13:00 河边野炊午餐
+14:30 漂流
+16:00 河边钓鱼 / 休息
+18:00 收拾，天黑前返程
+20:00 到家</pre>
+</details>
+
+<p>一日版少的是晚上河边的氛围和清晨薄雾，核心体验（峡谷+漂流+野炊+徒步）一件不少。</p>
+
+<h4>顺义 — 潮白河 + 汉石桥湿地</h4>
+
+<p>这条路线没有「景点感」。潮白河的堤岸路枯燥而诚实——一侧是河、一侧是杨树，开了二十分钟风景几乎没变。但恰恰是这种不变让你松弛下来。六月的芦苇已经比人高，湿地栈道走进去像进了绿色隧道，风过时芦苇荡哗哗响——那种声音没法用手机录下来，但你走的时候会想多站一会儿。</p>
+
+<p>北四环西 → 京承高速 → 顺义，约 45min-1h。潮白河堤岸路沿河多钓位（手杆鲫鱼为主），河岸开阔处可野炊（注意部分河段禁明火）。汉石桥湿地木栈道环线约 1.5h，平路无爬升。罗马湖傍晚可喝杯咖啡收尾。</p>
+
+<details class="itinerary" open>
+<summary>一日方案</summary>
+<pre>
+9:00  出发
+10:00 潮白河边钓鱼
+12:00 河岸野炊午餐
+14:00 汉石桥湿地散步 + 拍照
+16:30 罗马湖
+17:30 回家</pre>
+</details>
+
+<h4>妙峰山 / 百花山 — 山路自驾 + 登山</h4>
+
+<div class="callout"><strong>⛰️ 六月是北京登山黄金月。</strong>山顶比城区低 5-8°C，雨季没到。过了七月就闷热+雷阵雨。</div>
+
+<p>109 国道在六月是深绿色的。过了门头沟城区，山体开始合拢，弯道一个一个接上来。妙峰山那 20 公里连续爬升——每个回头弯之后视野都大一圈，从山谷看到山腰，从山腰看到远处的山脊线。山顶的风永远比你以为的大，但它是凉的、带着松树味道的。</p>
+
+<p>百花山是另一回事。它不靠山路唬人，它靠高度——海拔 1991m，爬到草甸那一刻，脚底下是野花，远处是灵山的轮廓，天比下面蓝一个色号。</p>
+
+<p>北四环西 → 阜石路 → 109国道，约 1h 到妙峰山脚。妙峰山古道徒步 3-4h（石板路，新手友好），六月玫瑰谷正值花季。百花山徒步 2-3h 到高山草甸（台阶路），山顶可远眺灵山、海坨。野炊自带或山脚涧沟村农家院。钓鱼：这条路线没有，想钓+爬参考附录 C 白河湾。</p>
+
+<details class="itinerary">
+<summary>一日方案</summary>
+<pre>
+8:00  出发
+9:00  到妙峰山脚，登山
+12:00 登顶，山顶野餐
+13:00 下山
+14:30 沿 109 国道往百花山方向
+15:30 百花山脚喝茶或轻走一段
+17:00 返程</pre>
+</details>
+
+<h3 id="appendix-d-2">D.2 七月 · 盛夏</h3>
+<div class="callout"><strong>🌡️ 七月天气画像：</strong>高温 30-38°C，闷热，雷阵雨频繁。户外关键词：<strong>找凉快、找水、找海拔。</strong></div>
+<p><em>（待填充——核心思路：往北上山（崇礼、丰宁坝上），或者泡在水里（白河溯溪、金海湖皮划艇）。北京周边 1000m 以上海拔比城区低 5-8°C，是七月的避难所。）</em></p>
+
+<!-- D.3 -->
+<h3 id="appendix-d-3">D.3 九月 · 初秋</h3>
+<div class="callout"><strong>🍂 九月天气画像：</strong>全年最佳户外季节。气温回落至 15-25°C，天高云淡，鱼口开始变好。户外关键词：<strong>全都能玩。</strong></div>
+<p><em>（待填充——核心思路：九月是所有玩法的全能月。钓鱼秋口、徒步不热、露营不冷、拍照有秋色。草原天路开始变黄，白河湾进入全年最佳状态。）</em></p>
+
+<!-- D.4 -->
+<h3 id="appendix-d-4">D.4 十月 · 深秋</h3>
+<div class="callout"><strong>🍁 十月天气画像：</strong>红叶季。早晚需要外套，中午舒适。关键词：<strong>看颜色。</strong></div>
+<p><em>（待填充——核心思路：喇叭沟门、坡峰岭、慕田峪长城红叶。钓鱼进入末季。露营需要厚睡袋。）</em></p>
+
+<!-- D.5 -->
+<h3 id="appendix-d-5">D.5 冬季 / 早春（12月-3月）</h3>
+<div class="callout"><strong>❄️ 冬春天气画像：</strong>玩法严重收缩。冰钓是唯一新增的钓鱼方式。野炊需要抗寒装备。关键词：<strong>要么扛冷，要么改室内。</strong></div>
+<p><em>（待填充——核心思路：官厅水库冰钓、崇礼滑雪+温泉、古北水镇冬季。或者——冬天本来就是用来计划第二年路线的。）</em></p>
+</section>
+
+<hr>
+
+<blockquote>
+<p><strong>最后的忠告</strong></p>
+<p>这本手册是一个框架。它能帮你少走很多弯路，但不能替代你坐在水边的那些小时。</p>
+<p>真正的经验——哪个月这个水库的鲫鱼在哪个湾子里、这个天气该用什么饵、你的竿子抛到什么角度最顺手——只能靠你一次一次出去积累。</p>
+<p>但这也恰恰是最好的部分：<strong>没有人能替你获得这些。</strong></p>
+<p>所以出发吧。后备箱装好，开到水边，打好窝子。然后你就知道接下来该怎么做了。</p>
+<p>祝爆护。🍻</p>
+</blockquote>
+
+</main>
+</body>
+</html>
+
+
+
+

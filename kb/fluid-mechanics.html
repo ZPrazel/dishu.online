@@ -1,0 +1,826 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>流体力学认知地图 · Fluid Mechanics Cognitive Map</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']], tags:'ams' },
+  svg: { fontCache:'global' }
+};
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+<style>
+:root {
+  --bg:#fafaf8; --surface:#fff; --text:#1a1a1a; --text2:#555;
+  --accent:#1a56db; --accent2:#e8f0fe; --border:#e0e0e0;
+  --sb-bg:#f5f5f3; --sb-w:300px; --code:#f4f4f4;
+  --shadow:0 1px 3px rgba(0,0,0,.08);
+  --warn:#c05621; --ok:#276749;
+}
+[data-theme="dark"] {
+  --bg:#1a1a2e; --surface:#16213e; --text:#e0e0e0; --text2:#aaa;
+  --accent:#60a5fa; --accent2:#1e3a5f; --border:#2a2a4a;
+  --sb-bg:#0f0f23; --code:#1e1e3a; --shadow:0 1px 3px rgba(0,0,0,.3);
+  --warn:#f6ad55; --ok:#68d391;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family:'Segoe UI','Noto Sans SC',-apple-system,sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.75;
+  display:flex; min-height:100vh; font-size:15px;
+}
+/* sidebar */
+.sidebar {
+  width:var(--sb-w); min-width:var(--sb-w); background:var(--sb-bg);
+  border-right:1px solid var(--border); height:100vh; position:sticky;
+  top:0; overflow-y:auto; padding:20px 16px; z-index:10;
+}
+.sb-h { font-weight:700; font-size:17px; color:var(--accent); margin-bottom:4px; }
+.sb-sub { font-size:11px; color:var(--text2); margin-bottom:16px; }
+.toc { list-style:none; }
+.toc li { margin:2px 0; }
+.toc a {
+  display:block; padding:5px 10px; border-radius:6px;
+  text-decoration:none; color:var(--text); font-size:13px;
+  transition:background .15s;
+}
+.toc a:hover, .toc a.active { background:var(--accent2); color:var(--accent); }
+.toc .r0 { font-weight:700; color:var(--accent); margin-top:10px; font-size:14px; }
+.toc .r1 { padding-left:24px; font-size:13px; }
+.toc .r2 { padding-left:40px; font-size:12px; color:var(--text2); }
+.search-box {
+  width:100%; padding:8px 12px; border:1px solid var(--border);
+  border-radius:8px; font-size:13px; background:var(--surface);
+  color:var(--text); margin-bottom:14px;
+}
+.search-box:focus { outline:2px solid var(--accent); border-color:transparent; }
+.sb-btns { display:flex; gap:6px; margin-bottom:14px; }
+.sb-btns button {
+  flex:1; padding:5px 8px; border:1px solid var(--border);
+  background:var(--surface); color:var(--text); border-radius:6px;
+  cursor:pointer; font-size:11px;
+}
+.sb-btns button:hover { background:var(--accent2); }
+
+/* main */
+.main { flex:1; max-width:860px; padding:36px 48px 120px; margin:0 auto; }
+h1 { font-size:28px; margin-bottom:4px; letter-spacing:-.5px; }
+.regime-title {
+  font-size:22px; margin-top:52px; margin-bottom:8px; padding-bottom:8px;
+  border-bottom:3px solid var(--accent); color:var(--accent);
+}
+.regime-title .num {
+  display:inline-block; background:var(--accent); color:#fff;
+  font-size:14px; padding:2px 10px; border-radius:12px; margin-right:8px;
+  vertical-align:middle;
+}
+h3 { font-size:18px; margin-top:28px; margin-bottom:10px; }
+h4 { font-size:15px; margin-top:20px; margin-bottom:6px; }
+p { margin:10px 0; }
+ul, ol { margin:8px 0 8px 22px; }
+li { margin:3px 0; }
+
+/* cards */
+.card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:16px 20px; margin:14px 0; box-shadow:var(--shadow);
+}
+.card.def { border-left:4px solid var(--accent); }
+.card.aha { border-left:4px solid var(--ok); background:#f0fdf4; }
+[data-theme="dark"] .card.aha { background:#0f2d1a; }
+.card.warn { border-left:4px solid var(--warn); background:#fffaf0; }
+[data-theme="dark"] .card.warn { background:#2d1f0f; }
+.card .ct { font-weight:700; font-size:14px; margin-bottom:4px; }
+.card.def .ct { color:var(--accent); }
+.card.aha .ct { color:var(--ok); }
+.card.warn .ct { color:var(--warn); }
+
+/* roadmap */
+.roadmap {
+  display:flex; flex-wrap:wrap; gap:8px; margin:20px 0;
+  align-items:center; font-size:13px;
+}
+.roadmap .step {
+  background:var(--accent2); padding:6px 14px; border-radius:20px;
+  font-weight:600; white-space:nowrap; color:var(--accent);
+  border:2px solid var(--accent);
+}
+.roadmap .step.active { background:var(--accent); color:#fff; }
+.roadmap .arrow { font-size:16px; color:var(--text2); }
+
+/* tables */
+table { width:100%; border-collapse:collapse; margin:12px 0; font-size:13px; }
+th, td { border:1px solid var(--border); padding:7px 11px; text-align:left; }
+th { background:var(--accent2); font-weight:600; }
+
+/* calculator */
+.calc {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:10px; padding:18px 22px; margin:14px 0; box-shadow:var(--shadow);
+}
+.calc label { display:block; margin:8px 0 3px; font-size:13px; font-weight:600; }
+.calc input, .calc select {
+  width:100%; padding:7px 10px; border:1px solid var(--border);
+  border-radius:6px; font-size:14px; background:var(--bg); color:var(--text);
+}
+.calc .res {
+  margin-top:10px; padding:10px 14px; background:var(--accent2);
+  border-radius:6px; font-weight:600; font-size:14px;
+}
+.calc button {
+  margin-top:10px; padding:7px 18px; background:var(--accent);
+  color:#fff; border:none; border-radius:6px; cursor:pointer; font-size:14px;
+}
+.calc button:hover { opacity:.85; }
+.calc .note { font-size:11px; color:var(--text2); margin-top:4px; }
+
+/* progress */
+.progbar {
+  position:fixed; top:0; left:0; height:3px; background:var(--accent);
+  z-index:100; transition:width .1s linear;
+}
+/* theme fab */
+.tfab {
+  position:fixed; bottom:24px; right:24px; width:42px; height:42px;
+  border-radius:50%; background:var(--surface); border:1px solid var(--border);
+  box-shadow:var(--shadow); cursor:pointer; font-size:18px;
+  display:flex; align-items:center; justify-content:center; z-index:50;
+}
+.tfab:hover { transform:scale(1.1); }
+
+/* regime banners */
+.regime-banner {
+  padding:24px 28px; border-radius:12px; margin:20px 0;
+  background:linear-gradient(135deg, var(--accent2), var(--surface));
+  border:1px solid var(--border);
+}
+.regime-banner h3 { margin-top:0; }
+.regime-banner .realm { font-size:13px; color:var(--text2); }
+
+/* tags */
+.tag { display:inline-block; padding:1px 7px; border-radius:4px; font-size:10px; font-weight:700; margin-right:3px; }
+.tag.eq { background:#fce7f3; color:#9d174d; }
+.tag.key { background:#dbeafe; color:#1e40af; }
+.tag.eng { background:#fef3c7; color:#92400e; }
+[data-theme="dark"] .tag.eq { background:#4a1942; color:#f9a8d4; }
+[data-theme="dark"] .tag.key { background:#1e3a5f; color:#93c5fd; }
+[data-theme="dark"] .tag.eng { background:#5c3d0e; color:#fcd34d; }
+
+@media (max-width:800px) {
+  body { flex-direction:column; font-size:14px; }
+  .sidebar { width:100%; min-width:100%; height:auto; position:relative; border-right:none; border-bottom:1px solid var(--border); padding:12px; }
+  .main { padding:16px 14px 80px; }
+}
+.sidebar::-webkit-scrollbar { width:6px; }
+.sidebar::-webkit-scrollbar-track { background:transparent; }
+.sidebar::-webkit-scrollbar-thumb { background:#ccc; border-radius:3px; }
+.highlight-match { background:#ffeb3b; padding:1px 3px; border-radius:2px; }
+</style>
+<style>
+.kb-back-btn {
+  position: fixed; bottom: 28px; left: 28px; z-index: 99999;
+  background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 24px; padding: 8px 18px;
+  font-size: 13px; color: #8b5e3c; text-decoration: none;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: all 0.25s; display: inline-flex; align-items: center; gap: 6px;
+  letter-spacing: 0.04em;
+}
+.kb-back-btn:hover {
+  background: rgba(255,255,255,1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+  border-color: rgba(139,94,60,0.4);
+}
+</style>
+</head>
+<body>
+<a href="../index.html" class="kb-back-btn">鈫?鐭ヨ瘑搴?/a>
+
+
+<div class="progbar" id="progbar"></div>
+
+<!-- ════════════ SIDEBAR ════════════ -->
+<aside class="sidebar" id="side">
+  <div class="sb-h">🌊 流体力学认知地图</div>
+  <div class="sb-sub">Fluid Mechanics Cognitive Map · Aerospace</div>
+  <input class="search-box" id="search" placeholder="🔍 搜索…">
+  <div class="sb-btns">
+    <button id="expand">展开</button><button id="collapse">折叠</button>
+  </div>
+  <ul class="toc" id="toc">
+    <li><a href="#map" class="r0">🗺 总览：物理进阶路线</a></li>
+    <li><a href="#r0" class="r0">第零站 · 流体世界的公理</a></li>
+    <li><a href="#r0-1" class="r1">连续介质 & Kn数</a></li>
+    <li><a href="#r0-2" class="r1">守恒三律（质·动·能）</a></li>
+    <li><a href="#r0-3" class="r1">三把尺子：Re, Ma, St</a></li>
+    <li><a href="#r1" class="r0">第一站 · 水之世界（不可压层流）</a></li>
+    <li><a href="#r1-1" class="r1">流体静止：压强与浮力</a></li>
+    <li><a href="#r1-2" class="r1">数学注入：梯度散度旋度</a></li>
+    <li><a href="#r1-3" class="r1">NS方程初次见面</a></li>
+    <li><a href="#r1-4" class="r1">伯努利：第一条积分</a></li>
+    <li><a href="#r1-5" class="r1">势流 & 达朗贝尔悖论</a></li>
+    <li><a href="#r2" class="r0">第二站 · 黏性的反叛（边界层&分离）</a></li>
+    <li><a href="#r2-1" class="r1">边界层：普朗特的洞见</a></li>
+    <li><a href="#r2-2" class="r1">层流→湍流BL</a></li>
+    <li><a href="#r2-3" class="r1">分离：阻力从哪里来</a></li>
+    <li><a href="#r2-4" class="r1">涡动力学（不可压）</a></li>
+    <li><a href="#r3" class="r0">第三站 · 混沌（湍流）</a></li>
+    <li><a href="#r3-1" class="r1">湍流是什么</a></li>
+    <li><a href="#r3-2" class="r1">RANS：工程师的妥协</a></li>
+    <li><a href="#r3-3" class="r1">Kolmogorov能谱</a></li>
+    <li><a href="#r4" class="r0">第四站 · 空气变弹簧（可压缩亚声速）</a></li>
+    <li><a href="#r4-1" class="r1">声速 & 马赫数</a></li>
+    <li><a href="#r4-2" class="r1">等熵流：压缩不再免费</a></li>
+    <li><a href="#r4-3" class="r1">升力：正确的物理解释</a></li>
+    <li><a href="#r5" class="r0">第五站 · 跨越声障（跨声速）</a></li>
+    <li><a href="#r5-1" class="r1">激波初现 & 阻力发散</a></li>
+    <li><a href="#r5-2" class="r1">超临界翼型 & 面积律</a></li>
+    <li><a href="#r6" class="r0">第六站 · 超越自己（超声速）</a></li>
+    <li><a href="#r6-1" class="r1">正激波 & 斜激波</a></li>
+    <li><a href="#r6-2" class="r1">膨胀波（Prandtl-Meyer）</a></li>
+    <li><a href="#r6-3" class="r1">拉瓦尔喷管</a></li>
+    <li><a href="#r7" class="r0">第七站 · 火的边疆（高超声速）</a></li>
+    <li><a href="#r7-1" class="r1">薄激波层 & 熵层</a></li>
+    <li><a href="#r7-2" class="r1">气动加热（Fay-Riddell）</a></li>
+    <li><a href="#r7-3" class="r1">方程加源项：化学反应</a></li>
+    <li><a href="#r7-4" class="r1">再入 & 热防护</a></li>
+    <li><a href="#tools" class="r0">🛠 工具箱</a></li>
+    <li><a href="#tools-re" class="r1">雷诺数</a></li>
+    <li><a href="#tools-bl" class="r1">边界层</a></li>
+    <li><a href="#tools-shock" class="r1">正激波</a></li>
+    <li><a href="#tools-isen" class="r1">等熵流</a></li>
+    <li><a href="#tools-bern" class="r1">伯努利</a></li>
+    <li><a href="#faq" class="r0">❓ 外行人FAQ</a></li>
+  </ul>
+</aside>
+
+<!-- ════════════ MAIN ════════════ -->
+<main class="main" id="main">
+
+<h1>🌊 流体力学认知地图</h1>
+<p style="font-size:15px;color:var(--text2);">
+  A Cognitive Map of Fluid Mechanics — from Water to Fire<br>
+  <strong>不是教科书。是按物理复杂度升阶的一张心智地图。</strong>
+</p>
+
+<!-- ═══════ MAP ═══════ -->
+<section id="map">
+<div class="regime-banner">
+<h3>🗺 物理进阶路线</h3>
+<p>流体力学不是一堆公式的集合，而是<strong>随着速度和温度增加，一个接一个"物理开关"被打开</strong>的过程。这条路线就是理解流体力学的骨架：</p>
+</div>
+
+<div class="roadmap">
+  <div class="step">💧 不可压层流</div><span class="arrow">→</span>
+  <div class="step">🌊 +黏性/分离</div><span class="arrow">→</span>
+  <div class="step">🌪 +湍流</div><span class="arrow">→</span>
+  <div class="step">💨 +压缩性</div><span class="arrow">→</span>
+  <div class="step">⚡ +激波</div><span class="arrow">→</span>
+  <div class="step">🔥 +化学</div>
+</div>
+
+<table style="margin-top:16px;">
+<tr><th>物理复杂度</th><th>新打开的"开关"</th><th>新出现的现象</th><th>典型场景</th></tr>
+<tr><td><strong>第零站</strong></td><td>连续介质假设</td><td>—</td><td>一切流体的公理</td></tr>
+<tr><td><strong>第一站</strong></td><td>黏性=0, ∇·u=0, 定常</td><td>伯努利、势流</td><td>低速水/空气、管道</td></tr>
+<tr><td><strong>第二站</strong></td><td>+ 黏性 (μ>0)</td><td>边界层、分离、阻力</td><td>汽车、高尔夫球、机翼低速</td></tr>
+<tr><td><strong>第三站</strong></td><td>+ Re→∞ → 湍流</td><td>随机脉动、级串、混合增强</td><td>大气、管道、几乎所有工程流</td></tr>
+<tr><td><strong>第四站</strong></td><td>+ ρ可变 (Ma>0.3)</td><td>密度变化、总温总压</td><td>客机巡航、风洞</td></tr>
+<tr><td><strong>第五站</strong></td><td>+ 局部Ma>1</td><td>激波、阻力发散</td><td>跨声速机翼</td></tr>
+<tr><td><strong>第六站</strong></td><td>+ 全域Ma>1</td><td>激波系、膨胀波、音爆</td><td>战斗机、导弹、火箭喷管</td></tr>
+<tr><td><strong>第七站</strong></td><td>+ T>2000K → 化学</td><td>离解、电离、辐射、烧蚀</td><td>再入、高超声速飞行器</td></tr>
+</table>
+
+<p style="margin-top:12px; font-size:13px; color:var(--text2);">
+  关键洞见：<strong>每一站都是前一站加上新的物理</strong>。NS方程本身始终是那个方程——我们只是在不同的极限下看它，或者往里面加新的项（源项）。下面逐站展开。
+</p>
+</section>
+
+<!-- ═══════ R0: FOUNDATIONS ═══════ -->
+<section id="r0">
+<h2 class="regime-title"><span class="num">0</span>第零站 · 流体世界的公理</h2>
+
+<div class="regime-banner">
+  <div class="realm">📍 物理状态：还没开始流动。建立所有后续讨论的共同语言。</div>
+</div>
+
+<h3 id="r0-1">连续介质假设 & Knudsen数</h3>
+<p>我们不追踪分子，而是把流体当成<strong>连续介质</strong>。这个假设是否成立的判据是克努森数：</p>
+$$ Kn = \frac{\lambda}{L} \quad \text{（λ=分子平均自由程，L=特征长度）} $$
+<p>$Kn < 0.01$ → 连续介质成立。低空大气 $Kn \sim 10^{-7}$（非常好），80km以上 $Kn > 0.01$（需要稀薄气体动力学）。连续介质假设是我们一切推导的<strong>第零公理</strong>。</p>
+
+<div class="card aha"><div class="ct">💡 尺度的意义</div>
+<p>同一个空气，在房间尺度下是完美的连续介质，在微米尺度的MEMS器件中可能不再连续。流体力学的"正确与否"取决于<strong>你用什么尺度看它</strong>。</p></div>
+
+<h3 id="r0-2">守恒三律：所有方程都从这三句话来</h3>
+
+<p>流体力学所有方程都是以下三条守恒律的数学表达。先记这三句话，再记方程：</p>
+
+<div class="card def"><div class="ct">① 质量守恒（连续性） <span class="tag key">key</span></div>
+<p>一个控制体里，质量的变化 = 流入 − 流出。东西不会凭空出现或消失。</p></div>
+
+<div class="card def"><div class="ct">② 动量守恒（NS方程的本质） <span class="tag key">key</span></div>
+<p>牛顿第二定律 $F=ma$ 用在流体上。动量变化率 = 作用在流体上的所有力（压强梯度 + 黏性 + 重力 + …）。</p></div>
+
+<div class="card def"><div class="ct">③ 能量守恒 <span class="tag key">key</span></div>
+<p>热力学第一定律。内能+动能的变化 = 传入的热量 + 外力做的功。</p></div>
+
+<p>我们会一路带着这三条，每次在新的物理条件下把它们写出来。</p>
+
+<h3 id="r0-3">三把尺子：Re, Ma, St</h3>
+<p>将控制方程无量纲化后，所有流动的特征被压缩到几个无量纲数上。它们是判断流动性质的"尺子"：</p>
+
+$$ Re = \frac{\rho U L}{\mu} = \frac{\text{惯性力}}{\text{黏性力}} \qquad
+   Ma = \frac{U}{a} = \frac{\text{流速}}{\text{声速}} \qquad
+   St = \frac{L}{UT} = \frac{\text{特征时间}}{\text{对流时间}} $$
+
+<div class="card aha"><div class="ct">💡 Re 和 Ma 是流体力学最核心的两个数</div>
+<p><strong>Re 大</strong> → 惯性 >> 黏性 → 容易出现湍流、分离。<br>
+<strong>Re 小</strong> → 黏性主导 → 流动"听话"、层流。<br>
+<strong>Ma < 0.3</strong> → 密度几乎不变 → 水世界。<br>
+<strong>Ma > 0.3</strong> → 压缩性不能忽略 → 空气变弹簧。<br>
+<strong>Ma > 1</strong> → 你跑得比自己的扰动还快 → 激波出现。</p></div>
+</section>
+
+<!-- ═══════ R1: INCOMPRESSIBLE LAMINAR ═══════ -->
+<section id="r1">
+<h2 class="regime-title"><span class="num">1</span>第一站 · 水之世界（不可压层流）</h2>
+
+<div class="regime-banner">
+  <div class="realm">📍 物理开关：∇·u=0（不可压缩），μ=0 或 μ很小，Re不大，流动平滑有序。<br>典型场景：低速水流、油、蜂蜜、微流体、管道输运。</div>
+</div>
+
+<h3 id="r1-1">流体静止：最简单的起点</h3>
+<p>流动速度为零时，NS方程退化到只有压强梯度和重力：</p>
+$$ \nabla p = \rho \mathbf{g} \quad\Rightarrow\quad \frac{dp}{dz} = -\rho g $$
+<p>这就是"水越深压强越大"的数学表达。阿基米德浮力也来自这个压强梯度的积分。在这一站，我们只需要理解<strong>压强是标量、各向同性</strong>就够了。</p>
+
+<h3 id="r1-2">数学注入：梯度·散度·旋度 <span class="tag eq">math</span></h3>
+
+<p>流体运动起来后，我们需要描述"某处的速度在空间上怎么变"。这就需要三个算符。这里不堆公式，用直觉：</p>
+
+<table>
+<tr><th>算什么</th><th>作用于</th><th>物理直觉</th><th>在流体力学中</th></tr>
+<tr><td><strong>梯度 ∇p</strong></td><td>标量→矢量</td><td>变化最快的方向</td><td>压强梯度推动流体从高压到低压</td></tr>
+<tr><td><strong>散度 ∇·u</strong></td><td>矢量→标量</td><td>某点是"源"还是"汇"</td><td>不可压缩 ⇔ ∇·u=0（不膨胀不收缩）</td></tr>
+<tr><td><strong>旋度 ∇×u = ω</strong></td><td>矢量→矢量</td><td>某点旋转的强度</td><td>涡量——升力的"原材料"</td></tr>
+</table>
+
+<div class="card aha"><div class="ct">💡 散度 vs 旋度，两个最容易被搞混的概念</div>
+<p>放一个小气球在流体中：气球膨胀 = 散度>0。放一个小十字桨叶：桨叶旋转 = 旋度≠0。<strong>弯曲的流线可以旋度为零</strong>（自由涡），这是整个涡动力学的起点。</p></div>
+
+<p>还需要<strong>物质导数</strong>——跟随一个流体微团看物理量的变化：</p>
+$$ \frac{D\phi}{Dt} = \underbrace{\frac{\partial \phi}{\partial t}}_{\text{当地变化}} + \underbrace{(\mathbf{u}\cdot\nabla)\phi}_{\text{对流变化}} $$
+
+<p>类比：你开车从北京（5°C）到上海（25°C），感受到的温度变化 = 两地本身在变暖（当地项）+ 你移动到了更暖的地方（对流项）。</p>
+
+<h3 id="r1-3">NS方程初次见面 <span class="tag eq">eq</span></h3>
+
+<p>把所有力——压强梯度、黏性、重力——代入 $F=ma$，得到不可压缩牛顿流体的NS方程：</p>
+$$ \rho\left(\frac{\partial\mathbf{u}}{\partial t} + \mathbf{u}\cdot\nabla\mathbf{u}\right) = -\nabla p + \mu\nabla^2\mathbf{u} + \rho\mathbf{g} $$
+
+<table>
+<tr><th>项</th><th>物理含义</th><th>如果没了会怎样</th></tr>
+<tr><td>$\rho\frac{\partial\mathbf{u}}{\partial t}$</td><td>非定常惯性力</td><td>定常流这一项为零</td></tr>
+<tr><td>$\rho\mathbf{u}\cdot\nabla\mathbf{u}$</td><td>对流惯性力（<strong>非线性之源</strong>）</td><td>无此项→线性→无湍流</td></tr>
+<tr><td>$-\nabla p$</td><td>压强梯度力</td><td>流体不受压强差推动</td></tr>
+<tr><td>$\mu\nabla^2\mathbf{u}$</td><td>黏性扩散（动量从高速扩散到低速）</td><td>无黏→欧拉方程</td></tr>
+<tr><td>$\rho\mathbf{g}$</td><td>重力（体积力）</td><td>无重力→浮力消失</td></tr>
+</table>
+
+<div class="card warn"><div class="ct">⚠️ 非线性项 $\mathbf{u}\cdot\nabla\mathbf{u}$ 是整个学科的核心困难</div>
+<p>因为有它，NS方程是非线性的——"叠加原理"不成立，小扰动可以放大。这就是湍流难以预测的根源。NS方程的存在性与光滑性是<strong>千禧年七大问题之一</strong>。</p></div>
+
+<h3 id="r1-4">伯努利方程：NS的第一条"免费积分" <span class="tag key">key</span></h3>
+
+<p>第一站的理想极限：假设<strong>无黏、定常、不可压缩、沿一条流线</strong>，NS方程可以解析积分：</p>
+$$ \frac{p}{\rho} + \frac{U^2}{2} + gz = \text{const（沿一条流线）} $$
+
+<div class="card warn"><div class="ct">⚠️ 飞机升力 ≠ 伯努利</div>
+<p>"机翼上方路程长所以速度快压强低"是错的。正确的升力解释需要环量（见第四站）。伯努利只是告诉我们<strong>"如果速度快了，压强就会低"</strong>——它没有告诉我们<strong>为什么</strong>机翼上方速度更快。这里犯错的工科生远比你想象的多。</p></div>
+
+<p><strong>伯努利能解释的日常现象</strong>：水龙头水流变细（下落加速→连续性→截面积减）、两张纸吹气靠近（中间流速大压强低）、高铁站台安全线——这些是真正的伯努利。</p>
+
+<h3 id="r1-5">势流理论 & 达朗贝尔悖论</h3>
+
+<p>再加一个假设——<strong>无旋</strong>（∇×u=0）→ 存在速度势 φ，u=∇φ。代入不可压缩条件得拉普拉斯方程 ∇²φ=0。线性！好解！</p>
+
+<p>但无黏无旋流预测：<strong>物体匀速运动时阻力为零</strong>。这显然是错的——这就是达朗贝尔悖论。</p>
+
+<div class="card aha"><div class="ct">💡 达朗贝尔悖论是流体力学最好的"钩子"</div>
+<p>它精确地告诉我们：<strong>阻力不是来自无黏的"推开水"</strong>，而是来自黏性。这就自然引出下一站——边界层。普朗特正是用边界层解决了这个悖论，这是1904年流体力学最伟大的突破。</p></div>
+</section>
+
+<!-- ═══════ R2: BOUNDARY LAYER & SEPARATION ═══════ -->
+<section id="r2">
+<h2 class="regime-title"><span class="num">2</span>第二站 · 黏性的反叛（边界层 & 分离）</h2>
+
+<div class="regime-banner">
+  <div class="realm">📍 新打开的开关：黏性 μ > 0，Re 中等到大。<br>新增现象：边界层、摩擦阻力、逆压梯度分离、压差阻力。<br>典型场景：飞机（低速）、汽车、高尔夫球、桥梁风载。</div>
+</div>
+
+<h3 id="r2-1">边界层：普朗特的天才简化</h3>
+<p>普朗特的洞见：高雷诺数下，黏性效应被局限在物面附近的<strong>薄层</strong>（边界层）里。层外用无黏势流，层内用简化的NS——两个问题解耦，大幅降低难度。</p>
+
+<p>边界层厚度沿流向增长。层流边界层的经典解（Blasius，零攻角平板）：</p>
+$$ \delta_{99} \approx \frac{5.0x}{\sqrt{Re_x}}, \quad C_f = \frac{0.664}{\sqrt{Re_x}}, \quad Re_x = \frac{U_\infty x}{\nu} $$
+
+<p>三个特征厚度：<strong>名义厚度 δ₉₉</strong>（速度恢复到99%）、<strong>位移厚度 δ*</strong>（边界层对外流的"排挤"效应）、<strong>动量厚度 θ</strong>（动量亏损量度）。</p>
+
+<h3 id="r2-2">层流 vs 湍流边界层</h3>
+<p>同一位置，湍流边界层比层流更厚、摩擦更大。但——<strong>湍流边界层更抗分离</strong>。因为湍流混合把外层高动量流体带入近壁区，"补血"了近壁流体的动量亏损。</p>
+
+<p>转捩（层流→湍流）的关键：临界雷诺数 $Re_{x,cr} \approx 5\times 10^5$（光滑平板，低湍流度来流）。</p>
+
+<h3 id="r2-3">分离：阻力的真正来源 <span class="tag eng">eng</span></h3>
+
+<p>逆压梯度 $\partial p/\partial x > 0$ 是分离的催化剂。近壁流体动能本就不足（被黏性消耗），遇到逆压梯度（像在爬坡），动能耗尽后速度反向——流动从壁面"剥落"。</p>
+
+<div class="card aha"><div class="ct">💡 为什么高尔夫球有凹坑？</div>
+<p>凹坑迫使边界层提前转捩为湍流 → 湍流BL更抗分离 → 尾流更窄 → <strong>压差阻力大幅减小</strong> → 球飞得远得多。光滑球在同样速度下层流BL过早分离，阻力大。</p>
+<p>这个问题的本质是<strong>分离点位置决定压差阻力大小</strong>。足球"电梯球"的突然下坠也与此相关。</p></div>
+
+<p><strong>阻力 = 摩擦阻力 + 压差阻力</strong>。流线体（机翼）：摩擦为主。钝体（球、圆柱）：压差为主。边界层控制的工程目标常常是<strong>推迟分离</strong>——涡流发生器、前缘缝翼、高尔夫球凹坑，本质都是这个目的。</p>
+
+<h3 id="r2-4">涡动力学（在不可压框架内） <span class="tag key">key</span></h3>
+
+<p>在第二站引入了黏性，涡量就不再守恒。涡量输运方程（对不可压NS取旋度）：</p>
+$$ \frac{D\boldsymbol{\omega}}{Dt} = (\boldsymbol{\omega}\cdot\nabla)\mathbf{u} + \nu\nabla^2\boldsymbol{\omega} $$
+
+<p>两项：<strong>涡拉伸</strong>（$(\boldsymbol{\omega}\cdot\nabla)\mathbf{u}$，三维独有！二维此项为零）+ <strong>黏性扩散</strong>（$\nu\nabla^2\boldsymbol{\omega}$）。</p>
+
+<div class="card aha"><div class="ct">💡 二维湍流 vs 三维湍流的根本区别</div>
+<p>二维：涡只有ω_z分量，涡拉伸项=0 → 涡只能扩散，不能被拉伸 → 能量从<strong>小尺度往大尺度</strong>聚集（逆级串）。<br>
+三维：涡拉伸可以把涡管拉长拉细 → 角动量守恒使涡量增大 → 能量从<strong>大尺度往小尺度</strong>传递（正级串）→ 这是湍流的根本物理机制。</p></div>
+
+<p><strong>环量</strong>：$\Gamma = \oint_C \mathbf{u}\cdot d\mathbf{l}$。开尔文环量定理：无黏正压流体中环量守恒。这是后面机翼升力理论的基石。</p>
+</section>
+
+<!-- ═══════ R3: TURBULENCE ═══════ -->
+<section id="r3">
+<h2 class="regime-title"><span class="num">3</span>第三站 · 混沌（湍流）</h2>
+
+<div class="regime-banner">
+  <div class="realm">📍 新打开的开关：Re 大到惯性力压倒黏性力 → 层流失稳。<br>新增现象：随机脉动、强混合、能量级串、雷诺应力。<br>这是NS方程自身包含的物理——不需要额外项，只是解法变了。</div>
+</div>
+
+<h3 id="r3-1">湍流是什么</h3>
+<p>湍流不是流体的属性，是<strong>流动的状态</strong>。同一管水，低流速层流，高流速湍流。湍流的几大特征：不规则但统计可预测、强扩散/混合能力、需要持续能量维持、三维涡量涨落。</p>
+
+<h3 id="r3-2">RANS：工程师如何处理湍流 <span class="tag eng">eng</span></h3>
+<p>我们不解析湍流的每个涡，而是做时间平均：$u = \bar{u} + u'$（平均+脉动）。代入NS、取平均后多出一项：</p>
+$$ -\rho\overline{u_i' u_j'} \quad \text{——雷诺应力} $$
+<p>这不是真实的应力，是脉动动量通量的平均值。问题是：<strong>未知数多于方程数</strong>（封闭性问题）。需要额外关系——湍流模型。</p>
+
+<p>涡黏假设是最简单的封闭：$\tau_{\text{turb}} \approx \mu_t \cdot S_{ij}$，把湍流当成"增强版的黏性"。主流模型：$k$-$\varepsilon$（工业通用）、$k$-$\omega$ SST（航空航天，逆压梯度分离预测更好）、Spalart-Allmaras（航空外流、一方程轻量）。</p>
+
+<div class="card warn"><div class="ct">⚠️ 没有万能湍流模型</div>
+<p>选模型需要对物理的理解。$k$-$\omega$ SST在航空航天中常用是因为它能更好预测逆压梯度下的分离——这是机翼失速和进气道性能的关键。</p></div>
+
+<h3 id="r3-3">Kolmogorov能谱：湍流的普适规律</h3>
+<p>科尔莫戈罗夫在1941年用量纲分析（没有解方程！）给出了湍流能谱的普适形式：</p>
+$$ E(k) = C_K \varepsilon^{2/3} k^{-5/3} $$
+
+<p>物理画面：能量在大尺度注入（积分尺度 $L$）→ 涡拉伸逐级传递到更小尺度 → 在 Kolmogorov 尺度 $\eta = (\nu^3/\varepsilon)^{1/4}$ 被黏性耗散为热。$L/\eta \sim Re^{3/4}$——这意味着 $Re=10^6$ 时，最小涡比最大涡小约 <strong>30000 倍</strong>。这就是 DNS（直接数值模拟）需要天文数字网格的原因。</p>
+</section>
+
+<!-- ═══════ R4: COMPRESSIBLE SUBSONIC ═══════ -->
+<section id="r4">
+<h2 class="regime-title"><span class="num">4</span>第四站 · 空气变成弹簧（可压缩亚声速）</h2>
+
+<div class="regime-banner">
+  <div class="realm">📍 新打开的开关：Ma > 0.3 → 密度不再是常数，ρ=ρ(p,T)。<br>新增现象：总温/总压、等熵关系、能量方程不再能忽略。<br>典型场景：客机巡航（Ma≈0.8）、涡轮机械、高速风洞。</div>
+</div>
+
+<h3 id="r4-1">声速与马赫数</h3>
+$$ a = \sqrt{\left(\frac{\partial p}{\partial \rho}\right)_s} = \sqrt{\gamma RT} $$
+<p>声速是"信息"在流体中的传播速度。$Ma = U/a$ 衡量你相对于信息传播速度有多快。海平面20°C：$a\approx 343$ m/s。高空-56°C：$a\approx 295$ m/s。</p>
+
+<p>$Ma < 1$ 时，扰动可以向上游传播——整个流场"知道"下游有什么。$Ma > 1$ 时，你跑得比扰动还快——马赫锥以外的区域完全"不知道"你的存在。</p>
+$$ \sin\mu = \frac{1}{Ma} \quad\text{（马赫角）} $$
+
+<h3 id="r4-2">等熵流：新的积分关系</h3>
+<p>可压缩 ≠ 可以随便压缩。在无激波、无黏、绝热的条件下，流动是<strong>等熵</strong>的。等熵关系给出总参数（滞止参数）与静参数之比：</p>
+$$ \frac{T_0}{T} = 1 + \frac{\gamma-1}{2}Ma^2, \quad \frac{p_0}{p} = \left(1 + \frac{\gamma-1}{2}Ma^2\right)^{\frac{\gamma}{\gamma-1}} $$
+
+<p>$p_0$（总压）代表流动的"机械能储量"。<strong>经过激波后总压下降</strong>——这是不可逆的熵增，代表机械能的损失。进气道设计的核心指标就是总压恢复系数。</p>
+
+<div class="card aha"><div class="ct">💡 总温不变但总压可能变</div>
+<p>等熵流中总温总压都不变。但经过激波：总温不变（绝热），总压下降（熵增）。这个区别很重要——总温是能量守恒，总压是"可用能量"。</p></div>
+
+<h3 id="r4-3">升力：终于可以正确解释了 <span class="tag key">key</span></h3>
+
+<p>正确的升力解释链条（和伯努利无关——伯努利只是压强-速度关系，不是升力的<strong>原因</strong>）：</p>
+
+<ol>
+  <li>机翼启动 → 尾缘产生<strong>启动涡</strong>脱落</li>
+  <li>开尔文环量定理 → 机翼上产生等量反向的<strong>束缚涡</strong> → 环量 $\Gamma$</li>
+  <li><strong>库塔条件</strong>：气流在尖尾缘平滑离开 → 确定环量大小</li>
+  <li><strong>库塔-儒科夫斯基定理</strong>：$L = \rho_\infty U_\infty \Gamma$（单位展长）</li>
+  <li>上下表面压强差是升力的<strong>直接来源</strong>，但压强差的<strong>原因</strong>是环量</li>
+</ol>
+
+<div class="card warn"><div class="ct">⚠️ 最常被误传的物理</div>
+<p>"上表面路程长气流跑得快所以压强低"——这叫"等时谬误"，实验证明上下表面的气流<strong>不会同时到达尾缘</strong>。正确的因果链是：启动涡 → 环量 → 上下压强差 → 升力。</p></div>
+
+<p><strong>有限翼展</strong>：翼尖涡产生下洗速度，减小有效攻角 → 诱导阻力 $C_{D_i} = C_L^2/(\pi e AR)$。<strong>展弦比 AR 越大，诱导阻力越小</strong>——这就是滑翔机翅膀极长的原因。</p>
+</section>
+
+<!-- ═══════ R5: TRANSONIC ═══════ -->
+<section id="r5">
+<h2 class="regime-title"><span class="num">5</span>第五站 · 跨越声障（跨声速）</h2>
+
+<div class="regime-banner">
+  <div class="realm">📍 新打开的开关：局部 Ma > 1，但来流 Ma < 1。<br>新增现象：翼面激波、激波-边界层相互作用、阻力发散。<br>这是流体力学最"脏"的流态——亚/超声速共存，强非线性耦合。</div>
+</div>
+
+<h3 id="r5-1">激波初现 & 阻力发散</h3>
+<p>来流 Ma ≈ 0.7-0.8 时，机翼上表面局部气流加速到 Ma > 1 → 产生<strong>激波</strong>。激波导致边界层分离（激波-边界层相互作用），阻力急剧增大——<strong>阻力发散</strong>。</p>
+
+<p>阻力发散马赫数 $Ma_{DD}$：$dC_D/dMa = 0.1$ 时的马赫数。它是飞机巡航速度的硬上限。</p>
+
+<h3 id="r5-2">超临界翼型 & 面积律 <span class="tag eng">eng</span></h3>
+
+<p><strong>超临界翼型</strong>：上表面较平坦，延缓激波形成，减小激波强度。波音787、A350 巡航 Ma≈0.85，靠的就是超临界翼型。</p>
+
+<p><strong>面积律（Whitcomb Rule）</strong>：跨声速波阻与机身+机翼截面积沿纵轴的分布有关。理想分布应平滑（雪茄形）。这就是战斗机"收腰"（可乐瓶机身）的原因——机翼占面积的地方机身补偿缩小，总截面积平滑过渡。</p>
+
+<div class="card aha"><div class="ct">💡 面积律是跨声速设计的核心洞见</div>
+<p>1952年 Whitcomb 提出这个想法时，很多人觉得太简单不可能是真的。风洞实验完美验证。此后所有跨声速飞机的机身设计都遵循面积律。</p></div>
+</section>
+
+<!-- ═══════ R6: SUPERSONIC ═══════ -->
+<section id="r6">
+<h2 class="regime-title"><span class="num">6</span>第六站 · 超越自己（超声速）</h2>
+
+<div class="regime-banner">
+  <div class="realm">📍 新打开的开关：全域 Ma > 1，扰动不能上传。<br>新增现象：正激波、斜激波、膨胀波、音爆、拉瓦尔喷管。<br>典型场景：战斗机、导弹、火箭发动机喷管。</div>
+</div>
+
+<h3 id="r6-1">正激波 & 斜激波</h3>
+
+<p><strong>正激波 Rankine-Hugoniot 关系</strong>：</p>
+$$ Ma_2^2 = \frac{(\gamma-1)Ma_1^2+2}{2\gamma Ma_1^2-(\gamma-1)}, \quad \frac{p_2}{p_1} = 1+\frac{2\gamma}{\gamma+1}(Ma_1^2-1) $$
+
+<p>关键结论：$Ma_1 > 1$ 时 $Ma_2 < 1$（超声速进、亚声速出）；密度比有上限 $(\gamma+1)/(\gamma-1)=6$（空气无论多快最多压缩6倍）；激波厚度≈微米级。</p>
+
+<p><strong>斜激波</strong>由 $\theta$-$\beta$-$Ma$ 关系描述。弱解（实际最常见）和强解之分。<strong>音爆</strong>是飞机超声速飞行产生的激波不断扫过地面的结果——不是"破音障那一瞬间"的事。</p>
+
+<h3 id="r6-2">膨胀波：等熵加速 <span class="tag key">key</span></h3>
+<p>超声速流绕过<strong>凸角</strong>时平滑加速——等熵，不是激波。Prandtl-Meyer函数 $\nu(Ma)$ 描述偏转角与马赫数的关系。膨胀波是超声速流"自动加速"的机制。</p>
+
+<h3 id="r6-3">拉瓦尔喷管</h3>
+$$ \frac{dA}{A} = (Ma^2-1)\frac{du}{u} $$
+
+<p>这个关系揭示：亚声速要加速→面积减小；超声速要加速→<strong>面积增大</strong>。喉道处 $Ma=1$、$dA=0$。这就是为什么火箭喷管先收缩再扩张——<strong>收敛-扩张（CD）喷管是产生超声速射流的唯一被动方式</strong>。喉道堵塞意味着下游扰动无法上传——喷管内部与外界"解耦"。</p>
+</section>
+
+<!-- ═══════ R7: HYPERSONIC ═══════ -->
+<section id="r7">
+<h2 class="regime-title"><span class="num">7</span>第七站 · 火的边疆（高超声速）</h2>
+
+<div class="regime-banner">
+  <div class="realm">📍 新打开的开关：Ma > 5，T > 2000K → 分子振动激发 → 离解 → 电离。<br>新增现象：薄激波层、熵层、气动加热、烧蚀、辐射。<br>需要在 NS 方程中加化学源项。这是流体力学和化学物理的交汇带。</div>
+</div>
+
+<h3 id="r7-1">高超声速流的三大特殊物理</h3>
+<ul>
+  <li><strong>薄激波层</strong>：激波极贴近物面，激波与边界层几乎交织——黏性-无黏强耦合，不能分开处理</li>
+  <li><strong>熵层</strong>：钝头体前方弯曲激波产生强熵梯度，"熵层"吞没边界层，改变传热特性</li>
+  <li><strong>马赫数无关原理</strong>（Oswatitsch）：$Ma \to \infty$ 时无量纲流场趋于不变——超过一定速度再加更快也不会改变流场结构</li>
+</ul>
+
+<h3 id="r7-2">气动加热：速度的三次方 <span class="tag eng">eng</span></h3>
+$$ \dot{q}_w \propto \sqrt{\frac{\rho_\infty}{R_n}} \, U_\infty^3 $$
+
+<p>驻点热流正比于<strong>速度的三次方</strong>。速度翻倍 → 热流×8。这就是再入时速度如此致命的原因。</p>
+
+<div class="card aha"><div class="ct">💡 为什么航天器用钝头而不是尖头？</div>
+<p>直觉会说尖头"穿透"大气更好。但钝头产生<strong>脱体激波</strong>，将大量动能转化为激波层内的热然后辐射/散逸到大气中，只有一小部分传给航天器。尖头→激波附着→热流直接打在尖端→瞬间熔化。这是 Allen & Eggers 在1950年代的著名洞见。</p></div>
+
+<h3 id="r7-3">给方程加源项：化学来了 <span class="tag eq">eq</span></h3>
+
+<p>当温度超过约2000K，空气不再是简单的双原子理想气体。O₂ 开始离解（~2000K），N₂ 在更高温度下离解（~4000K），然后电离（~9000K）。</p>
+
+<p>我们需要在能量方程和组分方程中加<strong>源项</strong>：</p>
+$$ \frac{DY_i}{Dt} = \frac{1}{\rho}\nabla\cdot(\rho D_i \nabla Y_i) + \underbrace{\dot{\omega}_i}_{\text{化学反应源项}} $$
+
+$$ \rho\frac{Dh}{Dt} = \frac{Dp}{Dt} + \nabla\cdot(k\nabla T) + \boldsymbol{\tau}:\nabla\mathbf{u} - \underbrace{\sum_i h_i^0 \dot{\omega}_i}_{\text{化学热释放/吸收}} + \underbrace{\nabla\cdot\mathbf{q}_r}_{\text{辐射}} $$
+
+<p>这里 $\dot{\omega}_i$ 是组分 $i$ 的净生成率（化学反应动力学），$h_i^0$ 是生成焓，$\mathbf{q}_r$ 是辐射热流。</p>
+
+<div class="card aha"><div class="ct">💡 方程还是那个NS方程——只是加了项</div>
+<p>整个流体力学认知地图的精髓：<strong>NS方程本身没有变，我们只是在不同的物理条件下，决定保留哪些项、忽略哪些项、添加哪些源项</strong>。从不可压层流到高超声速等离子体，方程都是同一个家族。</p></div>
+
+<h3 id="r7-4">再入与热防护</h3>
+<p>再入两条路线：<strong>弹道再入</strong>（大减速、高热流、短时间——水星/联盟号）vs <strong>升力再入</strong>（利用升力延长轨迹、降低峰值热流——航天飞机）。</p>
+
+<p>热防护三大策略：<strong>烧蚀</strong>（阿波罗，材料牺牲自己吸热）、<strong>辐射/隔热</strong>（航天飞机陶瓷瓦+碳碳前缘）、<strong>主动冷却</strong>（未来方向，冷却剂循环）。</p>
+
+<hr style="margin:40px 0;border:none;border-top:1px solid var(--border);">
+<h3>🎯 认知地图总结</h3>
+<p>七站走完，你应该拥有的不是一堆公式，而是<strong>一条清晰的物理进阶线</strong>：</p>
+<ol>
+  <li>不可压层流 → 最简单的极限，学到守恒三律和基本数学工具</li>
+  <li>加黏性 → 边界层、分离、阻力从哪来</li>
+  <li>加湍流 → 混沌、RANS、为什么要模型</li>
+  <li>加压缩性 → 密度可变、等熵、升力正确解释</li>
+  <li>加激波 → 跨声速的脏、超声速的美</li>
+  <li>加化学 → 高超声速、再入、方程扩源项</li>
+</ol>
+<p>这条线上的每一个"开关"都对应着新的物理现象和新的工程挑战。理解了这条线，你就理解了流体力学。</p>
+</section>
+
+<!-- ═══════ TOOLS ═══════ -->
+<section id="tools">
+<h2 class="regime-title"><span class="num">🛠</span>工具箱 / Interactive Tools</h2>
+
+<div class="calc" id="tools-re">
+<h4>🔢 雷诺数计算器</h4>
+<label>流速 U (m/s)</label><input type="number" id="reu" value="30" step="any">
+<label>特征长度 L (m)</label><input type="number" id="rel" value="1.0" step="any">
+<label>流体</label>
+<select id="refl" onchange="upRefl()">
+  <option value="air">空气 20°C: ν=1.516e-5</option>
+  <option value="water">水 20°C: ν=1.004e-6</option>
+  <option value="cust">自定义</option>
+</select>
+<div id="recust" style="display:none"><label>ν (m²/s)</label><input type="number" id="renu" value="1.516e-5" step="any"></div>
+<button onclick="calcRe()">计算</button>
+<div class="res" id="reres"></div>
+<div class="note" id="renote"></div>
+</div>
+
+<div class="calc" id="tools-bl">
+<h4>📏 边界层厚度估算</h4>
+<label>U∞ (m/s)</label><input type="number" id="blu" value="50" step="any">
+<label>x (m)</label><input type="number" id="blx" value="0.5" step="any">
+<label>流动</label><select id="blt"><option value="lam">层流</option><option value="turb">湍流</option></select>
+<label>ν (m²/s)</label><input type="number" id="blnu" value="1.516e-5" step="any">
+<button onclick="calcBl()">计算</button>
+<div class="res" id="blres"></div>
+</div>
+
+<div class="calc" id="tools-shock">
+<h4>💥 正激波</h4>
+<label>Ma₁</label><input type="number" id="shma" value="2.0" step="any" min="1.0">
+<label>γ</label><input type="number" id="shga" value="1.4" step="any">
+<button onclick="calcSh()">计算</button>
+<div class="res" id="shres"></div>
+</div>
+
+<div class="calc" id="tools-isen">
+<h4>📊 等熵流</h4>
+<label>Ma</label><input type="number" id="isma" value="2.0" step="any" min="0">
+<label>γ</label><input type="number" id="isga" value="1.4" step="any">
+<button onclick="calcIs()">计算</button>
+<div class="res" id="isres"></div>
+</div>
+
+<div class="calc" id="tools-bern">
+<h4>🧮 伯努利</h4>
+<label>ρ (kg/m³)</label><input type="number" id="bero" value="1.225" step="any">
+<label>U₁ (m/s)</label><input type="number" id="beu1" value="10" step="any">
+<label>p₁ (Pa)</label><input type="number" id="bep1" value="101325" step="any">
+<label>U₂ (m/s) <span style="font-weight:400;font-size:11px;color:var(--text2)">留空用面积</span></label><input type="number" id="beu2" step="any" placeholder="留空">
+<label>A₁ (m²)</label><input type="number" id="bea1" value="0.1" step="any">
+<label>A₂ (m²)</label><input type="number" id="bea2" value="0.05" step="any">
+<button onclick="calcBe()">计算</button>
+<div class="res" id="beres"></div>
+</div>
+</section>
+
+<!-- ═══════ FAQ ═══════ -->
+<section id="faq">
+<h2 class="regime-title"><span class="num">❓</span>外行人可能会问的问题</h2>
+
+<div class="card"><div class="ct">飞机为什么能飞？</div><p>因为环量。正确的因果链：启动涡脱落 → 机翼上产生束缚涡 → 环量 → 上下表面压强差 → 升力。详见第四站。</p></div>
+<div class="card"><div class="ct">为什么飞机窗户是圆的？</div><p>方形窗户角上有应力集中。早期彗星客机的方形窗户在增压循环中产生疲劳裂纹坠毁。圆形均匀分布应力。</p></div>
+<div class="card"><div class="ct">为什么高尔夫球有凹坑？</div><p>凹坑迫使边界层提前转捩为湍流 → 湍流BL抗分离 → 尾流窄 → 压差阻力小 → 远。详见第二站。</p></div>
+<div class="card"><div class="ct">音爆是怎么回事？</div><p>飞机超声速飞行时激波持续存在，地面被激波扫到就听到"砰"。不是"突破音障"那一下。详见第六站。</p></div>
+<div class="card"><div class="ct">为什么船比飞机慢得多？</div><p>水密度是空气约800倍。船还有兴波阻力——船体速度墙。潜艇水下航行反而更快（无兴波阻力）。</p></div>
+<div class="card"><div class="ct">为什么航天器用钝头不是尖头？</div><p>钝头产生脱体激波，大部分热量散逸到大气中。尖头→激波附着→热流直接打尖端→熔化。详见第七站。</p></div>
+<div class="card"><div class="ct">什么是"热障"？</div><p>Ma≈2.5-3时，气动加热使蒙皮温度超铝合金承受力（~150°C）。SR-71用钛合金（巡航300°C+），协和号机身热胀约15cm。</p></div>
+<div class="card"><div class="ct">卡门涡街是什么？</div><p>圆柱绕流交替脱落涡旋。脱落频率由 St≈0.2 决定。与结构频率吻合→共振。烟囱风振、塔科马海峡桥（更复杂的颤振例子）。</p></div>
+<div class="card"><div class="ct">为什么战斗机进气道有各种形状？</div><p>给发动机提供均匀低压损气流。矩形（F-15）有可变斜坡；DSI（歼-20/F-35）用三维鼓包替代可动机构——减重、隐身。</p></div>
+<div class="card"><div class="ct">为什么直升机不能飞很高？</div><p>空气稀薄→旋翼效率低。旋翼前行/后行叶速度不对称（前行近声速、后行可能失速）限制了最大速度。升限一般6000-8000m。</p></div>
+<div class="card"><div class="ct">为什么游泳时潜泳比水面泳更快？</div><p>水面泳产生兴波阻力（造浪耗能）。潜泳（深度>3倍身长）几乎无兴波。这就是游泳比赛禁止长距离潜泳的原因。</p></div>
+<div class="card"><div class="ct">特斯拉阀是什么？</div><p>无活动部件的单向阀。正向畅通，反向流体被导入旁路形成涡旋→压降大。微流控等有应用。</p></div>
+</section>
+
+<hr style="margin-top:50px;border:none;border-top:1px solid var(--border);">
+<p style="text-align:center;color:var(--text2);font-size:11px;margin-top:16px;">
+  Fluid Mechanics Cognitive Map · v2.0 · 物理进阶驱动 · Aerospace Perspective
+</p>
+
+</main>
+
+<div class="tfab" onclick="togTheme()" title="切换深色/浅色">🌓</div>
+
+<script>
+// theme
+const tk='fm-theme';
+function togTheme(){
+  const h=document.documentElement, c=h.getAttribute('data-theme');
+  h.setAttribute('data-theme',c==='dark'?'':'dark');
+  localStorage.setItem(tk,c==='dark'?'':'dark');
+}
+(function(){
+  const s=localStorage.getItem(tk);
+  if(s) document.documentElement.setAttribute('data-theme',s);
+  else if(window.matchMedia('(prefers-color-scheze:dark)').matches)
+    document.documentElement.setAttribute('data-theme','dark');
+})();
+
+// progress
+window.addEventListener('scroll',()=>{
+  const t=window.scrollY, d=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('progbar').style.width=(d>0?t/d*100:0)+'%';
+});
+
+// TOC active
+const tla=document.querySelectorAll('.toc a'), secs=[];
+tla.forEach(a=>{const h=a.getAttribute('href');if(h&&h.startsWith('#')){const e=document.getElementById(h.slice(1));if(e)secs.push({l:a,el:e});}});
+function updAct(){let c=null;secs.forEach(s=>{if(s.el.getBoundingClientRect().top<=120)c=s.l;});tla.forEach(a=>a.classList.remove('active'));if(c)c.classList.add('active');}
+window.addEventListener('scroll',updAct);
+
+// expand/collapse
+document.getElementById('expand').addEventListener('click',()=>{document.querySelectorAll('.toc .r1,.toc .r2').forEach(a=>a.style.display='');});
+document.getElementById('collapse').addEventListener('click',()=>{document.querySelectorAll('.toc .r1,.toc .r2').forEach(a=>a.style.display='none');});
+
+// search
+document.getElementById('search').addEventListener('input',function(e){
+  const q=e.target.value.toLowerCase().trim();
+  document.querySelectorAll('.highlight-match').forEach(el=>el.replaceWith(el.textContent));
+  const all=document.querySelectorAll('.toc a');
+  if(!q){all.forEach(a=>a.style.display='');return;}
+  all.forEach(a=>{a.style.display=a.textContent.toLowerCase().includes(q)?'':'none';});
+});
+
+// smooth scroll
+tla.forEach(a=>{a.addEventListener('click',function(e){const h=this.getAttribute('href');if(h&&h.startsWith('#')){e.preventDefault();const t=document.getElementById(h.slice(1));if(t)t.scrollIntoView({behavior:'smooth',block:'start'});}});});
+
+// ── calculators ──
+function upRefl(){document.getElementById('recust').style.display=document.getElementById('refl').value==='cust'?'block':'none';}
+function calcRe(){
+  const U=parseFloat(document.getElementById('reu').value),L=parseFloat(document.getElementById('rel').value);
+  let nu; const f=document.getElementById('refl').value;
+  if(f==='air')nu=1.516e-5;else if(f==='water')nu=1.004e-6;else nu=parseFloat(document.getElementById('renu').value);
+  if(!U||!L||!nu||nu<=0){document.getElementById('reres').innerHTML='⚠️ 请填写所有参数';document.getElementById('renote').innerHTML='';return;}
+  const Re=U*L/nu; let r='';
+  if(Re<1)r='蠕流';else if(Re<2000)r='层流';else if(Re<4000)r='转捩区';else if(Re<1e5)r='湍流';else if(Re<1e7)r='充分发展湍流（航空常见）';else r='极高Re湍流';
+  document.getElementById('reres').innerHTML=`$Re = ${Re.toExponential(4)}$`;
+  document.getElementById('renote').innerHTML=`流态：${r} · 平板转捩 $Re_{x,cr}\\approx5\\times10^5$`;
+  MathJax.typesetPromise([document.getElementById('reres'),document.getElementById('renote')]);
+}
+function calcBl(){
+  const U=parseFloat(document.getElementById('blu').value),x=parseFloat(document.getElementById('blx').value),
+        nu=parseFloat(document.getElementById('blnu').value),t=document.getElementById('blt').value;
+  if(!U||!x||!nu||nu<=0||x<=0){document.getElementById('blres').innerHTML='⚠️ 请填写所有参数';return;}
+  const Rex=U*x/nu; let d,cf,ds,th;
+  if(t==='lam'){d=5.0*x/Math.sqrt(Rex);cf=0.664/Math.sqrt(Rex);ds=1.721*x/Math.sqrt(Rex);th=0.664*x/Math.sqrt(Rex);}
+  else{d=0.37*x/Math.pow(Rex,0.2);cf=0.027/Math.pow(Rex,1/7);ds=0.046*x/Math.pow(Rex,0.2);th=0.036*x/Math.pow(Rex,0.2);}
+  document.getElementById('blres').innerHTML=`$Re_x=${Rex.toExponential(4)}$<br>δ₉₉=${(d*1000).toFixed(3)}mm · δ*=${(ds*1000).toFixed(3)}mm · θ=${(th*1000).toFixed(3)}mm · Cf=${cf.toFixed(5)}`;
+  MathJax.typesetPromise([document.getElementById('blres')]);
+}
+function calcSh(){
+  const M1=parseFloat(document.getElementById('shma').value),g=parseFloat(document.getElementById('shga').value);
+  if(!M1||M1<=1){document.getElementById('shres').innerHTML='⚠️ Ma₁必须>1';return;}
+  const M2s=((g-1)*M1*M1+2)/(2*g*M1*M1-(g-1)),M2=Math.sqrt(M2s);
+  const pr=1+2*g*(M1*M1-1)/(g+1),rr=(g+1)*M1*M1/((g-1)*M1*M1+2),Tr=pr/rr;
+  const p02=Math.pow(1+(g-1)/2*M2*M2,g/(g-1))/Math.pow(1+(g-1)/2*M1*M1,g/(g-1))*pr;
+  document.getElementById('shres').innerHTML=`Ma₂=${M2.toFixed(4)} · p₂/p₁=${pr.toFixed(4)} · ρ₂/ρ₁=${rr.toFixed(4)} · T₂/T₁=${Tr.toFixed(4)} · p₀₂/p₀₁=${p02.toFixed(4)}`;
+  MathJax.typesetPromise([document.getElementById('shres')]);
+}
+function calcIs(){
+  const M=parseFloat(document.getElementById('isma').value),g=parseFloat(document.getElementById('isga').value);
+  if(isNaN(M)||M<0){document.getElementById('isres').innerHTML='⚠️ 请输入有效Ma';return;}
+  const t=1+(g-1)/2*M*M,T0T=t,p0p=Math.pow(t,g/(g-1)),r0r=Math.pow(t,1/(g-1));
+  let AAs=M>0.001?Math.pow(2/(g+1)*t,(g+1)/(2*(g-1)))/M:'∞';
+  let nu=''; if(M>=1){const a=Math.sqrt((g+1)/(g-1)),b=Math.sqrt((g-1)/(g+1)*(M*M-1));nu=` · ν=${((a*Math.atan(b)-Math.atan(Math.sqrt(M*M-1)))*180/Math.PI).toFixed(3)}°`;}
+  document.getElementById('isres').innerHTML=`T₀/T=${T0T.toFixed(4)} · p₀/p=${p0p.toFixed(4)} · ρ₀/ρ=${r0r.toFixed(4)} · A/A*=${typeof AAs==='number'?AAs.toFixed(4):AAs}${nu}`;
+  MathJax.typesetPromise([document.getElementById('isres')]);
+}
+function calcBe(){
+  const r=parseFloat(document.getElementById('bero').value),u1=parseFloat(document.getElementById('beu1').value),
+        p1=parseFloat(document.getElementById('bep1').value);
+  let u2=parseFloat(document.getElementById('beu2').value);
+  const a1=parseFloat(document.getElementById('bea1').value),a2=parseFloat(document.getElementById('bea2').value);
+  if(!r||!u1||isNaN(p1)){document.getElementById('beres').innerHTML='⚠️ 请填写截面1参数';return;}
+  if(isNaN(u2)&&a1&&a2&&a1>0&&a2>0)u2=u1*a1/a2;
+  if(!u2||u2<=0){document.getElementById('beres').innerHTML='⚠️ 请提供U₂或有效面积';return;}
+  const p2=p1+0.5*r*(u1*u1-u2*u2);
+  document.getElementById('beres').innerHTML=`U₂=${u2.toFixed(3)} m/s · p₂=${p2.toFixed(1)} Pa · Δp=${(p2-p1).toFixed(1)} Pa`;
+  MathJax.typesetPromise([document.getElementById('beres')]);
+}
+upRefl();
+MathJax.typesetPromise();
+</script>
+</body>
+</html>

@@ -1,0 +1,864 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>器物志 — 博物馆、古建、文物入门指南</title>
+<style>
+:root {
+  --bg: #faf7f0; --card: #fffef9; --text: #2c2416; --text-soft: #6b5e4a;
+  --accent: #8b5a2b; --accent2: #2e5c4e; --accent3: #b8860b;
+  --border: #d4cbb8; --shadow: 0 1px 6px rgba(0,0,0,0.05);
+  --sidebar-w: 250px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: "Noto Serif SC","Source Han Serif SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",serif;
+  background: var(--bg); color: var(--text); line-height:1.9; font-size:16px;
+}
+.sidebar {
+  position:fixed; top:0; left:0; bottom:0; width:var(--sidebar-w);
+  background:#3a3028; color:#d4cbb8; overflow-y:auto; z-index:10;
+  padding:20px 0 32px; box-shadow:2px 0 16px rgba(0,0,0,0.2);
+}
+.sidebar h3 { padding:0 18px 12px; font-size:15px; letter-spacing:2px; color:#d4a84a; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:6px; }
+.sidebar nav a {
+  display:block; padding:6px 18px; color:#b8a88a; text-decoration:none; font-size:13px;
+  transition:all 0.2s; border-left:3px solid transparent;
+}
+.sidebar nav a:hover, .sidebar nav a.active { color:#fff; background:rgba(255,255,255,0.05); border-left-color:var(--accent3); }
+.sidebar nav a.sub { padding-left:30px; font-size:12px; }
+.main { margin-left:var(--sidebar-w); padding:40px 52px 80px; max-width:1000px; }
+h1 { font-size:34px; letter-spacing:4px; color:var(--accent); margin-bottom:4px; }
+.subtitle { font-size:15px; color:var(--text-soft); margin-bottom:32px; letter-spacing:1px; }
+section { margin-bottom:52px; scroll-margin-top:20px; }
+h2 { font-size:23px; border-bottom:2px solid var(--border); padding-bottom:8px; margin-bottom:20px; color:var(--accent); letter-spacing:2px; }
+h3 { font-size:18px; margin:24px 0 10px; color:#4a3520; }
+h4 { font-size:16px; margin:16px 0 6px; color:var(--accent2); }
+p { margin:10px 0; }
+ul, ol { padding-left:22px; margin:8px 0; }
+li { margin:4px 0; }
+
+.search-wrap {
+  position:sticky; top:0; z-index:8; background:var(--bg); padding:10px 0 14px; margin-bottom:8px;
+}
+.search-wrap input {
+  width:100%; padding:10px 16px; font-size:15px; border:2px solid var(--border); border-radius:8px;
+  background:var(--card); font-family:inherit; color:var(--text); outline:none; transition:0.2s;
+}
+.search-wrap input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(139,90,43,0.1); }
+.search-info { font-size:12px; color:var(--text-soft); margin-top:4px; display:none; }
+.search-info.visible { display:block; }
+mark { background:#f5e6c8; padding:1px 3px; border-radius:2px; }
+.card-hidden { display:none !important; }
+
+.timeline-bar {
+  display:flex; align-items:stretch; gap:0; overflow-x:auto;
+  border-top:2px solid var(--border); border-bottom:2px solid var(--border);
+  padding:0; margin:0 0 28px; position:sticky; top:52px; z-index:7;
+  background:var(--bg); scrollbar-width:thin;
+}
+.timeline-bar::-webkit-scrollbar { height:4px; }
+.tl-node {
+  flex-shrink:0; text-align:center; padding:10px 14px; font-size:13px;
+  cursor:pointer; transition:0.2s; border-bottom:3px solid transparent;
+  color:var(--text-soft); white-space:nowrap; text-decoration:none; user-select:none;
+}
+.tl-node:hover { background:#f0e8d8; color:var(--text); }
+.tl-node.active { border-bottom-color:var(--accent); color:var(--accent); font-weight:700; }
+.tl-node .tl-era { font-weight:700; }
+.tl-node .tl-year { font-size:10px; display:block; margin-top:1px; }
+
+.card {
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+  padding:20px 24px; margin:16px 0; box-shadow:var(--shadow);
+}
+.card h4 { margin-top:0; }
+
+.artifact {
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+  padding:20px 24px; margin:16px 0; box-shadow:var(--shadow);
+  border-left:4px solid var(--accent3);
+}
+.artifact h4 { margin:0 0 4px; }
+.artifact .meta { font-size:13px; color:var(--text-soft); margin-bottom:8px; }
+.artifact .meta span { margin-right:12px; }
+.artifact .rating {
+  display:inline-block; background:#c0392b; color:#fff; padding:2px 8px; border-radius:4px;
+  font-size:11px; letter-spacing:1px;
+}
+
+.building-card {
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+  padding:20px 24px; margin:16px 0; box-shadow:var(--shadow);
+  border-left:4px solid var(--accent2);
+}
+.building-card h4 { margin:0 0 4px; }
+
+.grotto-card {
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+  padding:20px 24px; margin:16px 0; box-shadow:var(--shadow);
+  border-left:4px solid #6b4e8a;
+}
+.grotto-card h4 { margin:0 0 4px; }
+
+.map-guide {
+  background:#fffef5; border:1px dashed #d4c8a0; border-radius:6px;
+  padding:14px 18px; margin:14px 0; font-size:14px; color:#6b5a30;
+}
+.map-guide::before { content:"🗺️ 位置："; font-weight:700; }
+
+.insight {
+  background:#f0f4e8; border-left:3px solid var(--accent2); border-radius:0 6px 6px 0;
+  padding:14px 18px; margin:14px 0; font-size:14px; color:#2c4a30;
+}
+.insight::before { content:"💡 "; font-weight:700; }
+
+.era-summary {
+  margin-top:20px; padding:14px 18px; background:#fffef5;
+  border:1px solid #d4c8a0; border-radius:6px; font-size:14px; color:#5c4a30;
+}
+.era-summary::before { content:"📌 关键小结："; font-weight:700; color:var(--accent); }
+
+blockquote {
+  margin:16px 0; padding:14px 20px; background:#fdf8ee;
+  border-left:3px solid var(--accent3); font-style:italic; color:#5c4a30;
+  border-radius:0 6px 6px 0;
+}
+table { width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+th, td { border:1px solid var(--border); padding:8px 12px; text-align:left; }
+th { background:#3a3028; color:#d4a84a; font-weight:500; letter-spacing:1px; }
+tr:nth-child(even) td { background:rgba(0,0,0,0.012); }
+
+.tag { display:inline-block; padding:2px 10px; border-radius:12px; font-size:12px; margin:2px 3px 2px 0; letter-spacing:1px; }
+.tag.bronze { background:#8b6914; color:#fff; }
+.tag.jade { background:#5b8c3a; color:#fff; }
+.tag.ceramic { background:#3a7ca5; color:#fff; }
+.tag.painting { background:#8b4513; color:#fff; }
+.tag.architecture { background:#2e5c4e; color:#fff; }
+.tag.silk { background:#9b59b6; color:#fff; }
+.tag.gold { background:#d4a017; color:#fff; }
+.tag.top { background:#c0392b; color:#fff; }
+
+@media (max-width:800px) { .sidebar{display:none;} .main{margin-left:0;padding:20px;} .timeline-bar{top:0;} }
+::-webkit-scrollbar { width:5px; } ::-webkit-scrollbar-thumb { background:#c4b99a; border-radius:3px; }
+.highlight { background:linear-gradient(to top, #f5e6c8 40%, transparent 40%); padding:0 2px; }
+hr.divider { border:none; border-top:1px dashed var(--border); margin:28px 0; }
+
+.roof-demo { display:flex; gap:20px; flex-wrap:wrap; margin:16px 0; }
+.roof-item { flex:1; min-width:180px; text-align:center; padding:16px; background:var(--card); border:1px solid var(--border); border-radius:6px; }
+.roof-item .roof-shape { font-size:40px; margin-bottom:8px; }
+.roof-item .roof-name { font-weight:700; font-size:14px; }
+.roof-item .roof-rank { font-size:12px; color:var(--text-soft); }
+
+/* 看古建步骤 */
+.steps { counter-reset:step; }
+.step { counter-increment:step; padding:16px 20px; margin:12px 0; background:var(--card); border:1px solid var(--border); border-radius:6px; display:flex; gap:16px; align-items:flex-start; }
+.step::before { content:counter(step); background:var(--accent); color:#fff; width:28px; height:28px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0; }
+.step-body { flex:1; }
+.step-body h4 { margin:0 0 4px; }
+</style>
+<style>
+.kb-back-btn {
+  position: fixed; bottom: 28px; left: 28px; z-index: 99999;
+  background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 24px; padding: 8px 18px;
+  font-size: 13px; color: #8b5e3c; text-decoration: none;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: all 0.25s; display: inline-flex; align-items: center; gap: 6px;
+  letter-spacing: 0.04em;
+}
+.kb-back-btn:hover {
+  background: rgba(255,255,255,1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+  border-color: rgba(139,94,60,0.4);
+}
+</style>
+</head>
+<body>
+<a href="../index.html" class="kb-back-btn">鈫?鐭ヨ瘑搴?/a>
+
+
+<aside class="sidebar">
+  <h3>🏛️ 器物志</h3>
+  <nav>
+    <a href="#howto">怎么用这份指南</a>
+    <a href="#museum">博物馆入门</a>
+    <a href="#howto-bronze">怎么看器物（三把钥匙）</a>
+    <a href="#howto-bronze" class="sub">🔑 青铜器</a>
+    <a href="#howto-bronze" class="sub">🔑 陶瓷</a>
+    <a href="#howto-bronze" class="sub">🔑 佛教造像</a>
+    <a href="#arch-intro">古建入门</a>
+    <a href="#arch-intro" class="sub">为什么用木头</a>
+    <a href="#arch-intro" class="sub">斗拱·榫卯·屋顶</a>
+    <a href="#arch-howto">怎么看一座古建筑</a>
+    <a href="#arch-dynasty">建筑演变（按朝代）</a>
+    <a href="#grottoes">石窟：建在崖壁上的信仰</a>
+    <a href="#arch-geo">为什么山西是古建宝库</a>
+    <a href="#artifacts">顶级文物巡礼（25件）</a>
+    <a href="#routes">主题旅行路线</a>
+    <a href="#museums">附录：全国重点博物馆清单</a>
+  </nav>
+</aside>
+
+<main class="main">
+
+<h1>器物志</h1>
+<p class="subtitle">博物馆、古建筑、文物入门指南 —— 格物致知，学会看懂眼前的东西</p>
+
+<div class="search-wrap">
+  <input type="text" id="searchInput" placeholder="🔍 搜索文物、建筑、博物馆、石窟…（如：斗拱、后母戊鼎、莫高窟）" autocomplete="off">
+  <div class="search-info" id="searchInfo"></div>
+</div>
+
+<div class="timeline-bar" id="timelineBar">
+  <a class="tl-node" href="#museum"><span class="tl-era">博物馆</span></a>
+  <a class="tl-node" href="#howto-bronze"><span class="tl-era">怎么看器物</span></a>
+  <a class="tl-node" href="#arch-intro"><span class="tl-era">古建入门</span></a>
+  <a class="tl-node" href="#arch-howto"><span class="tl-era">怎么看古建</span></a>
+  <a class="tl-node" href="#arch-dynasty"><span class="tl-era">唐→明清</span></a>
+  <a class="tl-node" href="#grottoes"><span class="tl-era">石窟</span></a>
+  <a class="tl-node" href="#arch-geo"><span class="tl-era">山西古建</span></a>
+  <a class="tl-node" href="#artifacts"><span class="tl-era">文物25件</span></a>
+  <a class="tl-node" href="#routes"><span class="tl-era">旅行路线</span></a>
+  <a class="tl-node" href="#museums"><span class="tl-era">博物馆清单</span></a>
+</div>
+
+<!-- ═══════ HOW TO USE ═══════ -->
+<section id="howto">
+<h2>怎么用这份指南</h2>
+<p>这份指南不是为了让你"读完记住所有文物"，而是<strong>帮你建立一套看东西的框架</strong>——下次走进博物馆，你知道该看什么、怎么看。</p>
+<ol>
+  <li><strong>先学怎么看</strong>——博物馆展签、文物分级</li>
+  <li><strong>掌握三把钥匙</strong>——青铜器/陶瓷/佛教造像的通用分析法，走进任何博物馆都能用</li>
+  <li><strong>再看建筑怎么看</strong>——古建基本构件、站到古建前该看什么、按朝代看演变</li>
+  <li><strong>深入石窟</strong>——这个特殊类型的"建筑+雕塑+壁画综合体"</li>
+  <li><strong>精选25件顶级文物</strong>——每件标注📍在哪里能看到</li>
+  <li><strong>旅行路线+博物馆清单</strong>——方便实地打卡</li>
+</ol>
+<blockquote>和姐妹篇「江山即史」一样，这份指南完全自包含——不需要网络，一个 HTML 文件走天下。</blockquote>
+</section>
+
+<!-- ═══════ MUSEUM ═══════ -->
+<section id="museum">
+<h2>第一章：博物馆入门</h2>
+
+<h3>怎么看展签</h3>
+<p>每件文物旁边的小牌子（展签），写着比你以为的多得多的信息。</p>
+<div class="card">
+  <table>
+    <tr><th>项目</th><th>怎么看</th><th>例子</th></tr>
+    <tr><td><strong>名称</strong></td><td>材质+器型+纹饰。看名知物</td><td>"青花缠枝莲纹梅瓶"=青花瓷+缠枝莲纹+梅瓶</td></tr>
+    <tr><td><strong>年代</strong></td><td>越精确说明考古证据越充分</td><td>"公元前1200-前1046年"&gt;"商代"</td></tr>
+    <tr><td><strong>出土地点</strong></td><td>墓葬/窖藏/遗址各有不同含义</td><td>"1976年安阳殷墟妇好墓出土"</td></tr>
+    <tr><td><strong>尺寸</strong></td><td>没参照物时看它——巴掌大的东西可能照片里像半人高</td><td>"高16.5cm"——不看你以为一米</td></tr>
+    <tr><td><strong>质地</strong></td><td>青铜=国之重器，玉=礼制象征，瓷=日常生活与审美</td><td>不同材质=不同时代的技术天花板</td></tr>
+  </table>
+</div>
+
+<h3>文物分级</h3>
+<table>
+  <tr><th>级别</th><th>含义</th><th>数量（约）</th></tr>
+  <tr><td><strong>禁止出境展览文物</strong></td><td>最高级别，永久不得出境</td><td>195件/组（三批）</td></tr>
+  <tr><td><strong>一级文物</strong></td><td>特别重要的历史、艺术、科学价值</td><td>数万件</td></tr>
+  <tr><td><strong>二级文物</strong></td><td>具有重要价值</td><td>数十万件</td></tr>
+  <tr><td><strong>三级文物</strong></td><td>具有一定价值</td><td>数百万件</td></tr>
+</table>
+<div class="insight">展签上写着"禁止出境展览文物"——停下来，多站五分钟。全国只有195件/组，你面前的可能是一生一次。</div>
+
+<div class="era-summary">博物馆入门的核心就一句话：学会读展签。名称告诉你是什么，年代告诉你多老，出土地告诉你从哪来，质地告诉你当时的技术水平。下次别急着拍照，先读牌子。</div>
+</section>
+
+<!-- ═══════ 怎么看青铜器 ═══════ -->
+<section id="howto-bronze">
+<h2>第二章：怎么看器物——青铜·陶瓷·造像，三把万能钥匙</h2>
+<p>学会了读展签，还不够。如果眼前出现一件不认识的青铜器——它叫鼎还是簋？什么年代的？下面三把"钥匙"让你在任何博物馆都能<strong>自己分析</strong>。</p>
+
+<!-- ── 青铜器 ── -->
+<h3>🔑 第一把钥匙：怎么看青铜器</h3>
+
+<div class="card"><h4>第一步：看器型——它是什么？</h4>
+  <p>青铜器按用途分四大类。记住这四类，你就能说出眼前青铜器的名字和功能：</p>
+  <table>
+    <tr><th>类别</th><th>常见器型</th><th>用途</th><th>怎么记</th></tr>
+    <tr><td><strong>食器</strong></td><td>鼎、簋（guǐ）、鬲（lì）、甗（yǎn）</td><td>煮肉（鼎）、盛饭（簋）</td><td>鼎=锅，簋=碗，鼎簋配成套——天子九鼎八簋</td></tr>
+    <tr><td><strong>酒器</strong></td><td>爵、觚（gū）、尊、卣（yǒu）、壶、斝（jiǎ）</td><td>喝酒（爵、觚）、盛酒（尊、卣、壶）</td><td>商代重酒（酒器超多），周代重食（酒器减少）——因为周人认为商朝亡于酗酒</td></tr>
+    <tr><td><strong>水器</strong></td><td>盘、匜（yí）、鑑（jiàn）</td><td>洗手（盘+匜组合）、盛水/照面（鑑）</td><td>贵族吃饭前要洗手，盘接水、匜倒水</td></tr>
+    <tr><td><strong>乐器</strong></td><td>编钟、铙（náo）、镈（bó）</td><td>祭祀和宴飨时演奏</td><td>曾侯乙编钟是最完整的代表</td></tr>
+  </table>
+  <p><strong>实战技巧：</strong>走进青铜器展厅，先看它有没有腿（三足=鼎，四足=可能是方鼎），有没有流（倒酒嘴=爵），有没有提梁（提手=卣）。三秒判断器型。</p>
+</div>
+
+<div class="card"><h4>第二步：看纹饰——它是什么年代的？</h4>
+  <p>青铜器的纹饰有清晰的<strong>时代演变规律</strong>。看到纹饰就能大致断代：</p>
+  <table>
+    <tr><th>时代</th><th>主流纹饰</th><th>特征</th><th>一句话</th></tr>
+    <tr><td><strong>商代</strong></td><td>饕餮纹（兽面纹）</td><td>神秘恐怖、双目圆睁、对称构图、满身是纹</td><td>"越吓人越商代"——宗教恐怖感拉满</td></tr>
+    <tr><td><strong>西周早期</strong></td><td>饕餮纹 + 凤鸟纹</td><td>饕餮纹开始简化，凤鸟纹大量出现</td><td>周人以凤鸟为祥瑞（"凤鸣岐山"）</td></tr>
+    <tr><td><strong>西周中晚期</strong></td><td>窃曲纹、环带纹、重环纹</td><td>几何化、抽象化，不再恐怖</td><td>"从神秘到规矩"——礼制成熟了</td></tr>
+    <tr><td><strong>春秋</strong></td><td>蟠螭（chī）纹、蟠虺（huǐ）纹</td><td>密密麻麻缠绕的小蛇/小龙纹</td><td>"越密越春秋"——精细繁密</td></tr>
+    <tr><td><strong>战国</strong></td><td>几何纹、云雷纹、错金银、镶嵌</td><td>写实场景出现（宴乐、狩猎、水陆攻战）</td><td>"青铜器开始讲故事了"</td></tr>
+  </table>
+  <p><strong>实战技巧：</strong>商代青铜器=粗犷恐怖+满身花纹；西周=规整简洁+铭文超长（"毛公鼎"有497字）；春秋战国=精密繁复+生活场景。纹饰从"吓人"到"规矩"到"精致"，就是一部商周青铜器演变史。</p>
+</div>
+
+<div class="era-summary">青铜器两招制敌：先看器型知用途（鼎簋=食、爵觚尊=酒、盘匜=水），再看纹饰断年代（饕餮=商、窃曲=西周中晚、蟠螭=春秋、写实=战国）。掌握了这两个维度，任何一件青铜器你都能说出来它是什么、哪个时代的。</div>
+
+<!-- ── 陶瓷 ── -->
+<h3>🔑 第二把钥匙：怎么看陶瓷</h3>
+
+<div class="card"><h4>第一步：陶和瓷——两码事</h4>
+  <table>
+    <tr><th>区别</th><th>陶</th><th>瓷</th></tr>
+    <tr><td><strong>烧制温度</strong></td><td>800-1000°C</td><td>1200°C以上</td></tr>
+    <tr><td><strong>原料</strong></td><td>普通黏土</td><td>瓷土（高岭土）</td></tr>
+    <tr><td><strong>釉</strong></td><td>无釉或低温铅釉（如唐三彩）</td><td>高温釉，釉面光滑坚硬</td></tr>
+    <tr><td><strong>透光</strong></td><td>不透光</td><td>薄处可透光</td></tr>
+    <tr><td><strong>敲击声</strong></td><td>沉闷</td><td>清脆如金属</td></tr>
+    <tr><td><strong>代表</strong></td><td>兵马俑、唐三彩、紫砂壶</td><td>青花、汝窑、粉彩</td></tr>
+  </table>
+  <p>陶器是人类最早发明的——新石器时代就有了（仰韶彩陶、马家窑彩陶）。瓷器是中国的独家发明——从商周原始青瓷到东汉成熟瓷器，领先了世界一千多年。<strong>温度决定一切：温度越高，质地越硬，颜色越浅。</strong></p>
+</div>
+
+<div class="card"><h4>第二步：中国瓷器的演进路线</h4>
+  <p>瓷器史就是一部<strong>"从青到白到彩"</strong>的历史：</p>
+  <table>
+    <tr><th>阶段</th><th>时代</th><th>代表</th><th>逻辑</th></tr>
+    <tr><td><strong>原始青瓷</strong></td><td>商周</td><td>原始青瓷尊（温度不够，釉不均匀）</td><td>偶然发现：窑灰落在器物上形成"釉"</td></tr>
+    <tr><td><strong>成熟青瓷</strong></td><td>东汉</td><td>越窑青瓷</td><td>温度突破1200°C，真正意义上的瓷器诞生</td></tr>
+    <tr><td><strong>青瓷巅峰</strong></td><td>唐-五代</td><td>越窑秘色瓷、"南青北白"格局</td><td>南方以青瓷为主（越窑），北方开始烧白瓷（邢窑）</td></tr>
+    <tr><td><strong>白瓷成熟</strong></td><td>宋</td><td>定窑白瓷</td><td>去除铁杂质的技术成熟，白瓷质量飞跃</td></tr>
+    <tr><td><strong>青花出现</strong></td><td>元</td><td>元青花（用钴料在白瓷胎上画蓝色纹饰）</td><td>蒙古帝国打通了从中东进口钴料的路线</td></tr>
+    <tr><td><strong>彩瓷巅峰</strong></td><td>明清</td><td>斗彩、五彩、粉彩、珐琅彩</td><td>技术不再受限，工匠开始"在瓷器上画画"</td></tr>
+  </table>
+</div>
+
+<div class="card"><h4>第三步：五大名窑——一句话辨识</h4>
+  <table>
+    <tr><th>窑口</th><th>年代</th><th>最显著特征</th><th>一句话记住</th></tr>
+    <tr><td><strong>汝窑</strong></td><td>北宋</td><td>天青釉+细密开片+芝麻钉痕</td><td>"雨过天青"——只烧了20多年，全球不足100件</td></tr>
+    <tr><td><strong>官窑</strong></td><td>南宋</td><td>粉青釉+"紫口铁足"</td><td>南宋官方的窑，口沿釉薄露紫色胎，底足无釉露铁色</td></tr>
+    <tr><td><strong>哥窑</strong></td><td>宋</td><td>"金丝铁线"——粗黑和细金的两种开片</td><td>最大的特点是开片（裂纹）被刻意保留为装饰</td></tr>
+    <tr><td><strong>钧窑</strong></td><td>宋-元</td><td>"窑变"——入窑一色出窑万彩，红紫斑</td><td>最不像宋代审美的宋代名窑——颜色绚烂多变</td></tr>
+    <tr><td><strong>定窑</strong></td><td>北宋</td><td>白瓷+芒口（口沿无釉，镶金属边）</td><td>唯一的白瓷名窑，口沿"芒口"是覆烧工艺的标志</td></tr>
+  </table>
+  <p><strong>实战技巧：</strong>汝窑看天青色（雨后天空的颜色），官窑看粉青色+紫口铁足，哥窑看"金丝铁线"裂纹，钧窑看红色紫色斑块，定窑看白瓷+口沿镶边。</p>
+</div>
+
+<div class="era-summary">陶瓷三招：一看陶还是瓷（敲声音，清脆=瓷），二看颜色判断年代（青=早、白=中、彩=晚），三看窑口辨识风格（汝=天青、官=紫口铁足、哥=裂纹、钧=窑变、定=白瓷芒口）。从青到白到彩的逻辑很简单——温度越高，去除杂质越多，颜色越浅，最后自由上彩。</div>
+
+<!-- ── 佛教造像 ── -->
+<h3>🔑 第三把钥匙：怎么看佛教造像</h3>
+
+<div class="card"><h4>第一步：看手印——佛的手在说什么？</h4>
+  <p>佛教造像的手势（手印/mudra）不是随意的——每种手印有明确含义。认出它，你就知道这尊佛在"表达"什么：</p>
+  <table>
+    <tr><th>手印</th><th>手势</th><th>含义</th><th>常见场景</th></tr>
+    <tr><td><strong>无畏印</strong></td><td>右手举至胸前，掌心向外，手指向上</td><td>"不要害怕"——施无畏，安抚众生</td><td>最常见，几乎所有立佛都做此印</td></tr>
+    <tr><td><strong>与愿印</strong></td><td>右手垂下，掌心向外，手指向下</td><td>"愿望会实现"——满足众生祈愿</td><td>常与无畏印组合（一手上一下）</td></tr>
+    <tr><td><strong>禅定印</strong></td><td>双手叠放腿上，掌心向上，拇指相触</td><td>"我在冥想"——入定状态</td><td>坐佛的标配，莫高窟第158窟涅槃像也类似</td></tr>
+    <tr><td><strong>触地印（降魔印）</strong></td><td>右手垂下触地，指尖朝下</td><td>"大地为证"——释迦牟尼成道时的瞬间</td><td>释迦牟尼成道像的标志性手印</td></tr>
+    <tr><td><strong>说法印（转法轮印）</strong></td><td>双手在胸前，拇指与食指相触成圈</td><td>"我在讲法"——初转法轮，宣讲佛法</td><td>表现释迦牟尼第一次说法的场景</td></tr>
+  </table>
+  <p><strong>实战技巧：</strong>走进石窟或寺庙，看手——举起来（无畏印）=让你别怕，放下去（与愿印）=答应你的愿望，放在腿上（禅定印）=正在打坐，触地=成道这一刻，拇指食指捏圈（说法印）=正在讲课。五秒钟认出佛的"语言"。</p>
+</div>
+
+<div class="card"><h4>第二步：看"神职等级"——佛、菩萨、弟子、天王、力士</h4>
+  <p>佛教造像有严格的等级体系。越朴素等级越高——这个逻辑和世俗世界相反：</p>
+  <table>
+    <tr><th>身份</th><th>服装</th><th>头饰</th><th>特征</th><th>一句话认出</th></tr>
+    <tr><td><strong>佛</strong></td><td>简朴袈裟（"福田衣"），通常袒右肩</td><td>螺髻（小卷发）+ 肉髻（头顶隆起）</td><td>面容安详、无装饰、耳垂特长</td><td>"穿得最朴素的就是佛"</td></tr>
+    <tr><td><strong>菩萨</strong></td><td>华丽天衣+璎珞（项圈和珠串）+臂钏</td><td>高发髻+宝冠，有时冠上有化佛（观音的标志）</td><td>面容慈悲、装饰华丽、"在家修行"的贵族形象</td><td>"全身珠宝首饰的就是菩萨"</td></tr>
+    <tr><td><strong>弟子</strong></td><td>僧袍</td><td>光头</td><td>老者=迦叶（苦行脸），青年=阿难（清秀脸）</td><td>"一老一少站在佛旁边的就是弟子"</td></tr>
+    <tr><td><strong>天王</strong></td><td>铠甲+战靴</td><td>头盔或宝冠</td><td>武将打扮、手持武器、脚踏小鬼</td><td>"穿铠甲的就是天王"</td></tr>
+    <tr><td><strong>力士</strong></td><td>赤膊或轻甲</td><td>无冠</td><td>肌肉发达、怒目圆睁、动态夸张</td><td>"肌肉男+愤怒脸=力士"</td></tr>
+  </table>
+  <p>注意：佛教造像不光在石窟里——寺庙、金铜造像、木雕造像都适用同一套规则。</p>
+</div>
+
+<div class="card"><h4>第三步：看面相和体型——判断时代</h4>
+  <p>和青铜器一样，造像风格也有时代演变规律：</p>
+  <table>
+    <tr><th>时代</th><th>面容</th><th>体型</th><th>代表</th></tr>
+    <tr><td><strong>北魏</strong></td><td>瘦削清秀、"秀骨清像"</td><td>修长纤细</td><td>云冈早期、龙门宾阳洞</td></tr>
+    <tr><td><strong>北齐</strong></td><td>面容圆润、表情内敛</td><td>身体饱满但不张扬</td><td>青州龙兴寺窖藏造像</td></tr>
+    <tr><td><strong>唐</strong></td><td>丰满圆润、自信从容</td><td>雄浑饱满、充满力量</td><td>龙门奉先寺、莫高窟45窟</td></tr>
+    <tr><td><strong>宋</strong></td><td>写实自然、世俗化</td><td>比例协调、接近真人</td><td>大足石刻</td></tr>
+  </table>
+  <p><strong>实战技巧：</strong>北魏=瘦、唐=胖、宋=真——"越早越像神仙，越晚越像邻居"。唐代造像的"胖"不是真的胖，是帝国自信——那份从容和饱满，此后再也没有了。</p>
+</div>
+
+<div class="era-summary">造像三问：手在做什么？（手印→身份和状态）穿的什么？（袈裟=佛、璎珞=菩萨、铠甲=天王）长什么样？（瘦=北魏、胖=唐、真=宋）。三问下来，任何一尊造像你都能说出：这是谁、什么身份、哪个时代的。</div>
+
+<div class="insight">这三把钥匙有一个共同点：<strong>它们都是"看"的技能。</strong>不需要查资料、不需要背年代——眼睛看到的特征直接对应答案。鼎有三足、饕餮有双眼、汝窑有天青、佛有螺髻、手印有方向。下次走进博物馆，别急着看手机——先"看"。</div>
+</section>
+
+<!-- ═══════ ARCH INTRO ═══════ -->
+<section id="arch-intro">
+<h2>第三章：古建入门——中国建筑的底层逻辑</h2>
+
+<h3>为什么中国人用木头？</h3>
+<p>不是因为没有石头，是<strong>主动选择</strong>：</p>
+<ul>
+  <li><strong>抗震</strong>——榫卯不是刚性连接，地震时木构件可以轻微滑动，以柔克刚。应县木塔960多年历经40余次地震不倒。</li>
+  <li><strong>可替换</strong>——构件坏了单独换，不用拆整座。故宫几百年来一直在更换腐朽的木头。</li>
+  <li><strong>哲学观念</strong>——建筑和人一样有生命周期，"不求原物长存"。</li>
+</ul>
+
+<div class="card"><h4>① 斗拱</h4>
+  <p>柱子顶部层层叠叠的木构件。唐代斗拱雄大（占柱高1/2），到明清变得繁密细小、几乎成纯装饰。<strong>看斗拱的大小和疏密，可以大致判断建筑的年代——越大越疏越古老。</strong></p>
+  <span class="tag architecture">承重+抗震+等级标志</span>
+</div>
+<div class="card"><h4>② 榫卯</h4>
+  <p>榫（凸）插入卯（凹），不用一颗钉子。弹性连接——对应"以柔克刚"的哲学。</p>
+  <span class="tag architecture">榫卯</span>
+</div>
+<div class="card"><h4>③ 屋顶等级</h4>
+  <div class="roof-demo">
+    <div class="roof-item"><div class="roof-shape">⛩️</div><div class="roof-name">庑殿顶</div><div class="roof-rank">最高等级·皇家专用</div><div style="font-size:12px;color:var(--text-soft);">故宫太和殿·重檐庑殿顶</div></div>
+    <div class="roof-item"><div class="roof-shape">🏯</div><div class="roof-name">歇山顶</div><div class="roof-rank">第二等级</div><div style="font-size:12px;color:var(--text-soft);">天安门·保和殿</div></div>
+    <div class="roof-item"><div class="roof-shape">🏠</div><div class="roof-name">悬山顶</div><div class="roof-rank">民用最高</div><div style="font-size:12px;color:var(--text-soft);">民居·普通庙宇</div></div>
+    <div class="roof-item"><div class="roof-shape">🏘️</div><div class="roof-name">硬山顶</div><div class="roof-rank">最常见</div><div style="font-size:12px;color:var(--text-soft);">北方民居</div></div>
+  </div>
+  <p>重檐（两层屋檐）比单檐高；黄色琉璃瓦等级最高；脊兽数量有严格规定——太和殿10个，全国唯一。</p>
+</div>
+
+<div class="era-summary">中国古建的三个关键词：斗拱（越大越古）、榫卯（不用钉子以柔克刚）、屋顶（看等级——庑殿>歇山>悬山>硬山）。掌握这三个概念，你就不是"看热闹"了。</div>
+</section>
+
+<!-- ═══════ 怎么看古建筑 ═══════ -->
+<section id="arch-howto">
+<h2>第四章：站到一座古建筑前——你该看什么</h2>
+<p>和"读展签"一样，看古建筑也有一套流程。从外到内，四步走：</p>
+
+<div class="steps">
+  <div class="step"><div class="step-body">
+    <h4>看屋顶——判断等级和年代</h4>
+    <p>站在外面，先抬头。是庑殿顶还是歇山顶？有重檐吗？瓦是什么颜色（黄色=皇家，绿色=王府/寺庙，灰色=民间）？脊兽有几个？这些信息告诉你这座建筑的<strong>"身份地位"</strong>。</p>
+  </div></div>
+  <div class="step"><div class="step-body">
+    <h4>看斗拱——判断年代</h4>
+    <p>斗拱是古建筑的"时钟"。唐代：巨大雄浑，斗拱高度占柱高近一半，功能性极强。宋代：变小变精致，开始讲究比例美学。明清：密集成排，几乎纯装饰。<strong>斗拱越大越疏 → 年代越早。</strong></p>
+  </div></div>
+  <div class="step"><div class="step-body">
+    <h4>看结构——柱子、梁架、彩画</h4>
+    <p>走进室内（如果可以的话），看柱子。柱子是直的还是略有收分（上细下粗）？唐代柱子有明显的"卷杀"（弧线收分）；明清柱子基本是直的。抬头看梁架上的彩画——宋代的彩画典雅含蓄（青绿为主），明清的和玺彩画（龙凤纹、沥粉贴金）富丽张扬。</p>
+  </div></div>
+  <div class="step"><div class="step-body">
+    <h4>看环境——建筑和地形的关系</h4>
+    <p>退远一点看整体。它建在山坡上还是平地上？坐北朝南吗？有没有中轴线？中国古建筑几乎都是<strong>院子围合式</strong>布局（和西方单体建筑立在广场中央完全不同）。看懂了院子之间的关系，就看懂了中国人的空间观念。</p>
+  </div></div>
+</div>
+<div class="era-summary">四步法：先看屋顶知身份 → 再看斗拱断年代 → 进室内看结构 → 退远看整体布局。下次去佛光寺或故宫，试试用这个顺序看。</div>
+</section>
+
+<!-- ═══════ ARCH DYNASTY ═══════ -->
+<section id="arch-dynasty">
+<h2>第五章：建筑演变——从唐到清的风格变迁</h2>
+
+<div class="building-card">
+  <h4>唐（618-907）：雄浑大气</h4>
+  <div class="map-guide">山西五台山·佛光寺东大殿（857年）——中国现存最古老唐代木构之一</div>
+  <p>斗拱雄大（占柱高近1/2）、出檐深远、屋顶平缓——整座建筑像一只展翅的大鸟。现存唐代木构<strong>只有3座半，全部在山西</strong>：佛光寺东大殿、南禅寺大殿、广仁王庙，以及敦煌第196窟的半座。日本奈良的唐招提寺大量保留了唐代风格——这是唐文化影响力最直观的证据。</p>
+  <span class="tag architecture">唐代木构</span><span class="tag top">仅存3座半</span>
+</div>
+
+<div class="building-card">
+  <h4>宋·辽·金（960-1279）：精致秀丽</h4>
+  <div class="map-guide">太原·晋祠圣母殿（北宋，1023-32年）；蓟州·独乐寺观音阁（辽，984年）；应县·佛宫寺释迦塔（辽，1056年）</div>
+  <p>斗拱变小变精致，屋顶更陡，装饰增多。<strong>《营造法式》</strong>（1103年，李诫）是中国古代最完整的建筑规范——用"材份制"把所有构件按比例标准化，相当于今天的国家标准。<strong>应县木塔</strong>高67.31米，全榫卯结构，960多年来经历40多次地震和战争炮击不倒——榫卯抗震能力的最佳证明。</p>
+  <span class="tag architecture">宋·辽·金</span>
+</div>
+
+<div class="building-card">
+  <h4>元（1271-1368）：粗犷转型</h4>
+  <div class="map-guide">山西芮城·永乐宫（1247-1358年）——元代道教建筑+中国最大规模道教壁画</div>
+  <p>永乐宫《朝元图》壁画面积400多平方米。北京妙应寺白塔代表元代引入的藏传佛教覆钵式塔。</p>
+  <span class="tag architecture">元代</span>
+</div>
+
+<div class="building-card">
+  <h4>明·清（1368-1912）：繁复华丽</h4>
+  <div class="map-guide">北京·故宫（1420年）·天坛（1420年）</div>
+  <p>斗拱变得繁密细小——几乎失去结构功能，沦为纯装饰。故宫太和殿是中国现存最高等级木构：重檐庑殿顶、11开间、脊兽10个（全国唯一）。天坛祈年殿是"形式服从象征"的极致——圆形平面、三重檐攒尖顶、蓝色琉璃瓦象征天。</p>
+  <span class="tag architecture">明清</span>
+</div>
+
+<div class="era-summary">建筑演变的主线：唐→雄浑（斗拱巨大），宋→秀丽（精致比例），元→粗犷（草原影响），明清→繁复（装饰压倒结构）。一个判断年代的简易法则：斗拱越大越疏越古老。</div>
+</section>
+
+<!-- ═══════ GROTTOES ═══════ -->
+<section id="grottoes">
+<h2>第六章：石窟——建在崖壁上的信仰</h2>
+<p>石窟是中国最特殊的建筑类型——它既是建筑（凿山为寺）、又是雕塑、又是绘画。三大石窟从西到东排在丝绸之路东段，各自代表不同的时代巅峰。</p>
+
+<div class="grotto-card">
+  <h4>敦煌莫高窟（甘肃敦煌）</h4>
+  <div class="map-guide">甘肃省敦煌市东南25km·鸣沙山东麓</div>
+  <p><strong>开凿时间：</strong>前秦建元二年（366年）至元代，持续约1000年。<strong>现存：</strong>735个洞窟、45000平方米壁画、2400余身彩塑。</p>
+  <p>莫高窟的核心价值在<strong>壁画</strong>——它是世界现存规模最大、内容最丰富的佛教艺术画廊。壁画内容包罗万象：佛经故事、供养人像、农耕狩猎、商旅出行、乐舞百戏……简直就是一部中古中国的"图像百科全书"。第45窟的唐代彩塑群像（一佛二弟子二菩萨二天王）是中国雕塑史上的巅峰之作。藏经洞（第17窟）在1900年被发现，里面藏有5万余件写本和绢画——直接催生了"敦煌学"。</p>
+  <p><strong>看莫高窟的要点：</strong>壁画不是装饰——它是"经变画"，把深奥的佛经转化成普通人能看懂的画面。唐代的经变画最宏大精美（比如第220窟的《药师经变》），因为唐代国力最强、信仰最盛。</p>
+  <span class="tag architecture">壁画</span><span class="tag top">世界文化遗产</span>
+</div>
+
+<div class="grotto-card">
+  <h4>云冈石窟（山西大同）</h4>
+  <div class="map-guide">山西省大同市西16km·武周山南麓</div>
+  <p><strong>开凿时间：</strong>北魏和平元年（460年）至正光五年（524年），仅60多年。<strong>现存：</strong>45个主要洞窟、51000余身造像。</p>
+  <p>云冈的核心价值在<strong>石刻造像</strong>——它是佛教艺术中国化的关键转折点。早期（"昙曜五窟"，第16-20窟）的佛像还有浓重的犍陀罗（今巴基斯坦和阿富汗一带）风格——高鼻深目、衣纹厚重。到晚期已经完全中国化——面容圆润、褒衣博带。第20窟的露天大佛（高13.7米）是云冈的标志——当年窟顶坍塌，大佛就露在了外面，反而成了最震撼的一窟。</p>
+  <p><strong>看云冈的要点：</strong>注意佛像的面容和衣纹变化——从"外国人"变成"中国人"，这就是佛教中国化的视觉证据。</p>
+  <span class="tag architecture">石刻造像</span><span class="tag top">世界文化遗产</span>
+</div>
+
+<div class="grotto-card">
+  <h4>龙门石窟（河南洛阳）</h4>
+  <div class="map-guide">河南省洛阳市南12km·伊河两岸</div>
+  <p><strong>开凿时间：</strong>北魏太和年间（约493年）至唐代，持续约400年。<strong>现存：</strong>2345个窟龛、10万余身造像、2800余块碑刻题记。</p>
+  <p>龙门横跨北魏和唐代两个高峰。北魏的"宾阳三洞"精美细腻；唐代的<strong>奉先寺</strong>（第1280窟）是龙门最震撼的一窟——卢舍那大佛高17.14米，面容丰满、神情安详、目光微垂，据说是按武则天的容貌塑造的（武则天捐了两万贯脂粉钱赞助开凿）。两旁的弟子、菩萨、天王、力士形成一个庄严完整的群像体系。</p>
+  <p><strong>看龙门的要点：</strong>站到奉先寺大佛面前，仰头看。它代表的不仅是唐代雕塑的最高水平，更是帝国鼎盛时期的自信——这种从容和气势，此后再也没有出现过。</p>
+  <span class="tag architecture">石刻造像</span><span class="tag top">世界文化遗产</span>
+</div>
+
+<div class="era-summary">三大石窟的地理逻辑：最西边的敦煌（壁画巅峰，持续1000年）→ 中间的云冈（石刻造像巅峰，仅60年，佛教中国化的转折点）→ 最东边的龙门（北魏+唐双高峰，帝国盛世的最后见证）。从西到东走一遍，就是一部佛教艺术从传入到完全中国化的视觉史。</div>
+</section>
+
+<!-- ═══════ SHANXI ═══════ -->
+<section id="arch-geo">
+<h2>第七章：为什么山西是"中国古建博物馆"？</h2>
+<p>一个数据：中国现存元代及以前的木构建筑，<strong>超过80%在山西</strong>。</p>
+<ul>
+  <li><strong>干燥气候</strong>——木材最怕潮湿和白蚁。山西干燥少雨。</li>
+  <li><strong>偏远山区</strong>——太行山、吕梁山深处，战乱打不到。</li>
+  <li><strong>经济衰落</strong>——富裕的地方拆旧建新，贫穷的地方反而保留了老建筑。</li>
+  <li><strong>民间信仰</strong>——大量村庙有信众维护，香火不断。</li>
+</ul>
+
+<div class="era-summary">想看中国古建筑，山西是绕不开的目的地。干燥+偏远+经济落后+民间信仰=一个天然的"古建保鲜库"。唐代木构全国仅存3座半，全在山西；宋辽金元木构山西占全国绝大多数。一座省保存的早期木构，超过全国其他所有省份的总和。</div>
+</section>
+
+<!-- ═══════ ARTIFACTS ═══════ -->
+<section id="artifacts">
+<h2>第八章：顶级文物巡礼——25件</h2>
+<p>按青铜、玉器/金银、陶瓷、书画分类。每件标注<strong>📍在哪能看到</strong>。</p>
+
+<h3>青铜器</h3>
+
+<div class="artifact">
+  <h4>后母戊鼎<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>商代晚期</span><span>高133cm·重832.84kg</span><span>📍中国国家博物馆（北京）</span></div>
+  <p>已知<strong>最重的中国古代青铜器</strong>。商王为祭祀母亲所铸。"后母戊"铸于内壁——"后"是伟大，"母戊"是母亲的庙号。</p>
+  <span class="tag bronze">青铜</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>曾侯乙编钟<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>战国早期（约前433年）</span><span>65件·总重约2500kg</span><span>📍湖北省博物馆（武汉）</span></div>
+  <p>2400多年前的乐器，<strong>至今仍能演奏</strong>。每件钟可发两个音，音域跨五个半八度。改写了世界音乐史——十二平均律在战国已萌芽。</p>
+  <span class="tag bronze">青铜</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>越王勾践剑<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>春秋晚期</span><span>长55.7cm</span><span>📍湖北省博物馆（武汉）</span></div>
+  <p>地下埋了约2400年，出土时<strong>依然锋利</strong>——可轻松划破20层纸。剑身不同部位含锡量不同：刃部高锡（硬而锋利）、脊部低锡（韧而不折）。至今无法完全复制。</p>
+  <span class="tag bronze">青铜</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>何尊<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>西周早期</span><span>高38.8cm</span><span>📍宝鸡青铜器博物院（陕西宝鸡）</span></div>
+  <p>内底122字铭文中出现了<strong>"中国"一词最早的实物证据</strong>——"宅兹中国"，指以洛阳为中心的中原地区。</p>
+  <span class="tag bronze">青铜</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>四羊方尊<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>商代晚期</span><span>高58.3cm</span><span>📍中国国家博物馆（北京）</span></div>
+  <p>中国青铜铸造工艺的巅峰——四角各铸一只卷角羊，羊头和羊角伸出器外，羊身与尊体融为一体。用了<strong>分铸法+焊接</strong>，商代工匠在3000多年前就掌握了极其复杂的组合铸造技术。</p>
+  <span class="tag bronze">青铜</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>妇好鸮尊<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>商代晚期</span><span>高46.3cm</span><span>📍河南博物院（郑州）/ 中国国家博物馆（北京）</span></div>
+  <p>猫头鹰（鸮）造型的酒器——昂首挺胸、双足粗壮、双眼圆瞪，充满力量感。妇好是商王武丁的妻子，也是中国历史上<strong>第一位有据可查的女将军</strong>，曾率军13000人征战。她的墓是殷墟唯一未被盗掘的商代王室墓。</p>
+  <span class="tag bronze">青铜</span><span class="tag top">禁止出境</span>
+</div>
+
+<h3 style="margin-top:32px;">玉器·金银·漆器</h3>
+
+<div class="artifact">
+  <h4>红山文化玉龙<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>新石器时代（约5000年前）</span><span>高26cm</span><span>📍中国国家博物馆（北京）</span></div>
+  <p>C形碧玉龙——<strong>中国最早的龙形象之一</strong>。5000年前用原始工具在一块玉石上雕出流畅的曲线和精准的比例。龙作为图腾至少可追溯到红山文化。</p>
+  <span class="tag jade">玉器</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>金缕玉衣<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>西汉</span><span>全长约188cm</span><span>📍河北省博物馆（石家庄）/ 徐州博物馆 / 南越王博物院</span></div>
+  <p>用金丝把上千片玉片串成人形葬服——汉代贵族相信玉能保尸不朽。做一件需要熟练工匠<strong>10年以上工时</strong>。最著名的是河北满城汉墓（中山靖王刘胜夫妇）出土的两件。</p>
+  <span class="tag jade">玉器</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>长信宫灯<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>西汉</span><span>高48cm</span><span>📍河北省博物馆（石家庄）</span></div>
+  <p>通体鎏金。宫女的袖子是烟道——燃烧产生的烟通过袖子进入体内（内存水），不会污染室内。<strong>两千年前的环保设计。</strong>灯盘可旋转调节亮度。</p>
+  <span class="tag gold">鎏金铜器</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>太阳神鸟金饰<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>商周时期（金沙遗址）</span><span>直径12.5cm·厚0.02cm</span><span>📍金沙遗址博物馆（成都）</span></div>
+  <p>一张极薄的金箔——<strong>厚度仅0.02厘米</strong>，相当于两张打印纸。镂空图案是四只神鸟绕着一轮太阳飞翔，构图完美对称。它是中国文化遗产的标志。</p>
+  <span class="tag gold">金器</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>三星堆金面具</h4>
+  <div class="meta"><span>商代晚期（约前1200年）</span><span>📍三星堆博物馆（四川广汉）</span></div>
+  <p>用金箔锤打而成，五官夸张——大眼、宽鼻、阔嘴，完全不同于中原青铜器的风格。三星堆的发现改写了"黄河流域是中华文明唯一源头"的旧叙事——<strong>长江上游的古代文明同样高度发达。</strong></p>
+  <span class="tag gold">金器</span>
+</div>
+
+<div class="artifact">
+  <h4>素纱禅衣<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>西汉（马王堆一号墓）</span><span>重仅49克</span><span>📍湖南省博物馆（长沙）</span></div>
+  <p>一件成人尺寸的衣服，<strong>重量不到一两（49克）</strong>——折叠起来可以塞进一个火柴盒。它是马王堆汉墓（辛追夫人墓）出土的最令人震惊的丝织品，证明西汉的纺织技术达到了不可思议的高度。现代人尝试复制，最初的仿品比原件重了好几倍。</p>
+  <span class="tag silk">丝织品</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>大秦景教流行中国碑<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>唐建中二年（781年）</span><span>高279cm</span><span>📍西安碑林博物馆（西安）</span></div>
+  <p>碑文以中文和叙利亚文双语记载了<strong>基督教聂斯托利派（景教）在唐代中国的传播</strong>。它证明了早在635年（唐太宗时期），基督教就已经传入中国——比一般人以为的明末清初早了整整一千年。碑文融合了基督教教义和佛教、道教术语，是文化交流的奇观。</p>
+  <span class="tag architecture">碑刻</span><span class="tag top">禁止出境</span>
+</div>
+
+<h3 style="margin-top:32px;">陶瓷</h3>
+
+<div class="artifact">
+  <h4>秦始皇陵兵马俑<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>秦代（约前210年）</span><span>真人大小的陶俑约8000件</span><span>📍秦始皇兵马俑博物馆（西安）</span></div>
+  <p>一支<strong>完整的军队</strong>——每个陶俑面部表情不同，不是模具批量生产。战车、马匹、兵器皆实物大小。证明秦代中国写实雕塑能力不输古希腊。</p>
+  <span class="tag ceramic">陶俑</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>马踏飞燕（铜奔马）<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>东汉</span><span>高34.5cm</span><span>📍甘肃省博物馆（兰州）</span></div>
+  <p>一只蹄踏在飞燕上——<strong>整个雕塑的重心完全落在一只蹄子上</strong>。力学计算之精准让现代工程师叹服。中国旅游的标志。</p>
+  <span class="tag ceramic">青铜</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>汝窑天青釉弦纹樽<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>北宋</span><span>高12.9cm</span><span>📍故宫博物院（北京）</span></div>
+  <p>汝窑是宋代五大名窑之首，烧造仅20多年。传世汝窑<strong>全世界不足100件</strong>。釉色——"雨过天青云破处"，一种介于蓝和绿之间的温润色调，无法精确描述，必须亲眼看到。</p>
+  <span class="tag ceramic">汝窑</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>唐三彩骆驼载乐俑<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>唐代</span><span>高58cm</span><span>📍陕西历史博物馆（西安）</span></div>
+  <p>骆驼驮着一个小型乐队——弹琵琶的、吹笛子的、打鼓的，人物服装和乐器来自中亚。丝绸之路繁荣和长安国际化的最生动写照。</p>
+  <span class="tag ceramic">唐三彩</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>法门寺秘色瓷<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>唐代（874年封入地宫）</span><span>📍法门寺博物馆（陕西宝鸡扶风）</span></div>
+  <p>秘色瓷是越窑的巅峰之作——历代文献中屡屡提及，但失传千年，无人知道它到底长什么样。直到1987年法门寺地宫被发现，地宫物账碑上明确写有"秘色瓷"字样，才解开了这个千古之谜。釉色如湖水般清澈温润，<strong>证明了唐代瓷器可以达到的高度。</strong></p>
+  <span class="tag ceramic">秘色瓷</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>贾湖骨笛</h4>
+  <div class="meta"><span>新石器时代（约7000-8000年前）</span><span>长22.7cm</span><span>📍河南博物院（郑州）</span></div>
+  <p>用鹤的翅骨制成，<strong>世界最早的吹奏乐器之一</strong>。8000年前的人在这根骨管上精确钻了7个音孔，至今仍能吹奏完整的七声音阶。它把中国音乐史向前推了数千年——在此之前，人们认为七声音阶是后来才传入中国的。</p>
+  <span class="tag jade">骨器</span>
+</div>
+
+<h3 style="margin-top:32px;">书画</h3>
+
+<div class="artifact">
+  <h4>《兰亭序》（神龙本·冯承素摹本）<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>原作：东晋·王羲之（353年）；摹本：唐代</span><span>📍故宫博物院（北京）</span></div>
+  <p>王羲之真迹早已失传（据传被唐太宗带进了昭陵）。这件唐代精确摹本（"双钩填墨"——先勾勒轮廓再一笔笔填墨）被认为<strong>最接近原作</strong>。28行324字，每个"之"字写法不同。《兰亭序》不只是书法——它是中国文人理想境界的化身：微醺、雅集、挥毫、对生命无常的感喟。</p>
+  <span class="tag painting">书法</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>《清明上河图》<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>北宋·张择端</span><span>528.7×24.8cm</span><span>📍故宫博物院（北京）</span></div>
+  <p>一张画里画了<strong>800多个人物、60多头牲畜、20多艘船、30多栋建筑</strong>。它是一幅北宋汴京（今开封）的城市生活长卷——大到运河货船、小到街头摊位，每个角落都有故事。它不是画给皇帝的重大题材，而是画给后世的真实生活。</p>
+  <span class="tag painting">绘画</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="artifact">
+  <h4>《千里江山图》<span class="rating">禁止出境</span></h4>
+  <div class="meta"><span>北宋·王希孟（1113年，时年18岁）</span><span>1191.5×51.5cm</span><span>📍故宫博物院（北京）</span></div>
+  <p>王希孟画这幅画时<strong>只有18岁</strong>。用了极其珍贵的矿物颜料——石青、石绿（从孔雀石和蓝铜矿提取），近千年后依然鲜艳。画的是理想化的江南山水。画完之后王希孟就从历史中消失了，没有任何其他作品——他用全部生命画了这一张。</p>
+  <span class="tag painting">绘画</span><span class="tag top">禁止出境</span>
+</div>
+
+<div class="era-summary">25件文物不是"最值钱的25件"——而是最有信息量的25件。后母戊鼎让你看到商代的祭祀，越王勾践剑让你看到战国的铸造技术，素纱禅衣让你看到西汉的纺织高度，大秦景教碑让你看到唐代的文化开放。每一件都是一扇窗，透过它能看到一个时代。</div>
+</section>
+
+<!-- ═══════ ROUTES ═══════ -->
+<section id="routes">
+<h2>第九章：主题旅行路线</h2>
+
+<div class="card">
+  <h4>🛕 山西古建线（约一周）</h4>
+  <p><strong>太原</strong>（晋祠圣母殿·宋代）→ <strong>五台山</strong>（佛光寺东大殿·唐 + 南禅寺大殿·唐）→ <strong>应县</strong>（佛宫寺释迦塔·辽）→ <strong>大同</strong>（云冈石窟·北魏 + 华严寺·辽金 + 善化寺·辽金）</p>
+  <p>看遍唐代到辽金元的完整木构序列。春秋两季最佳。</p>
+</div>
+
+<div class="card">
+  <h4>🐫 丝绸之路石窟线（约两周）</h4>
+  <p><strong>天水</strong>（麦积山石窟·北魏至明，以精美的泥塑著称）→ <strong>兰州</strong>（甘肃省博物馆·马踏飞燕）→ <strong>张掖</strong>（大佛寺·西夏卧佛）→ <strong>嘉峪关</strong>→ <strong>敦煌</strong>（莫高窟·前秦至元 + 鸣沙山月牙泉）</p>
+  <p>从东到西沿丝绸之路走，石窟风格从中国化逐渐过渡到西域风。春秋最佳，避开暑假。</p>
+</div>
+
+<div class="card">
+  <h4>🏯 江南园林线（约一周）</h4>
+  <p><strong>苏州</strong>（拙政园·明 + 留园·清 + 网师园·宋始建清重建 + 苏州博物馆·贝聿铭设计）→ <strong>无锡</strong>（寄畅园·明）→ <strong>扬州</strong>（个园·清 + 何园·清）</p>
+  <p>江南园林和北方宫殿是完全不同的体系——一个追求"移步换景"的文人意境，一个强调"中轴对称"的皇家威仪。最好在人少的时候去（清晨或雨天），才能体会"静"字。</p>
+</div>
+
+<div class="card">
+  <h4>🏛️ 北京博物馆线（约一周）</h4>
+  <p><strong>故宫博物院</strong>（至少一整天，提前预约）→ <strong>中国国家博物馆</strong>（古代中国展厅是精华）→ <strong>天坛</strong>→ <strong>颐和园</strong>→ <strong>雍和宫</strong>（藏传佛教建筑）</p>
+  <p>国博的"古代中国"基本陈列按时间线排布，从旧石器到明清，是中国最好的通史式展览。故宫建议选工作日，避开人流。</p>
+</div>
+
+<div class="era-summary">四条路线覆盖了中国物质文化遗产的核心：山西线看木构（时代最早），丝路线看石窟（从西域到中国化的全过程），江南线看园林（文人审美），北京线看皇家（最高等级）。不需要一次走完——但至少走一条，你会发现读过的知识全"活"了。</div>
+</section>
+
+<!-- ═══════ MUSEUMS ═══════ -->
+<section id="museums">
+<h2>附录：全国重点博物馆清单</h2>
+
+<table>
+  <tr><th>省份/城市</th><th>博物馆</th><th>必看</th></tr>
+  <tr><td><strong>北京</strong></td><td>故宫博物院</td><td>《清明上河图》《千里江山图》（轮展）、汝窑、太和殿</td></tr>
+  <tr><td><strong>北京</strong></td><td>中国国家博物馆</td><td>后母戊鼎、红山玉龙、四羊方尊、古代中国展厅</td></tr>
+  <tr><td><strong>陕西·西安</strong></td><td>陕西历史博物馆</td><td>唐三彩骆驼载乐俑、镶金兽首玛瑙杯</td></tr>
+  <tr><td><strong>陕西·西安</strong></td><td>秦始皇兵马俑博物馆</td><td>兵马俑一号坑、铜车马</td></tr>
+  <tr><td><strong>陕西·宝鸡</strong></td><td>宝鸡青铜器博物院</td><td>何尊（"中国"最早出处）</td></tr>
+  <tr><td><strong>陕西·扶风</strong></td><td>法门寺博物馆</td><td>秘色瓷、鎏金银宝函、佛指舍利</td></tr>
+  <tr><td><strong>湖北·武汉</strong></td><td>湖北省博物馆</td><td>曾侯乙编钟、越王勾践剑</td></tr>
+  <tr><td><strong>河南·郑州</strong></td><td>河南博物院</td><td>贾湖骨笛、妇好鸮尊</td></tr>
+  <tr><td><strong>河南·洛阳</strong></td><td>龙门石窟</td><td>奉先寺卢舍那大佛</td></tr>
+  <tr><td><strong>甘肃·兰州</strong></td><td>甘肃省博物馆</td><td>马踏飞燕</td></tr>
+  <tr><td><strong>甘肃·敦煌</strong></td><td>莫高窟</td><td>第45窟、第158窟涅槃像、藏经洞</td></tr>
+  <tr><td><strong>河北·石家庄</strong></td><td>河北省博物馆</td><td>金缕玉衣、长信宫灯</td></tr>
+  <tr><td><strong>湖南·长沙</strong></td><td>湖南省博物馆</td><td>马王堆汉墓（辛追夫人、素纱禅衣）</td></tr>
+  <tr><td><strong>四川·广汉</strong></td><td>三星堆博物馆</td><td>青铜立人、青铜神树、金面具</td></tr>
+  <tr><td><strong>四川·成都</strong></td><td>金沙遗址博物馆</td><td>太阳神鸟金饰</td></tr>
+  <tr><td><strong>江苏·南京</strong></td><td>南京博物院</td><td>竹林七贤砖画</td></tr>
+  <tr><td><strong>上海</strong></td><td>上海博物馆</td><td>大克鼎、宋元书画收藏</td></tr>
+  <tr><td><strong>山西·太原</strong></td><td>山西博物院</td><td>晋侯鸟尊、北朝壁画</td></tr>
+  <tr><td><strong>山西·大同</strong></td><td>云冈石窟</td><td>第20窟露天大佛、"昙曜五窟"</td></tr>
+  <tr><td><strong>山西·五台山</strong></td><td>佛光寺</td><td>东大殿（唐代木构）</td></tr>
+  <tr><td><strong>山西·应县</strong></td><td>佛宫寺释迦塔</td><td>应县木塔（世界最高木塔）</td></tr>
+  <tr><td><strong>广东·广州</strong></td><td>南越王博物院</td><td>丝缕玉衣、文帝行玺金印</td></tr>
+  <tr><td><strong>辽宁·沈阳</strong></td><td>辽宁省博物馆</td><td>《簪花仕女图》、红山文化玉器</td></tr>
+  <tr><td><strong>陕西·西安</strong></td><td>西安碑林博物馆</td><td>大秦景教流行中国碑、开成石经</td></tr>
+</table>
+</section>
+
+<hr class="divider">
+
+<section>
+<h2>结语</h2>
+<blockquote>
+  器物的价值不在于它"值多少钱"，而在于它<strong>承载了多少信息</strong>。<br>
+  一个青铜鼎告诉你三千年前的人如何祭祀，一个斗拱告诉你一千年前的人如何思考力学，一张《清明上河图》告诉你九百年前一个普通人怎么在街上讨生活。<br><br>
+  下次走进博物馆时，慢下来。找一件东西，站五分钟。<br>
+  问自己三个问题：它是什么做的？谁做的？它从哪来？<br>
+  当你开始问这些问题的时候，你就是在<strong>阅读</strong>它了。
+</blockquote>
+</section>
+
+</main>
+
+<script>
+const tlNodes = document.querySelectorAll('.tl-node');
+const allTargets = [];
+tlNodes.forEach(n => {
+  const href = n.getAttribute('href');
+  if (href) { const el = document.getElementById(href.substring(1)); if (el) allTargets.push({node:n, el:el}); }
+});
+function updateTimeline() {
+  let active = null;
+  allTargets.forEach(({node, el}) => { if (el.getBoundingClientRect().top < 200) active = node; });
+  tlNodes.forEach(n => n.classList.remove('active'));
+  if (active) { active.classList.add('active'); active.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}); }
+}
+window.addEventListener('scroll', updateTimeline);
+tlNodes.forEach(n => {
+  n.addEventListener('click', e => {
+    e.preventDefault();
+    const el = document.getElementById(n.getAttribute('href').substring(1));
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+const navs = document.querySelectorAll('.sidebar nav a');
+const secs = document.querySelectorAll('section, .artifact, .building-card, .card[id]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  secs.forEach(s => { if(s.getBoundingClientRect().top < 160) cur = s.id; });
+  navs.forEach(a => {
+    a.classList.remove('active');
+    if(a.getAttribute('href') === '#' + cur) a.classList.add('active');
+  });
+});
+navs.forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const el = document.getElementById(a.getAttribute('href').substring(1));
+    if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  });
+});
+
+const searchInput = document.getElementById('searchInput');
+const searchInfo = document.getElementById('searchInfo');
+const searchable = document.querySelectorAll('.artifact, .building-card, .grotto-card, .card, section, .step');
+function doSearch() {
+  const q = searchInput.value.trim().toLowerCase();
+  document.querySelectorAll('mark').forEach(m => m.replaceWith(m.textContent));
+  if (!q) { searchInfo.classList.remove('visible'); searchable.forEach(c => c.classList.remove('card-hidden')); return; }
+  let count = 0, first = null;
+  searchable.forEach(card => {
+    if (card.textContent.toLowerCase().includes(q)) { card.classList.remove('card-hidden'); count++; if (!first) first = card;
+      const w = document.createTreeWalker(card, NodeFilter.SHOW_TEXT, null, false); const ns = [];
+      while(w.nextNode()) { if(!['SCRIPT','STYLE','MARK'].includes(w.currentNode.parentNode.nodeName)) ns.push(w.currentNode); }
+      ns.forEach(node => {
+        const t = node.textContent, l = t.toLowerCase(), i = l.indexOf(q);
+        if(i===-1) return;
+        const f = document.createDocumentFragment();
+        f.appendChild(document.createTextNode(t.substring(0,i)));
+        const m = document.createElement('mark'); m.textContent=t.substring(i,i+q.length); f.appendChild(m);
+        f.appendChild(document.createTextNode(t.substring(i+q.length)));
+        node.parentNode.replaceChild(f, node);
+      });
+    } else { card.classList.add('card-hidden'); }
+  });
+  searchInfo.textContent = count>0 ? `找到 ${count} 个匹配区块` : '未找到匹配内容';
+  searchInfo.classList.add('visible');
+  if (first) first.scrollIntoView({behavior:'smooth', block:'center'});
+}
+let t;
+searchInput.addEventListener('input', () => { clearTimeout(t); t=setTimeout(doSearch, 250); });
+searchInput.addEventListener('keydown', e => { if(e.key==='Escape'){searchInput.value='';doSearch();searchInput.blur();} });
+</script>
+</body>
+</html>

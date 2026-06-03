@@ -1,0 +1,1146 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>格斗修炼手册 | Boxing & Combat Guide</title>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --surface: #fff;
+    --surface2: #f5f3ef;
+    --border: #e5e0d8;
+    --text: #2c2c2c;
+    --text-muted: #8c8c8c;
+    --accent: #d9413a;
+    --accent2: #e07b39;
+    --accent3: #2e8b7a;
+    --accent4: #4a7eb5;
+    --gold: #c2943a;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    --font-sans: 'Noto Sans SC', 'Inter', 'Segoe UI', system-ui, sans-serif;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; scroll-padding-top:24px; }
+  body {
+    background:var(--bg); color:var(--text);
+    font-family:var(--font-sans); line-height:1.75;
+    display:flex; min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ===== SIDEBAR ===== */
+  nav {
+    width:250px; min-width:250px; background:var(--surface);
+    border-right:1px solid var(--border);
+    padding:28px 0; position:sticky; top:0; height:100vh;
+    overflow-y:auto; display:flex; flex-direction:column;
+    box-shadow:1px 0 8px rgba(0,0,0,0.03);
+  }
+  nav .logo {
+    font-size:1.4rem; font-weight:900; color:var(--accent);
+    padding:0 22px 20px; letter-spacing:1px;
+    border-bottom:1px solid var(--border); margin-bottom:10px;
+    line-height:1.3;
+  }
+  nav .logo span { color:var(--text-muted); font-weight:500; font-size:0.7rem; display:block; letter-spacing:3px; }
+  nav a {
+    display:block; padding:7px 22px; color:var(--text-muted);
+    text-decoration:none; font-size:0.85rem; transition:.12s;
+    border-left:3px solid transparent; font-weight:450;
+  }
+  nav a:hover { color:var(--text); background:var(--surface2); border-left-color:var(--accent2); }
+  nav .section-title {
+    padding:18px 22px 4px; font-size:0.68rem; text-transform:uppercase;
+    letter-spacing:2.5px; color:var(--accent2); font-weight:700;
+    opacity:0.8;
+  }
+
+  /* ===== MAIN ===== */
+  main {
+    flex:1; padding:44px 60px; max-width:920px; overflow-y:auto;
+  }
+  h1 {
+    font-size:2.2rem; color:var(--text); margin-bottom:6px;
+    letter-spacing:-0.3px; font-weight:800;
+  }
+  h1 .sub { display:block; font-size:0.95rem; color:var(--text-muted); font-weight:400; margin-top:6px; letter-spacing:0; }
+  h2 {
+    font-size:1.4rem; color:var(--text); margin:52px 0 18px;
+    padding-bottom:10px; border-bottom:2px solid var(--accent);
+    display:flex; align-items:center; gap:8px; font-weight:700;
+  }
+  h2 .icon { font-size:1.3rem; }
+  h3 { font-size:1.1rem; color:var(--accent2); margin:32px 0 10px; font-weight:700; }
+  h4 { font-size:0.95rem; color:var(--text); margin:18px 0 8px; font-weight:700; }
+  p { margin-bottom:10px; }
+  ul, ol { margin:6px 0 14px 22px; }
+  li { margin-bottom:5px; }
+
+  /* ===== CARDS ===== */
+  .card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:10px; padding:20px 22px; margin-bottom:14px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
+  }
+  .card.warn { border-left:4px solid var(--accent); background:#fef7f5; }
+  .card.info { border-left:4px solid var(--accent3); background:#f5fbf9; }
+  .card.tip  { border-left:4px solid var(--gold); background:#fdfaf3; }
+  .card.blue { border-left:4px solid var(--accent4); background:#f7fafd; }
+  .card h4 { margin-top:0; }
+
+  /* ===== TABLES ===== */
+  .table-wrap { overflow-x:auto; margin:12px 0 20px; }
+  table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+  th { background:var(--surface2); color:var(--accent2); text-align:left; padding:10px 14px; font-weight:700; font-size:0.8rem; letter-spacing:0.5px; }
+  td { padding:9px 14px; border-bottom:1px solid var(--border); }
+  tr:hover td { background:#fdfaf5; }
+
+  /* ===== TAGS ===== */
+  .tag {
+    display:inline-block; padding:3px 9px; border-radius:4px;
+    font-size:0.72rem; font-weight:700; margin-right:2px; white-space:nowrap;
+  }
+  .tag-red  { background:#fde8e6; color:var(--accent); }
+  .tag-orange { background:#fef0e4; color:var(--accent2); }
+  .tag-teal { background:#e6f5f1; color:var(--accent3); }
+  .tag-blue { background:#e8f0f8; color:var(--accent4); }
+  .tag-gray { background:#f0efed; color:#999; }
+
+  /* ===== COMBO ===== */
+  .combo {
+    background:var(--surface2); border-radius:6px; padding:12px 16px;
+    margin:6px 0; font-family:var(--font-mono); font-size:1rem;
+    border-left:3px solid var(--accent);
+  }
+  .combo .num { color:var(--accent); font-weight:700; }
+  .combo .desc { display:block; font-size:0.78rem; color:var(--text-muted); margin-top:3px; font-family:var(--font-sans); }
+
+  /* ===== FLOWCHART / STEPS ===== */
+  .steps { counter-reset:step; list-style:none; margin-left:0; }
+  .steps li {
+    counter-increment:step; padding:10px 14px 10px 44px;
+    margin-bottom:8px; background:var(--surface); border-radius:8px;
+    position:relative; border:1px solid var(--border);
+  }
+  .steps li::before {
+    content:counter(step);
+    position:absolute; left:10px; top:10px;
+    width:24px; height:24px; border-radius:12px;
+    background:var(--accent); color:#fff; font-size:0.78rem; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* ===== STYLE CARDS ===== */
+  .style-grid {
+    display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:12px 0;
+  }
+  .style-card {
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:8px; padding:16px;
+  }
+  .style-card h4 { margin:0 0 6px; font-size:0.95rem; }
+  .style-card .subtitle { font-size:0.78rem; color:var(--text-muted); margin-bottom:6px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:768px) {
+    body { flex-direction:column; }
+    nav {
+      width:100%; min-width:unset; height:auto; position:static;
+      flex-direction:row; flex-wrap:wrap; padding:10px 14px;
+      overflow-x:auto; box-shadow:none;
+    }
+    nav .logo { width:100%; border:none; margin:0; padding:0 0 6px; font-size:1.2rem; }
+    nav .section-title { display:none; }
+    nav a { padding:5px 10px; border-left:none; border-bottom:2px solid transparent; white-space:nowrap; font-size:0.8rem; }
+    main { padding:20px 16px; }
+    h1 { font-size:1.6rem; }
+    .style-grid { grid-template-columns:1fr; }
+  }
+
+  @media print {
+    nav { display:none; }
+    main { max-width:100%; padding:0; }
+    .card { break-inside:avoid; box-shadow:none; }
+    body { font-size:0.85rem; }
+  }
+
+  section:target { animation: flash .5s ease; }
+  @keyframes flash { 0%{background:#fef3e8;} 100%{background:transparent;} }
+
+  /* Stats bar */
+  .stat-row { display:flex; gap:16px; margin:16px 0; flex-wrap:wrap; }
+  .stat {
+    flex:1; min-width:100px; background:var(--surface);
+    border:1px solid var(--border); border-radius:8px;
+    padding:14px 16px; text-align:center;
+  }
+  .stat .val { font-size:1.8rem; font-weight:800; color:var(--accent); }
+  .stat .label { font-size:0.73rem; color:var(--text-muted); margin-top:2px; }
+</style>
+<style>
+.kb-back-btn {
+  position: fixed; bottom: 28px; left: 28px; z-index: 99999;
+  background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 24px; padding: 8px 18px;
+  font-size: 13px; color: #8b5e3c; text-decoration: none;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: all 0.25s; display: inline-flex; align-items: center; gap: 6px;
+  letter-spacing: 0.04em;
+}
+.kb-back-btn:hover {
+  background: rgba(255,255,255,1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+  border-color: rgba(139,94,60,0.4);
+}
+</style>
+</head>
+<body>
+<a href="../index.html" class="kb-back-btn">鈫?鐭ヨ瘑搴?/a>
+
+
+<!-- ==================== NAV ==================== -->
+<nav>
+  <div class="logo">FIGHT BOOK<span>格斗修炼手册</span></div>
+
+  <div class="section-title">🥊 拳击核心</div>
+  <a href="#stance">站架与步法</a>
+  <a href="#distance">距离控制</a>
+  <a href="#punches">拳法体系</a>
+  <a href="#defense">防守体系</a>
+  <a href="#combinations">组合拳库</a>
+  <a href="#rhythm">节奏与时机</a>
+  <a href="#shadowbox">空击套路</a>
+  <a href="#styles">拳击风格流派</a>
+  <a href="#mistakes">常见错误自查</a>
+
+  <div class="section-title">🏋️ 训练体系</div>
+  <a href="#plan">每周计划</a>
+  <a href="#warmup">热身流程</a>
+  <a href="#conditioning">体能专项</a>
+  <a href="#nutrition">营养与恢复</a>
+  <a href="#gear">装备指南</a>
+  <a href="#coach">问教练的好问题</a>
+
+  <div class="section-title">🛡️ 街头自卫</div>
+  <a href="#legal">法律边界</a>
+  <a href="#deescalation">冲突降级</a>
+  <a href="#street-tech">实战技术</a>
+
+  <div class="section-title">🌍 格斗全景</div>
+  <a href="#landscape">流派总览</a>
+  <a href="#orgs">赛事组织</a>
+  <a href="#watchlist">观赛清单</a>
+
+  <div class="section-title">🧠 心理</div>
+  <a href="#mental">心态建设</a>
+  <a href="#sparring">实战分级</a>
+</nav>
+
+<!-- ==================== MAIN ==================== -->
+<main>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<h1>格斗修炼手册
+  <span class="sub">Boxing · Self-Defense · Combat Sports — 一本陪你进步的训练参考书</span>
+</h1>
+
+<div class="stat-row">
+  <div class="stat"><div class="val">20+</div><div class="label">已上私教课</div></div>
+  <div class="stat"><div class="val">2+1</div><div class="label">每周训练次</div></div>
+  <div class="stat"><div class="val">4</div><div class="label">月度主题</div></div>
+  <div class="stat"><div class="val">25+</div><div class="label">收录组合</div></div>
+</div>
+
+<!-- ═══════════════════ STANCE ═══════════════════ -->
+<section id="stance">
+<h2><span class="icon">🥊</span> 站架与步法</h2>
+
+<div class="card">
+  <h4>基本站架（正架 Orthodox）</h4>
+  <ul>
+    <li><strong>脚</strong>：左脚前右脚后，间距约肩宽；后脚跟微抬，重心偏前脚掌</li>
+    <li><strong>膝</strong>：微屈，弹性状态——"像坐在高脚凳边缘"</li>
+    <li><strong>髋</strong>：微微内收，保护腹部</li>
+    <li><strong>上身</strong>：略侧对对手，减少正面暴露面积约 30%</li>
+    <li><strong>手</strong>：前手探距（下巴高度），后手贴脸颊护下巴</li>
+    <li><strong>肘</strong>：紧贴肋骨——护肝护脾</li>
+    <li><strong>下巴</strong>：内收，藏于前肩后方</li>
+    <li><strong>视线</strong>：看对方胸部/锁骨——余光感知全身，不盯着拳看</li>
+  </ul>
+</div>
+
+<h3>步法体系</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>步法</th><th>执行</th><th>用途</th><th>训练方法</th></tr>
+  <tr><td>滑步（Step）</td><td>移动脚先动，后脚跟；双脚永不交叉</td><td>基础前后左右位移</td><td>镜前慢速滑步 3min×3</td></tr>
+  <tr><td>跳步（Bounce）</td><td>小幅弹跳保持节奏，脚掌着地</td><td>节奏控制、试探距敌</td><td>跳绳 3min×3，感受脚掌弹性</td></tr>
+  <tr><td>转步（Pivot）</td><td>前脚为轴，后脚弧线旋转 45-90°</td><td>创造角度、逃离围绳</td><td>绕锥桶 8 字转步</td></tr>
+  <tr><td>突进步（Lunge）</td><td>后脚猛蹬，前脚大步跨入攻击距离</td><td>快速缩短距离</td><td>从绳圈外突进—出拳—退出</td></tr>
+  <tr><td>侧闪步（L-Step）</td><td>向斜前/斜后 45° 跨步</td><td>创造反击角度</td><td>绳梯训练 + L 步出拳</td></tr>
+  <tr><td>撤退步（Pull Back）</td><td>前脚推地、上身微仰、整体后移</td><td>紧急脱离</td><td>沙袋摆荡练习进退出入</td></tr>
+</table>
+</div>
+
+<div class="card tip">
+  <h4>💡 步法黄金法则</h4>
+  <p><strong>「移动脚先动，重心不丢。」</strong>初学者最常见的问题：上身先动、脚跟不上。让步法成为肌肉记忆的唯一方法是——每次训练专门留 5-10 分钟练步法，哪怕只是在镜子前走。</p>
+</div>
+</section>
+
+<!-- ═══════════════════ DISTANCE ═══════════════════ -->
+<section id="distance">
+<h2><span class="icon">📏</span> 距离控制</h2>
+<p>拳击里有一句话：<strong>「控制了距离，就控制了比赛。」</strong>这是区分新手和好手的核心能力。</p>
+
+<h3>三层距离模型</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>距离</th><th>描述</th><th>你的武器</th><th>对手能做什么</th></tr>
+  <tr>
+    <td><strong style="color:var(--accent3)">远距离</strong><br><small>Long Range</small></td>
+    <td>双方前手勉强能碰到或碰不到</td>
+    <td>刺拳探距、假动作、观察</td>
+    <td>也只能刺拳</td>
+  </tr>
+  <tr>
+    <td><strong style="color:var(--accent2)">中距离</strong><br><small>Mid Range</small></td>
+    <td>双方直拳和部分勾拳能命中</td>
+    <td>直拳、勾拳、组合</td>
+    <td>直拳、勾拳</td>
+  </tr>
+  <tr>
+    <td><strong style="color:var(--accent)">近距离</strong><br><small>Inside / Pocket</small></td>
+    <td>贴得很近，双方肘可触身</td>
+    <td>短勾、上勾、身体拳</td>
+    <td>同上 + 可能箍颈/搂抱</td>
+  </tr>
+</table>
+</div>
+
+<h3>距离控制的四项能力</h3>
+<div class="steps">
+  <li><strong>感知距离</strong> — 不需要看脚，凭"感觉"知道自己在什么位置。通过大量空击和沙袋进出训练获得</li>
+  <li><strong>进入距离</strong> — 用刺拳掩护、假动作、角度步法安全地从中远距离切到中近距离</li>
+  <li><strong>保持在有利距离</strong> — 如果你臂展长，钉在远距离用刺拳折磨对手；如果你力量大，想法进入中近</li>
+  <li><strong>脱离距离</strong> — 打完组合立刻退出，不被反击。退出的步法和进入同样重要</li>
+</div>
+
+<div class="card info">
+  <h4>🔑 一个核心练习：进出 drill</h4>
+  <p>沙袋前画出三道线（远-中-近）。进 → 打组合 → 出，每组练 2 分钟。重点不是拳，是<strong>进的时机和出的速度</strong>。这个练 100 次，实战时你会感谢自己。</p>
+</div>
+
+<h3>刺拳：你的距离雷达</h3>
+<p>刺拳不只是轻拳，它是你的<strong>测距仪</strong>。不确定距离？出刺拳。对手移动？出刺拳。想进？先刺拳再进。把刺拳当作你在黑暗中伸出的手——它告诉你一切。</p>
+</section>
+
+<!-- ═══════════════════ PUNCHES ═══════════════════ -->
+<section id="punches">
+<h2><span class="icon">👊</span> 拳法体系</h2>
+
+<h3>六种基础拳法</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>#</th><th>拳法</th><th>核心要点</th><th>发力链</th><th>最常出错</th></tr>
+  <tr>
+    <td><span class="tag tag-red">1</span></td>
+    <td><strong>刺拳 Jab</strong></td>
+    <td>快、准、回收快。不是重拳，是"雷达拳"</td>
+    <td>前脚蹬→髋微转→肩送→臂展→拳峰着→原路收回</td>
+    <td>肘外翻、下巴上抬、不收拳</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-red">2</span></td>
+    <td><strong>后直 Cross</strong></td>
+    <td>全身发力，旋转是关键。收拳和出拳同样重要</td>
+    <td>后脚蹬地→转髋→转肩→臂推直→拳峰着→原路收回</td>
+    <td>只用手臂力、前脚离地、重心前倾过多</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-red">3</span></td>
+    <td><strong>前勾 Lead Hook</strong></td>
+    <td>肘抬至肩高、拳心向内、走最短弧线</td>
+    <td>前脚旋转→转髋→肩带手臂弧线击出</td>
+    <td>挥太大像棒球、肘低于肩变摆拳</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-red">4</span></td>
+    <td><strong>后勾 Rear Hook</strong></td>
+    <td>力道最大的弧线拳，常用在中距离和反击</td>
+    <td>后脚蹬→髋猛转→肩带动后手弧线击出</td>
+    <td>同上 + 重心过度前倾</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-red">5</span></td>
+    <td><strong>前上勾 Lead Uppercut</strong></td>
+    <td>膝微屈→身体沉→手臂贴身向上钻出</td>
+    <td>微蹲→蹬腿→转髋→手臂沿身体中线上升</td>
+    <td>手先动身体不沉、距离太远打空</td>
+  </tr>
+  <tr>
+    <td><span class="tag tag-red">6</span></td>
+    <td><strong>后上勾 Rear Uppercut</strong></td>
+    <td>近身杀器。必须沉身后再爆发上升</td>
+    <td>深蹲→猛蹬→转髋→手臂贴身钻升</td>
+    <td>同前上勾 + 幅度过大露空档</td>
+  </tr>
+</table>
+</div>
+
+<h3>变体与特殊拳法</h3>
+<ul>
+  <li><strong>身体刺拳（Body Jab）</strong>：刺拳下沉打腹部，迫使对手手位下移，为上面开路</li>
+  <li><strong>拍击刺拳（Pawing Jab）</strong>：不全力收回，连续轻拍对手视线（Lomachenko 常用）</li>
+  <li><strong>过顶拳（Overhand）</strong>：后手弧形越过对手前手，打太阳穴/耳后，破高护防守</li>
+  <li><strong>铲勾（Shovel Hook）</strong>：45° 弧线击打肝区/脾区。井上尚弥和 Canelo 的招牌</li>
+  <li><strong>直摆变线</strong>：直拳出到中途突然走弧，破防守节奏</li>
+</ul>
+
+<div class="card tip">
+  <h4>💡 出拳时呼气</h4>
+  <p>每拳配合短促的"嘶——"声呼气。不憋气 = 不累。李小龙的嘶声不是作秀，是科学：呼气释放核心压力、保持放松、延长体力。现在就开始习惯它。</p>
+</div>
+</section>
+
+<!-- ═══════════════════ DEFENSE ═══════════════════ -->
+<section id="defense">
+<h2><span class="icon">🛡️</span> 防守体系</h2>
+
+<h3>防守金字塔 — 从最优到最次</h3>
+<div class="steps">
+  <li><strong>距离控制</strong>（最优）— 让对手根本打不到你</li>
+  <li><strong>头部移动</strong> — 闪躲、侧闪、下潜、后撤</li>
+  <li><strong>格挡/拍挡</strong> — 手套、手臂护住要害；或拨开来拳</li>
+  <li><strong>硬扛</strong>（最次）— 收紧肌肉硬接，不得已而为之</li>
+</div>
+
+<div class="table-wrap">
+<table>
+  <tr><th>技术</th><th>执行要点</th><th>防什么</th></tr>
+  <tr><td><strong>侧闪 Slip</strong></td><td>上身向斜前小幅侧移，头从拳路线偏开；闪完立刻回到防守位</td><td>直拳</td></tr>
+  <tr><td><strong>下潜 Roll/Duck</strong></td><td>膝弯曲→上身弧形下沉→从勾拳下方滚过→回到站架</td><td>勾拳、摆拳</td></tr>
+  <tr><td><strong>后撤 Pull</strong></td><td>上身微仰，前脚可小步后撤，保持平衡</td><td>直拳连击</td></tr>
+  <tr><td><strong>拍挡 Parry</strong></td><td>手掌/前臂小幅度拨开拳面——"拍"不是"推"</td><td>刺拳、直拳</td></tr>
+  <tr><td><strong>高护 High Guard</strong></td><td>双拳贴太阳穴，肘收护肋，透过拳缝看对手</td><td>组合拳轰炸</td></tr>
+  <tr><td><strong>肩滚 Shoulder Roll</strong></td><td>前肩抬起挡拳，后手护另一边脸，上身微转泄力</td><td>直拳（高级）</td></tr>
+  <tr><td><strong>阻截反击 Catch & Shoot</strong></td><td>后手手套接住刺拳同时前手直接反击</td><td>刺拳</td></tr>
+</table>
+</div>
+
+<div class="card info">
+  <h4>防守的终极心法</h4>
+  <p><strong>防守不是为了不挨打，是为了打完反击。</strong> 每一次闪躲、每一次拍挡，紧接着应该有一个反击。纯粹的防守最终一定会被突破。防守→反击，把这个连起来练。</p>
+</div>
+</section>
+
+<!-- ═══════════════════ COMBINATIONS ═══════════════════ -->
+<section id="combinations">
+<h2><span class="icon">⚡</span> 组合拳库</h2>
+
+<h3>Level 1 — 双拳组合（入门）</h3>
+<div class="combo"><span class="num">1-2</span> 刺拳 → 后直 <span class="desc">万物之母，练到不需要想</span></div>
+<div class="combo"><span class="num">1-1</span> 双刺 <span class="desc">刺拳→刺拳，第二拳加力或变角度</span></div>
+<div class="combo"><span class="num">1-3</span> 刺拳 → 前勾 <span class="desc">直→弧，节奏切换</span></div>
+<div class="combo"><span class="num">2-3</span> 后直 → 前勾 <span class="desc">交叉连击，后手打完前手已在路上</span></div>
+<div class="combo"><span class="num">2-5</span> 后直 → 前上勾 <span class="desc">直拳破防→上勾钻入</span></div>
+
+<h3>Level 2 — 三拳组合（核心）</h3>
+<div class="combo"><span class="num">1-2-3</span> 刺拳 → 后直 → 前勾 <span class="desc">经典三连，打沙袋标配</span></div>
+<div class="combo"><span class="num">1-2-5</span> 刺拳 → 后直 → 前上勾 <span class="desc">上头→上头→下巴</span></div>
+<div class="combo"><span class="num">1-3-2</span> 刺拳 → 前勾 → 后直 <span class="desc">节奏变化：快-快-快 / 快-慢-快 都行</span></div>
+<div class="combo"><span class="num">2-3-2</span> 后直 → 前勾 → 后直 <span class="desc">后手起→前勾衔接→后手收尾</span></div>
+<div class="combo"><span class="num">1-2-1</span> 刺拳 → 后直 → 再刺拳 <span class="desc">进攻后掩护撤退</span></div>
+
+<h3>Level 3 — 四拳及以上（进阶）</h3>
+<div class="combo"><span class="num">1-2-3-2</span> 刺拳 → 后直 → 前勾 → 后直</div>
+<div class="combo"><span class="num">1-1-2-3</span> 双刺 → 后直 → 前勾 <span class="desc">双刺设伏，后面才是真货</span></div>
+<div class="combo"><span class="num">1-2-5-2</span> 刺拳 → 后直 → 前上勾 → 后直</div>
+<div class="combo"><span class="num">1-2-3-6</span> 刺拳 → 后直 → 前勾 → 后上勾 <span class="desc">头部→身体切换</span></div>
+<div class="combo"><span class="num">1-2-1-2</span> 刺拳 → 后直 → 刺拳 → 后直 <span class="desc">快-慢-快-慢，节奏欺骗</span></div>
+
+<h3>Level 4 — 身体打击组合</h3>
+<div class="combo"><span class="num">1-2b-3</span> 刺拳(头) → 后直(身) → 前勾(头) <span class="desc">高→低→高，经典欺骗链</span></div>
+<div class="combo"><span class="num">1-3b-2</span> 刺拳(头) → 前勾(肝) → 后直(头)</div>
+<div class="combo"><span class="num">2b-3b-6</span> 后直(身) → 前勾(身) → 后上勾(头) <span class="desc">全打身体后炸上头</span></div>
+<div class="combo"><span class="num">1-2-3b-2</span> 刺拳 → 后直 → 前勾(肝) → 后直 <span class="desc">井上尚弥招牌连击</span></div>
+
+<h3>Level 5 — 防守反击组合</h3>
+<div class="combo"><span class="num">Slip → 2-3</span> 侧闪 → 后直 → 前勾 <span class="desc">闪开刺拳后反击</span></div>
+<div class="combo"><span class="num">Parry → 2</span> 拍挡 → 后直 <span class="desc">拍掉刺拳直接后直</span></div>
+<div class="combo"><span class="num">Duck → 5-2</span> 下潜 → 前上勾 → 后直 <span class="desc">躲勾拳后反击</span></div>
+<div class="combo"><span class="num">Pull → 1-2</span> 后撤 → 刺拳 → 后直 <span class="desc">后撤创造距离后反攻</span></div>
+
+<div class="card tip">
+  <h4>💡 组合训练原则</h4>
+  <p>不要在沙袋上随机打拳。每回合只练 <strong>1-2 个组合</strong>，重复 50-80 次。先慢后快，先把流畅度搞定，速度是最后才加的东西。一个流畅的慢组合好过十个乱七八糟的快组合。</p>
+</div>
+</section>
+
+<!-- ═══════════════════ RHYTHM ═══════════════════ -->
+<section id="rhythm">
+<h2><span class="icon">🎵</span> 节奏与时机</h2>
+
+<h3>什么是节奏</h3>
+<p>节奏 = 出拳的时间间隔模式。人类本能会适应固定节奏。打破节奏 = 创造机会。</p>
+
+<div class="table-wrap">
+<table>
+  <tr><th>节奏类型</th><th>例子</th><th>效果</th></tr>
+  <tr><td><strong>匀速</strong></td><td>1…2…1…2…</td><td>容易被预判，但可作为"设伏"用</td></tr>
+  <tr><td><strong>加速</strong></td><td>1..2..12..1212!</td><td>逐渐加速让对手跟不上</td></tr>
+  <tr><td><strong>断奏</strong></td><td>1……1-2!…………1</td><td>长时间静默后突然爆发，最难防</td></tr>
+  <tr><td><strong>切分</strong></td><td>1-2…3…………2!</td><td>在"不该出拳的拍子"出拳</td></tr>
+</table>
+</div>
+
+<h3>时机是什么</h3>
+<p>时机 = 在对手最脆弱的那一瞬间出手。几个黄金时机窗口：</p>
+<ul>
+  <li><strong>对手出拳时</strong> — 他伸拳 = 他那一侧暴露</li>
+  <li><strong>对手收拳时</strong> — 收回来的路上，他的防守还没归位</li>
+  <li><strong>对手呼吸间隙</strong> — 刚组合打完有个换气停顿</li>
+  <li><strong>对手步法落地瞬间</strong> — 脚刚落地那一刻重心最稳也最僵</li>
+  <li><strong>对手眨眼/视线转移</strong> — 眼睛不看你的那一瞬间</li>
+</ul>
+
+<div class="card info">
+  <h4>🔑 发展时机感的练习</h4>
+  <ul>
+    <li><strong>双人节奏 drill：</strong> 一人出刺拳，你练习在他刺拳收回时出刺拳</li>
+    <li><strong>沙袋摆荡：</strong> 推沙袋让它荡回来，在沙袋向你靠近时出拳（模拟对手进入）</li>
+    <li><strong>跳绳变速：</strong> 30秒慢 → 30秒快 → 30秒双摇，训练节奏切换本能</li>
+    <li><strong>看比赛时"点节奏"：</strong> 自己用手指敲桌子跟上拳手的出拳节奏</li>
+  </ul>
+</div>
+</section>
+
+<!-- ═══════════════════ SHADOW BOXING ═══════════════════ -->
+<section id="shadowbox">
+<h2><span class="icon">🪞</span> 空击套路</h2>
+<p>职业拳手每天空击可能比打沙袋还多。空击不是"随便比划"，是有目的的技术打磨。</p>
+
+<div class="card">
+  <h4>🔹 短版热身（5min）</h4>
+  <ol>
+    <li><strong>1min：</strong>慢速基础拳法逐一检查（Jab → Cross → Hook → Uppercut），纠动作</li>
+    <li><strong>1min：</strong>步法移动 + 刺拳（前后左右绕圈，保持站架）</li>
+    <li><strong>1min：</strong>1-2 组合 + 头部移动，每打完立刻移动</li>
+    <li><strong>1min：</strong>自由组合，加防守动作</li>
+    <li><strong>1min：</strong>全速输出（模拟最后一回合）</li>
+  </ol>
+</div>
+
+<div class="card">
+  <h4>🔹 标准版（12min：4R×3min）</h4>
+  <ol>
+    <li><strong>R1 — 技术：</strong>慢动作只打1-2和1-2-3。关注每次转髋、回收、下巴位置</li>
+    <li><strong>R2 — 步法：</strong>移动中出拳。重点是出拳瞬间脚下稳定，打完立刻挪</li>
+    <li><strong>R3 — 防反：</strong>模拟对手来拳→防守→反击（Slip-2-3 / Parry-2 / Duck-5-2）</li>
+    <li><strong>R4 — 自由：</strong>全速混合所有技术，每 30 秒换一种节奏</li>
+  </ol>
+</div>
+
+<div class="card">
+  <h4>🔹 长版专项（20min）</h4>
+  <p>标准版 12min + 以下两项：</p>
+  <ul>
+    <li><strong>R5（4min）：</strong>身体打击专项 — 每一拳后接一个身体拳，练高低切换</li>
+    <li><strong>R6（4min）：</strong>条件限制 — 只用前手 / 只能防不能还 / 只能在"绳边"打</li>
+  </ul>
+</div>
+</section>
+
+<!-- ═══════════════════ STYLES ═══════════════════ -->
+<section id="styles">
+<h2><span class="icon">🎭</span> 拳击风格流派</h2>
+<p>了解不同风格，有助于你找到自己的方向，也方便在实战中识别对手类型。</p>
+
+<div class="style-grid">
+  <div class="style-card">
+    <h4>🥊 外线拳手 Out-Boxer</h4>
+    <div class="subtitle">代表：Floyd Mayweather, Larry Holmes, Oleksandr Usyk</div>
+    <p>利用步伐和刺拳在远距离控制比赛。打点得分、极少受伤。核心能力：步法 + 刺拳 + 距离感。</p>
+  </div>
+  <div class="style-card">
+    <h4>💣 重炮手 Slugger / Puncher</h4>
+    <div class="subtitle">代表：Deontay Wilder, Julian Jackson, George Foreman</div>
+    <p>一拳定胜负。不追求点数，追求 KO。步法可能粗糙但力量恐怖。对体能和时机要求极高——因为重拳很耗体力。</p>
+  </div>
+  <div class="style-card">
+    <h4>🔥 压迫型 Swarmer / Pressure</h4>
+    <div class="subtitle">代表：Julio César Chávez, Joe Frazier, Gennady Golovkin</div>
+    <p>不断前压、高频出拳、身体打击凶狠。让对方无法喘息。需要超强体能和"能吃拳"的下巴。</p>
+  </div>
+  <div class="style-card">
+    <h4>🎯 全能型 Boxer-Puncher</h4>
+    <div class="subtitle">代表：Manny Pacquiao, Canelo Alvarez, Naoya Inoue</div>
+    <p>兼具外线技术和重拳能力，能根据对手切换打法。最全面但也最难——你需要什么都会。</p>
+  </div>
+  <div class="style-card">
+    <h4>🥋 反击型 Counter-Puncher</h4>
+    <div class="subtitle">代表：Juan Manuel Márquez, Canelo, James Toney</div>
+    <p>等对手先出手，利用防守+反击得分。极其依赖时机感和预判。看起来"被动"，但反击往往最致命。</p>
+  </div>
+  <div class="style-card">
+    <h4>🇨🇺 古巴/苏联体系</h4>
+    <div class="subtitle">代表：Vasiliy Lomachenko, Guillermo Rigondeaux, Bivol</div>
+    <p>业余拳击背景深厚，步法极其灵动，经常切换正反架。强调角度创造和"打了就跑"的移动。</p>
+  </div>
+</div>
+
+<div class="card tip">
+  <h4>💡 你现在不需要"选风格"</h4>
+  <p>20 节课的阶段，你的风格还没成型——这反而是好事。什么都试一试，让教练帮你发现你的身体条件（臂展、速度、力量）更适配什么风格。风格是练出来的，不是选出来的。</p>
+</div>
+</section>
+
+<!-- ═══════════════════ MISTAKES ═══════════════════ -->
+<section id="mistakes">
+<h2><span class="icon">🔧</span> 常见错误自查</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>错误</th><th>表现</th><th>怎么改</th></tr>
+  <tr><td>下巴上抬</td><td>出拳时下巴离开胸口</td><td>空击时下巴夹网球练习；或想象下巴压着一个鸡蛋</td></tr>
+  <tr><td>不收拳</td><td>拳打出去后停在前面或掉下来</td><td>出拳后原路收回防守位；沙袋训练强制回收</td></tr>
+  <tr><td>刺拳肘外翻</td><td>刺拳时肘向外张开变"推"</td><td>面对墙壁练刺拳，肘擦墙走</td></tr>
+  <tr><td>后直不转脚</td><td>只用上半身，拳无力</td><td>慢动作刻意练后脚→髋→肩的传导链</td></tr>
+  <tr><td>勾拳幅度过大</td><td>手臂甩太开像挥棒球棒</td><td>贴墙练勾拳，肘贴身走最短弧线</td></tr>
+  <tr><td>步法交叉</td><td>双脚交叉，重心瞬间不稳</td><td>绳梯训练，永远移动脚先动</td></tr>
+  <tr><td>憋气出拳</td><td>出拳时屏息，两拳后就没体力</td><td>每次出拳配合短促"嘶"声呼气</td></tr>
+  <tr><td>盯着对方拳看</td><td>视线追拳，反应总慢半拍</td><td>练习看胸部/锁骨，用余光感知来拳</td></tr>
+  <tr><td>重心过高</td><td>膝盖太直像站着打</td><td>空击时想象坐高脚凳，始终保持微屈膝</td></tr>
+  <tr><td>组合间停顿过长</td><td>打一拳看一下反应再打</td><td>用节拍器或音乐练组合连续性</td></tr>
+</table>
+</div>
+</section>
+
+<!-- ═══════════════════ PLAN ═══════════════════ -->
+<section id="plan">
+<h2><span class="icon">📋</span> 每周训练计划</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>星期</th><th>类型</th><th>核心内容</th><th>时长</th></tr>
+  <tr><td>周一</td><td><span class="tag tag-red">私教</span></td><td>新技术学习 + 针对性纠错 + 条件实战</td><td>60-90min</td></tr>
+  <tr><td>周二</td><td><span class="tag tag-gray">恢复</span></td><td>拉伸、泡沫轴、散步。让身体修复</td><td>15-20min</td></tr>
+  <tr><td>周三/四</td><td><span class="tag tag-teal">自主训练</span></td><td>空击 + 沙袋 + 跳绳 + 体能（见下方菜单）</td><td>60-75min</td></tr>
+  <tr><td>周五</td><td><span class="tag tag-gray">完全休息</span></td><td>不做训练。肌肉和神经都需要恢复</td><td>—</td></tr>
+  <tr><td>周六</td><td><span class="tag tag-red">私教</span></td><td>复习 + 组合进阶 + 轻实战</td><td>60-90min</td></tr>
+  <tr><td>周日</td><td><span class="tag tag-gray">休息</span></td><td>睡个好觉</td><td>—</td></tr>
+</table>
+</div>
+
+<h3>自主训练菜单（周三/四任选）</h3>
+<div class="card">
+  <h4>🔹 版本A：体能偏重（60min）</h4>
+  <ol>
+    <li>跳绳 3R×3min（间歇 1min）</li>
+    <li>空击 3R×3min（专注步法+组合）</li>
+    <li>沙袋 3R×3min（重拳/节奏变化）</li>
+    <li>核心：仰卧起坐 3×20、俄罗斯转体 3×20、平板支撑 3×45s</li>
+    <li>腿：自重深蹲 3×20、弓步蹲 3×15/腿</li>
+    <li>拉伸 5-10min</li>
+  </ol>
+</div>
+<div class="card">
+  <h4>🔹 版本B：技术偏重（75min）</h4>
+  <ol>
+    <li>跳绳 2R×3min</li>
+    <li>镜子空击 4R×3min（慢速打磨动作细节）</li>
+    <li>沙袋组合专项 4R×3min（每回合只练 1-2 个组合，大量重复）</li>
+    <li>步法绳梯/锥桶 10min</li>
+    <li>防守反应训练（网球抛接/反应球）5min</li>
+    <li>拉伸收尾</li>
+  </ol>
+</div>
+
+<h3>月度主题轮换</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>月</th><th>主题</th><th>重点</th></tr>
+  <tr><td>1</td><td>基础巩固</td><td>站架、直拳质量、步法稳定、防守意识</td></tr>
+  <tr><td>2</td><td>组合进攻</td><td>2-4 拳组合流畅度、进出距离、节奏变化</td></tr>
+  <tr><td>3</td><td>防守反击</td><td>拍挡反击、闪躲反击、迎击时机感</td></tr>
+  <tr><td>4</td><td>压力与控制</td><td>前压、围绳战术、体能分配</td></tr>
+</table>
+</div>
+</section>
+
+<!-- ═══════════════════ WARMUP ═══════════════════ -->
+<section id="warmup">
+<h2><span class="icon">🔥</span> 热身流程</h2>
+<p>别再"随便跳两下"了。一套标准化的热身让你训练质量提升 30%。</p>
+
+<div class="card">
+  <h4>标准热身（10-12min）</h4>
+  <ol>
+    <li><strong>全身激活（2min）：</strong>开合跳 30s + 高抬腿 30s + 原地小跑 1min</li>
+    <li><strong>关节活动（3min）：</strong>颈→肩→腕→髋→膝→踝，每个关节 30s 绕环。重点是肩和髋</li>
+    <li><strong>动态拉伸（3min）：</strong>弓步转体、腿摆动（前后+侧向）、猫牛式、肩胛激活</li>
+    <li><strong>跳绳（3min）：</strong>激活脚掌弹性和全身协调。可以 1min 慢 + 1min 快 + 1min 自由</li>
+    <li><strong>空击轻量（1min）：</strong>慢速出拳，检查今天身体状态</li>
+  </ol>
+</div>
+
+<div class="card info">
+  <h4>🚫 热身禁忌</h4>
+  <ul>
+    <li>不要静态拉伸（压腿、拉筋）→ 练完再做</li>
+    <li>不要一上来就全力 → 身体还没准备好</li>
+    <li>不要跳过热身 → 肩关节伤病很多跟热身不足有关</li>
+  </ul>
+</div>
+</section>
+
+<!-- ═══════════════════ CONDITIONING ═══════════════════ -->
+<section id="conditioning">
+<h2><span class="icon">💪</span> 体能专项</h2>
+
+<h3>拳击体能的关键理解</h3>
+<p>拳击不是马拉松，是<strong>间歇性爆发运动</strong>：3 分钟高强度 + 1 分钟休息，循环。你的体能训练应该模仿这个模式，而不是去跑 10 公里。</p>
+
+<h3>必练项目</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>项目</th><th>为什么重要</th><th>怎么练</th></tr>
+  <tr><td><strong>跳绳</strong></td><td>脚掌弹性、节奏感、协调性</td><td>3R×3min，间歇 1min；逐步加回合</td></tr>
+  <tr><td><strong>波比跳</strong></td><td>全身爆发 + 心肺模拟实战强度</td><td>20s 全力 + 10s 休息 × 8 组（Tabata）</td></tr>
+  <tr><td><strong>核心训练</strong></td><td>所有拳法力量都通过核心传递</td><td>平板、俄罗斯转体、死虫式、悬挂举腿</td></tr>
+  <tr><td><strong>颈部强化</strong></td><td>抗震荡能力。职业拳手的必修课</td><td>颈部桥（谨慎）、弹力带颈部对抗、点头/转头阻力训练</td></tr>
+  <tr><td><strong>腿部力量</strong></td><td>步法移动、发力根基</td><td>深蹲、弓步、保加利亚分腿蹲</td></tr>
+  <tr><td><strong>肩部耐力</strong></td><td>手举着护下巴 3 分钟比你想的累</td><td>持轻哑铃（1-2kg）保持防守姿势 2-3min</td></tr>
+</table>
+</div>
+
+<div class="card tip">
+  <h4>💡 体能训练的黄金法则</h4>
+  <p><strong>练拳击体能≠练健美。</strong>你想要的是功能性力量——爆发力、耐力、旋转力量——不是大块肌肉。自重训练 + 弹力带 + 跳绳 > 卧推 + 二头弯举。每次力量训练后，加一组"疲劳空击"（练完力量立刻打 2 分钟空击），这才是拳击体能。</p>
+</div>
+</section>
+
+<!-- ═══════════════════ NUTRITION ═══════════════════ -->
+<section id="nutrition">
+<h2><span class="icon">🍎</span> 营养与恢复</h2>
+
+<div class="card info">
+  <h4>练前（1-2小时）</h4>
+  <ul><li>碳水为主：香蕉、燕麦、全麦面包</li><li>适量蛋白：鸡蛋、酸奶</li><li>避免大量脂肪（消化慢、影响训练状态）</li></ul>
+</div>
+<div class="card info">
+  <h4>练后（30-60min 黄金窗口）</h4>
+  <ul><li>蛋白质 20-30g：鸡胸、鱼肉、蛋白粉</li><li>碳水补充：红薯、米饭、水果</li><li>补水至少 500-750ml</li></ul>
+</div>
+
+<h3>恢复金字塔</h3>
+<div class="steps">
+  <li><strong>睡眠（基石）</strong> — 7-9 小时。比任何营养补剂都重要。深睡时生长激素分泌、身体修复</li>
+  <li><strong>营养</strong> — 蛋白质 + 碳水 + 水。缺一不可</li>
+  <li><strong>主动恢复</strong> — 散步、轻度游泳、瑜伽。促进血液循环但不增加疲劳</li>
+  <li><strong>物理手段</strong> — 泡沫轴（每块肌肉 30-60s）、冰敷（关节/软组织急性酸痛时 15min）</li>
+</div>
+
+<div class="card warn">
+  <h4>⚠️ 伤病预警信号</h4>
+  <ul>
+    <li><strong>手腕/拳峰持续疼痛</strong> → 检查缠手和拳面是否正确</li>
+    <li><strong>肩关节弹响+疼痛</strong> → 可能肩袖问题，减少大幅度摆拳</li>
+    <li><strong>头晕/恶心/视力模糊</strong> → 可能脑震荡迹象，立即停，就医</li>
+    <li><strong>肋骨刺痛</strong> → 可能骨裂，别硬扛</li>
+    <li><strong>拇指扭伤</strong> → 常见于勾拳握拳错误</li>
+  </ul>
+  <p style="margin-top:8px;"><strong>原则：关节痛 = 停。肌肉酸 = 可以继续。拿不准就休息，休息一天不会退步，带伤训练会倒退一个月。</strong></p>
+</div>
+</section>
+
+<!-- ═══════════════════ GEAR ═══════════════════ -->
+<section id="gear">
+<h2><span class="icon">🧤</span> 装备指南</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>装备</th><th>推荐</th><th>说明</th></tr>
+  <tr>
+    <td><strong>拳套</strong></td>
+    <td>沙袋用 12-14oz；实战用 16oz</td>
+    <td>入门品牌：Fairtex、Twins、Venum、Title。oz 越大缓冲越好。别光图便宜——保护你的手</td>
+  </tr>
+  <tr>
+    <td><strong>缠手带</strong></td>
+    <td>墨西哥式（弹力）180 英寸</td>
+    <td>保护拳峰 + 手腕稳定。学一种缠法并每次都一致。比拳套本身更重要</td>
+  </tr>
+  <tr>
+    <td><strong>护齿</strong></td>
+    <td>定制最佳，其次 boil-and-bite</td>
+    <td>任何实战必须戴。为上排牙定制，确保呼吸通畅</td>
+  </tr>
+  <tr>
+    <td><strong>头盔</strong></td>
+    <td>Full-face 或 Open-face</td>
+    <td>实战必备。不防脑震荡（别误会），但防割伤/擦伤/眉骨裂</td>
+  </tr>
+  <tr>
+    <td><strong>护裆</strong></td>
+    <td>拳击专用护裆</td>
+    <td>硬实战和比赛必戴。训练中意外时有发生</td>
+  </tr>
+  <tr>
+    <td><strong>拳击鞋</strong></td>
+    <td>高帮拳击鞋</td>
+    <td>等训练稳定后再买。提供脚踝支撑和 pivot 灵活性。比跑鞋安全得多</td>
+  </tr>
+  <tr>
+    <td><strong>跳绳</strong></td>
+    <td>钢丝速度绳或皮质拳击绳</td>
+    <td>PVC 绳入门即可。别用太轻的——你需要在手腕上感受到它</td>
+  </tr>
+</table>
+</div>
+
+<div class="card tip">
+  <h4>💡 装备优先级</h4>
+  <p><strong>缠手带 > 拳套 > 护齿 > 头盔 > 护裆 > 拳击鞋。</strong> 好的缠手带和拳套是对自己手的投资。手伤了 = 什么都练不了。</p>
+</div>
+</section>
+
+<!-- ═══════════════════ COACH ═══════════════════ -->
+<section id="coach">
+<h2><span class="icon">❓</span> 问教练的好问题</h2>
+<p>很多学员花大钱上私教却不知道问什么。以下问题能让每节课效率翻倍：</p>
+
+<div class="card blue">
+  <h4>技术类</h4>
+  <ul>
+    <li>"我刚才那个刺拳，回收的速度对吗？哪里可以更快？"</li>
+    <li>"我的后直转髋到位了吗？帮我看看我的脚。"</li>
+    <li>"这个组合我哪里最不流畅？你帮我慢动作拆一遍。"</li>
+    <li>"我在什么距离最适合出这个组合？远了会怎样？"</li>
+  </ul>
+</div>
+
+<div class="card blue">
+  <h4>理解类（帮你建立拳击思维）</h4>
+  <ul>
+    <li>"如果对手一直用刺拳点我，我有什么选择？"</li>
+    <li>"你觉得我现在最大的短板是什么？下个月该重点练什么？"</li>
+    <li>"跟我体型差不多的拳手，有哪些值得我学习？"</li>
+    <li>"刚才实战里那个情况，我应该怎么处理？"</li>
+  </ul>
+</div>
+
+<div class="card blue">
+  <h4>实用类</h4>
+  <ul>
+    <li>"这周我自己训练的时候，最该练什么？给一个重点就行。"</li>
+    <li>"帮我录一段我打沙袋的视频，对比着给我讲。"</li>
+  </ul>
+</div>
+
+<div class="card tip">
+  <h4>💡 一个好习惯</h4>
+  <p>每节课前想好 <strong>一个</strong> 要问的问题。不用多，一个就够了。带着问题去上课，比空着脑子去强十倍。</p>
+</div>
+</section>
+
+<!-- ═══════════════════ LEGAL ═══════════════════ -->
+<section id="legal">
+<h2><span class="icon">⚖️</span> 街头自卫：法律边界</h2>
+
+<div class="card warn">
+  <h4>⚠️ 核心原则</h4>
+  <p>你有拳击训练经历，在司法实践中可能被视为<strong>「具有特殊格斗技能」</strong>，一旦动手法律上对你不利。<strong>拳击技术是最后防线，不是第一选择。</strong></p>
+</div>
+
+<h3>中国大陆正当防卫框架</h3>
+<ul>
+  <li><strong>《刑法》第20条：</strong>为使本人或他人的人身、财产等免受<strong>正在进行</strong>的不法侵害，采取制止行为 → 正当防卫，不负刑事责任</li>
+  <li><strong>防卫过当：</strong>明显超过必要限度造成重大损害 → 应负刑责但减轻或免除</li>
+  <li><strong>特殊防卫：</strong>对行凶、杀人、抢劫、强奸、绑架等严重危及人身安全的暴力犯罪 → 造成伤亡不负刑责</li>
+</ul>
+
+<div class="card warn">
+  <h4>⚡ 四条生死线</h4>
+  <ul>
+    <li><strong>对方停了你必须停</strong> — 追击 = 故意伤害，不是防卫</li>
+    <li><strong>对方空手你用武器</strong> — 可能被认定为防卫过当</li>
+    <li><strong>口角挑衅后动手</strong> — 不算"不法侵害正在发生" → 互殴</li>
+    <li><strong>能跑不跑</strong> — 法律鼓励逃避而非对抗。跑了再报警是最优解</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h4>武力使用决策链</h4>
+  <div class="steps">
+    <li><strong>能跑吗？</strong> → 跑（零法律风险，最优选择）</li>
+    <li><strong>能降级吗？</strong> → 语言缓和、道歉（哪怕不是你的错）、离开</li>
+    <li><strong>只是推搡？</strong> → 继续降级或离开，不要升级成拳脚</li>
+    <li><strong>持械 / 多人 / 威胁生命？</strong> → 这才是可以动手的底线</li>
+  </div>
+</div>
+</section>
+
+<!-- ═══════════════════ DE-ESCALATION ═══════════════════ -->
+<section id="deescalation">
+<h2><span class="icon">🗣️</span> 冲突降级</h2>
+
+<div class="card tip">
+  <h4>语言降级话术（学会这些，比后手直拳更有用）</h4>
+  <ul>
+    <li>"兄弟，不好意思，我不该……（承认"错误"，给对方台阶）"</li>
+    <li>"你说得对，我这就走。"</li>
+    <li>"没必要闹大，警察来了对谁都不好。"（第三方威慑）</li>
+    <li>"我家里人在等，先走了。"（示弱 + 合理离开理由）</li>
+  </ul>
+</div>
+
+<div class="card info">
+  <h4>非语言降级</h4>
+  <ul>
+    <li><strong>手掌摊开前伸</strong> — "我没有威胁"的通用信号</li>
+    <li><strong>保持一臂以上距离</strong></li>
+    <li><strong>避免长时间直视</strong> — 在某些文化中是挑衅。看鼻梁或胸口</li>
+    <li><strong>侧身站立</strong> — 减小正面面积，同时方便移动</li>
+    <li><strong>动作缓慢</strong> — 任何突然动作都可能被解读为攻击</li>
+  </ul>
+</div>
+</section>
+
+<!-- ═══════════════════ STREET TECH ═══════════════════ -->
+<section id="street-tech">
+<h2><span class="icon">🛡️</span> 街头实战技术</h2>
+
+<div class="card warn">
+  <h4>⚠️ 街头 ≠ 擂台</h4>
+  <ul>
+    <li>没有拳套 → 你的手骨远比对方头骨脆弱</li>
+    <li>没有裁判 → 倒地后可能被踢头</li>
+    <li>没有回合 → 10 秒内决定胜负</li>
+    <li>没有规则 → 对方可能有刀、有朋友</li>
+    <li>有监控/目击者 → 你的一切行为会被法庭逐帧审查</li>
+  </ul>
+</div>
+
+<h3>拳击技术的街头适配</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>技术</th><th>擂台用法</th><th>街头调整</th></tr>
+  <tr><td>站架</td><td>拳套护脸、明显格斗姿态</td><td>手放低更自然，掌心可朝前——既是"别过来"信号也是战斗姿态</td></tr>
+  <tr><td>刺拳</td><td>拳峰击打面部</td><td>改为<strong>掌底推击</strong>（Palm Strike）→ 保护手骨，法律上也更像"推开"</td></tr>
+  <tr><td>直拳</td><td>打头部</td><td><strong>打身体</strong>：腹部、胸骨、软肋。打脸极易伤手（拳峰 vs 牙齿=你输）</td></tr>
+  <tr><td>勾拳</td><td>中距离弧线</td><td>不推荐 → 容易被抓/抱摔。只在贴身缠斗中考虑短勾打身体</td></tr>
+  <tr><td>上勾拳</td><td>近身打下巴</td><td><strong>身体上勾是最优拳法</strong>：打腹部/胃部→瞬间丧失战斗意志、不伤手</td></tr>
+  <tr><td>防守</td><td>高护/拍挡/闪躲</td><td>改为<strong>控距+护头</strong>：前手探出保持距离，后手护下巴</td></tr>
+</table>
+</div>
+
+<h3>打击目标优先级（街头版）</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>优先级</th><th>目标</th><th>效果</th><th>你的风险</th></tr>
+  <tr><td style="color:var(--accent3)">🥇 第一</td><td><strong>膝盖侧向踢击</strong></td><td>立即丧失移动能力</td><td>低</td></tr>
+  <tr><td style="color:var(--accent3)">🥈 第二</td><td><strong>腹部/胃部重击</strong></td><td>剧痛、呼吸困难、战斗意志崩溃</td><td>低</td></tr>
+  <tr><td style="color:var(--accent3)">🥉 第三</td><td><strong>肝区（右肋下）</strong></td><td>剧痛、瞬间无力、跪地</td><td>低</td></tr>
+  <tr><td>第四</td><td>下巴侧面</td><td>可能 KO</td><td>中（伤手）</td></tr>
+  <tr><td>第五</td><td>鼻子</td><td>大量流泪、视线模糊</td><td>中</td></tr>
+  <tr><td style="color:var(--accent)">最后</td><td>面部/头部</td><td>威慑</td><td>高（对你和对方法律上都是）</td></tr>
+</table>
+</div>
+
+<div class="card warn">
+  <h4>⚡ 记住两件事</h4>
+  <p><strong>① 身体 > 头部。</strong>让对方痛到停手，比把对方打晕在法律上安全得多。</p>
+  <p><strong>② 打完就跑。</strong>一旦对方失去攻击能力，立刻撤离，报警备案（抢占先机，证明你是防卫方）。</p>
+</div>
+</section>
+
+<!-- ═══════════════════ LANDSCAPE ═══════════════════ -->
+<section id="landscape">
+<h2><span class="icon">🌍</span> 格斗流派总览</h2>
+
+<h3>打击系（Striking）</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>流派</th><th>起源</th><th>武器</th><th>特点</th><th>规模</th></tr>
+  <tr><td><strong>拳击 Boxing</strong></td><td>英美</td><td>双拳</td><td>步法最精、拳法最纯、防守体系最成熟</td><td>⭐⭐⭐⭐⭐</td></tr>
+  <tr><td><strong>泰拳 Muay Thai</strong></td><td>泰国</td><td>拳+腿+膝+肘</td><td>"八肢艺术"，膝肘极凶，胫骨硬如铁</td><td>⭐⭐⭐⭐</td></tr>
+  <tr><td><strong>踢拳 Kickboxing</strong></td><td>日本/荷兰</td><td>拳+腿</td><td>K-1 规则快节奏；荷式重低扫</td><td>⭐⭐⭐⭐</td></tr>
+  <tr><td><strong>跆拳道 TKD</strong></td><td>韩国</td><td>腿法为主</td><td>奥运项目，高踢华丽但拳法弱</td><td>⭐⭐⭐⭐⭐</td></tr>
+  <tr><td><strong>空手道 Karate</strong></td><td>冲绳/日本</td><td>拳+腿</td><td>流派多（松涛馆、极真），极真无护具实战</td><td>⭐⭐⭐⭐</td></tr>
+  <tr><td><strong>散打 Sanda</strong></td><td>中国</td><td>拳+腿+摔</td><td>踢打摔结合，摔法是区分点</td><td>⭐⭐⭐</td></tr>
+  <tr><td><strong>萨瓦特 Savate</strong></td><td>法国</td><td>拳+穿鞋腿法</td><td>穿鞋踢腿精准优雅，小众</td><td>⭐</td></tr>
+</table>
+</div>
+
+<h3>缠斗系（Grappling）</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>流派</th><th>起源</th><th>核心</th><th>特点</th><th>规模</th></tr>
+  <tr><td><strong>巴西柔术 BJJ</strong></td><td>巴西（源:日本柔道）</td><td>地面降服</td><td>杠杆以弱胜强，位置+关节技+绞技</td><td>⭐⭐⭐⭐</td></tr>
+  <tr><td><strong>摔跤 Wrestling</strong></td><td>全球多源</td><td>摔+地面控制</td><td>自由式/古典式奥运项目，压制力极强</td><td>⭐⭐⭐⭐⭐</td></tr>
+  <tr><td><strong>柔道 Judo</strong></td><td>日本</td><td>投技+地面</td><td>奥运项目，利用重心失衡摔投</td><td>⭐⭐⭐⭐</td></tr>
+  <tr><td><strong>桑搏 Sambo</strong></td><td>前苏联</td><td>摔+关节技</td><td>军用格斗，腿锁独步天下</td><td>⭐⭐</td></tr>
+  <tr><td><strong>中国跤</strong></td><td>中国</td><td>站立摔</td><td>快摔为主，倒地即分</td><td>⭐</td></tr>
+</table>
+</div>
+
+<h3>对你（拳击手）的建议：需要补充什么</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>短板</th><th>原因</th><th>基础对策</th></tr>
+  <tr><td>防摔</td><td>拳击不练防抱腿摔</td><td>学基础 Sprawl（压胯防摔）+ 起身</td></tr>
+  <tr><td>防腿</td><td>不习惯低扫和踢击</td><td>学基础 Check（提膝格挡低扫）</td></tr>
+  <tr><td>近身缠斗</td><td>拳击 Clinch 不涉及摔膝</td><td>了解泰拳箍颈和膝击</td></tr>
+  <tr><td>地面生存</td><td>拳击倒地即停</td><td>学最基础的 Guard → 起立</td></tr>
+</table>
+</div>
+</section>
+
+<!-- ═══════════════════ ORGS ═══════════════════ -->
+<section id="orgs">
+<h2><span class="icon">🏟️</span> 赛事组织与生态</h2>
+
+<h3>职业拳击四大组织</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>组织</th><th>成立</th><th>腰带</th><th>代表拳王</th></tr>
+  <tr><td><strong>WBC</strong></td><td>1963</td><td>绿色金腰带，声望最高</td><td>泰森、梅威瑟、阿瓦雷兹、井上尚弥</td></tr>
+  <tr><td><strong>WBA</strong></td><td>1921</td><td>历史最久，有超级/常规之分</td><td>阿里、刘易斯</td></tr>
+  <tr><td><strong>IBF</strong></td><td>1983</td><td>规则最严，强制挑战制度严格</td><td>霍普金斯、小克里琴科</td></tr>
+  <tr><td><strong>WBO</strong></td><td>1988</td><td>年轻但影响力持续上升</td><td>帕奎奥、克劳福德</td></tr>
+</table>
+</div>
+
+<h3>MMA 主要赛事</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>赛事</th><th>特点</th></tr>
+  <tr><td><strong>UFC</strong></td><td>绝对霸主，全球最大 MMA 组织，Las Vegas 总部</td></tr>
+  <tr><td><strong>ONE Championship</strong></td><td>亚洲最大，新加坡总部，兼含踢拳和泰拳赛事</td></tr>
+  <tr><td><strong>PFL</strong></td><td>赛季制+季后赛，百万美元奖金</td></tr>
+  <tr><td><strong>Rizin FF</strong></td><td>日本，延续 Pride 传统，足球场级场面</td></tr>
+</table>
+</div>
+
+<h3>中国格斗生态</h3>
+<ul>
+  <li><strong>武林风、昆仑决、勇士的荣耀</strong> — 站立格斗三大赛事</li>
+  <li><strong>UFC 中国赛</strong>（UFC Fight Night）— 已在上海/深圳/北京举办</li>
+  <li><strong>JCK 战觉城</strong> — 中国 MMA 人才培养基地</li>
+  <li><strong>张志磊</strong> — 中国职业拳击目前最亮的星（WBO 过渡重量级拳王）</li>
+</ul>
+</section>
+
+<!-- ═══════════════════ WATCHLIST ═══════════════════ -->
+<section id="watchlist">
+<h2><span class="icon">🎬</span> 观赛清单</h2>
+
+<h3>必看经典（拳击）</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>比赛</th><th>年</th><th>看点</th></tr>
+  <tr><td>Ali vs Frazier III — "Thrilla in Manila"</td><td>1975</td><td>意志力的极限、身体打击的毁灭性</td></tr>
+  <tr><td>Hagler vs Hearns</td><td>1985</td><td>第一回合即战争，史上最暴烈三回合</td></tr>
+  <tr><td>Leonard vs Hagler</td><td>1987</td><td>战术大师级表演，步法教科书</td></tr>
+  <tr><td>Gatti vs Ward I</td><td>2002</td><td>纯粹的勇气和身体打击</td></tr>
+  <tr><td>Mayweather vs Canelo</td><td>2013</td><td>防守大师如何化解年轻重炮手</td></tr>
+  <tr><td>Pacquiao vs Marquez IV</td><td>2012</td><td>反击时机的终极展示</td></tr>
+  <tr><td>Fury vs Wilder III</td><td>2021</td><td>现代重量级史诗</td></tr>
+  <tr><td>Inoue vs Donaire I</td><td>2019</td><td>小级别巅峰对决，井上封神</td></tr>
+</table>
+</div>
+
+<h3>按技术点推荐拳手</h3>
+<div class="table-wrap">
+<table>
+  <tr><th>想学什么</th><th>去看谁</th></tr>
+  <tr><td>刺拳大师</td><td>Larry Holmes, Gennady Golovkin, 井上尚弥</td></tr>
+  <tr><td>防守/步法</td><td>Floyd Mayweather, Vasiliy Lomachenko, Pernell Whitaker</td></tr>
+  <tr><td>身体打击</td><td>Canelo Alvarez, Naoya Inoue, Julio César Chávez</td></tr>
+  <tr><td>组合流畅</td><td>Manny Pacquiao, Joe Louis, Naoya Inoue</td></tr>
+  <tr><td>反击精准</td><td>Juan Manuel Márquez, Canelo, James Toney</td></tr>
+  <tr><td>压力打法</td><td>Julio César Chávez, Joe Frazier, Gennady Golovkin</td></tr>
+</table>
+</div>
+
+<h3>推荐资源</h3>
+<ul>
+  <li><strong>YouTube 频道：</strong>Precision Striking, Tony Jeffries, FightTips, Coach Anthony</li>
+  <li><strong>经典书籍：</strong>《Championship Fighting》Jack Dempsey、《Boxing》Edwin Haislet</li>
+  <li><strong>纪录片：</strong>《When We Were Kings》《The Kings of the World》</li>
+</ul>
+</section>
+
+<!-- ═══════════════════ MENTAL ═══════════════════ -->
+<section id="mental">
+<h2><span class="icon">🧠</span> 心态建设</h2>
+
+<div class="card info">
+  <h4>训练心态</h4>
+  <ul>
+    <li><strong>过程 > 结果</strong> — 关注"今天比昨天好一点"，而非"什么时候能打实战"</li>
+    <li><strong>慢就是快</strong> — 慢动作打磨是进步最快的方式。快但错误 = 练错</li>
+    <li><strong>接受平台期</strong> — 进步不是线性的。两周没感觉？正常。突破在拐角</li>
+    <li><strong>空击 ≠ 浪费时间</strong> — 顶尖拳手每天空击可能比打沙袋还多</li>
+  </ul>
+</div>
+
+<div class="card warn">
+  <h4>实战心态</h4>
+  <ul>
+    <li><strong>恐惧正常</strong> — 每个拳手都紧张。恐惧让你敏锐，不是软弱</li>
+    <li><strong>呼吸是第一技术</strong> — 紧张→屏息→快速疲劳。主动慢慢吐气</li>
+    <li><strong>被打不可怕</strong> — 越怕被打身体越僵，越容易被打。放松才有速度</li>
+    <li><strong>不确定就出刺拳</strong> — 刺拳是你的"雷达"，帮你搞清楚状况</li>
+  </ul>
+</div>
+
+<div class="card tip">
+  <h4>💡 拳击是下棋</h4>
+  <p>不是比谁更能扛，是比谁更能<strong>读到对方</strong>。每一拳都是信息（刺拳探距、假动作看反应），根据信息做决策。当你在"想"着打而不是"蛮"着打时，已经超越了 80% 的练习者。</p>
+</div>
+</section>
+
+<!-- ═══════════════════ SPARRING ═══════════════════ -->
+<section id="sparring">
+<h2><span class="icon">🤝</span> 实战分级指南</h2>
+
+<div class="table-wrap">
+<table>
+  <tr><th>级别</th><th>强度</th><th>目的</th><th>大约何时开始</th></tr>
+  <tr><td><strong>技术对练</strong></td><td>20-30%</td><td>在慢速中实践新技术</td><td>有基础拳法和防守后</td></tr>
+  <tr><td><strong>条件实战</strong></td><td>40-60%</td><td>限制条件（只用刺拳/一攻一防）</td><td>技术对练熟练后</td></tr>
+  <tr><td><strong>自由实战</strong></td><td>70-80%</td><td>模拟比赛节奏</td><td>约 6 个月系统训练后，教练在场</td></tr>
+  <tr><td><strong>硬实战</strong></td><td>90-100%</td><td>比赛备战</td><td>赛前 2-3 周，严控回合数</td></tr>
+</table>
+</div>
+
+<div class="card warn">
+  <h4>⚠️ 实战安全守则</h4>
+  <ul>
+    <li>永远戴护齿 + 头盔（硬实战加护裆）</li>
+    <li>教练必须在场</li>
+    <li>尊重"拍手暂停"信号</li>
+    <li>头部不适立刻停止，别硬扛</li>
+    <li>实战后不做重体能（脑部需要恢复）</li>
+    <li><strong>"轻一点"必须说出口</strong>——保护你的大脑，别不好意思</li>
+  </ul>
+</div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<hr style="border-color:var(--border);margin:48px 0 24px;">
+<p style="color:var(--text-muted);font-size:0.8rem;text-align:center;line-height:1.8;">
+  格斗修炼手册 · 持续更新中<br>
+  <em>最好的自卫术是跑得快。最好的拳法是你反复打磨的那一拳。</em>
+</p>
+
+</main>
+</body>
+</html>

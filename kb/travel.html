@@ -1,0 +1,884 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>山河行——全国旅行入门框架</title>
+<style>
+:root {
+  --bg: #faf7f0; --card: #fffef9; --text: #2c2416; --text-soft: #6b5e4a;
+  --accent: #8b5a2b; --accent2: #2e5c4e; --accent3: #b8860b;
+  --water: #3a6b8c; --mountain: #5c4033; --grass: #5a7d3c;
+  --border: #d4cbb8; --shadow: 0 1px 6px rgba(0,0,0,0.05);
+  --sidebar-w: 240px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: "Noto Serif SC","Source Han Serif SC","PingFang SC","Hiragino Sans GB","Microsoft YaHei",serif;
+  background: var(--bg); color: var(--text); line-height:1.9; font-size:16px;
+}
+.sidebar {
+  position:fixed; top:0; left:0; bottom:0; width:var(--sidebar-w);
+  background:#3a3028; color:#d4cbb8; overflow-y:auto; z-index:10;
+  padding:20px 0 32px; box-shadow:2px 0 16px rgba(0,0,0,0.2);
+}
+.sidebar h3 { padding:0 16px 12px; font-size:15px; letter-spacing:2px; color:#d4a84a; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:6px; }
+.sidebar nav a {
+  display:block; padding:6px 16px; color:#b8a88a; text-decoration:none; font-size:13px;
+  transition:all 0.2s; border-left:3px solid transparent;
+}
+.sidebar nav a:hover, .sidebar nav a.active { color:#fff; background:rgba(255,255,255,0.05); border-left-color:var(--accent3); }
+.sidebar nav a.sub { padding-left:28px; font-size:12px; }
+.main { margin-left:var(--sidebar-w); padding:40px 52px 80px; max-width:1020px; }
+h1 { font-size:34px; letter-spacing:4px; color:var(--accent); margin-bottom:4px; }
+.subtitle { font-size:15px; color:var(--text-soft); margin-bottom:32px; letter-spacing:1px; }
+section { margin-bottom:52px; scroll-margin-top:20px; }
+h2 { font-size:23px; border-bottom:2px solid var(--border); padding-bottom:8px; margin-bottom:20px; color:var(--accent); letter-spacing:2px; }
+h3 { font-size:18px; margin:24px 0 10px; color:#4a3520; }
+h4 { font-size:16px; margin:16px 0 6px; color:var(--accent2); }
+p { margin:10px 0; }
+ul, ol { padding-left:22px; margin:8px 0; }
+li { margin:4px 0; }
+
+.search-wrap {
+  position:sticky; top:0; z-index:8; background:var(--bg); padding:10px 0 14px; margin-bottom:8px;
+}
+.search-wrap input {
+  width:100%; padding:10px 16px; font-size:15px; border:2px solid var(--border); border-radius:8px;
+  background:var(--card); font-family:inherit; color:var(--text); outline:none; transition:0.2s;
+}
+.search-wrap input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(139,90,43,0.1); }
+.search-info { font-size:12px; color:var(--text-soft); margin-top:4px; display:none; }
+.search-info.visible { display:block; }
+mark { background:#f5e6c8; padding:1px 3px; border-radius:2px; }
+
+.timeline-bar {
+  display:flex; align-items:stretch; gap:0; overflow-x:auto;
+  border-top:2px solid var(--border); border-bottom:2px solid var(--border);
+  padding:0; margin:0 0 28px; position:sticky; top:52px; z-index:7;
+  background:var(--bg); scrollbar-width:thin;
+}
+.timeline-bar::-webkit-scrollbar { height:4px; }
+.tl-node {
+  flex-shrink:0; text-align:center; padding:10px 14px; font-size:13px;
+  cursor:pointer; transition:0.2s; border-bottom:3px solid transparent;
+  color:var(--text-soft); white-space:nowrap; text-decoration:none; user-select:none;
+}
+.tl-node:hover { background:#f0e8d8; color:var(--text); }
+.tl-node.active { border-bottom-color:var(--accent); color:var(--accent); font-weight:700; }
+
+.card {
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+  padding:20px 24px; margin:16px 0; box-shadow:var(--shadow);
+}
+.card h4 { margin-top:0; }
+
+.region-card {
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+  padding:24px 28px; margin:20px 0; box-shadow:var(--shadow);
+  border-top:4px solid var(--accent);
+}
+.region-card.northeast { border-top-color:#4a7c8c; }
+.region-card.north { border-top-color:#8b5a2b; }
+.region-card.northwest { border-top-color:#c4883c; }
+.region-card.southwest { border-top-color:#5a7d3c; }
+.region-card.central { border-top-color:#6b4e8c; }
+.region-card.east { border-top-color:#3a6b8c; }
+.region-card.south { border-top-color:#b85c3a; }
+
+.region-card h3 { margin:0 0 4px; font-size:20px; }
+.region-card .region-subtitle { font-size:13px; color:var(--text-soft); margin-bottom:16px; }
+
+.info-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:8px 24px; margin:12px 0;
+  font-size:14px;
+}
+.info-grid div { padding:4px 0; border-bottom:1px dotted var(--border); }
+.info-grid .label { color:var(--text-soft); font-size:12px; }
+
+.highlight-box {
+  background:#fef8e7; border-left:4px solid var(--accent3); padding:14px 18px;
+  margin:16px 0; border-radius:0 6px 6px 0; font-size:14px;
+}
+
+.paradigm-tag {
+  display:inline-block; padding:3px 10px; border-radius:4px; font-size:12px;
+  margin-right:6px; margin-bottom:4px; background:#f0e8d8; color:var(--accent);
+}
+
+.route-row { display:flex; align-items:baseline; gap:8px; padding:6px 0; border-bottom:1px dotted var(--border); font-size:14px; }
+.route-name { font-weight:700; min-width:160px; }
+.route-days { color:var(--accent); min-width:80px; font-size:13px; }
+.route-note { color:var(--text-soft); font-size:13px; }
+
+.era-summary {
+  background:#f0ede5; border-left:4px solid var(--accent2); padding:14px 18px;
+  margin:16px 0; border-radius:0 6px 6px 0; font-size:14px; color:#3a3028;
+}
+
+.insight {
+  background:#fef8e7; border:1px dashed var(--accent3); padding:14px 18px;
+  border-radius:6px; margin:16px 0; font-size:14px;
+}
+
+.season-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0;
+}
+.season-box {
+  background:var(--card); border:1px solid var(--border); border-radius:8px;
+  padding:16px 20px; box-shadow:var(--shadow);
+}
+.season-box.spring { border-left:4px solid #7bab5e; }
+.season-box.summer { border-left:4px solid #c0392b; }
+.season-box.autumn { border-left:4px solid #c4883c; }
+.season-box.winter { border-left:4px solid #5b7fa5; }
+
+table { width:100%; border-collapse:collapse; margin:12px 0; font-size:14px; }
+th { background:#3a3028; color:#d4cbb8; padding:8px 12px; text-align:left; font-weight:500; }
+td { padding:8px 12px; border-bottom:1px solid var(--border); }
+tr:nth-child(even) td { background:rgba(0,0,0,0.015); }
+
+@media (max-width:800px) { .sidebar{display:none;} .main{margin-left:0;padding:20px;} .timeline-bar{top:0;} .info-grid{grid-template-columns:1fr;} .season-grid{grid-template-columns:1fr;} }
+</style>
+<style>
+.kb-back-btn {
+  position: fixed; bottom: 28px; left: 28px; z-index: 99999;
+  background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 24px; padding: 8px 18px;
+  font-size: 13px; color: #8b5e3c; text-decoration: none;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: all 0.25s; display: inline-flex; align-items: center; gap: 6px;
+  letter-spacing: 0.04em;
+}
+.kb-back-btn:hover {
+  background: rgba(255,255,255,1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+  border-color: rgba(139,94,60,0.4);
+}
+</style>
+</head>
+<body>
+<a href="../index.html" class="kb-back-btn">鈫?鐭ヨ瘑搴?/a>
+
+
+<aside class="sidebar">
+  <h3>🗺️ 山河行</h3>
+  <nav>
+    <a href="#howto">怎么用这份指南</a>
+    <a href="#quick-pick">速查：如果你只有X天</a>
+    <a href="#geo-base">地理底盘</a>
+    <a href="#paradigms">七种旅行范式</a>
+    <a href="#who-with">出行人群——别忽略</a>
+    <a href="#northeast">东北</a>
+    <a href="#north">华北</a>
+    <a href="#northwest">西北</a>
+    <a href="#southwest">西南</a>
+    <a href="#central">华中</a>
+    <a href="#east">华东</a>
+    <a href="#south">华南</a>
+    <a href="#seasons">四季去哪儿</a>
+    <a href="#holiday">黄金周替代方案</a>
+    <a href="#routes">经典线路时间表</a>
+    <a href="#budget">预算矩阵</a>
+    <a href="#tips">出行贴士</a>
+  </nav>
+</aside>
+
+<main class="main">
+
+<h1>山河行</h1>
+<p class="subtitle">全国旅行入门框架 —— 先搞清楚中国有什么，再决定自己去哪里</p>
+
+<div class="search-wrap">
+  <input type="text" id="searchInput" placeholder="🔍 搜索目的地、景点、美食…（如：雪山、古城、喀纳斯、火锅）" autocomplete="off">
+  <div class="search-info" id="searchInfo"></div>
+</div>
+
+<!-- ═══════ 怎么用 ═══════ -->
+<section id="howto">
+<h2>怎么用这份指南</h2>
+<p>这份指南不是"中国旅游大全"——那是 Lonely Planet 800 页才能干的事。这份指南做三件事：</p>
+<ol>
+  <li><strong>给你一个框架</strong>——中国的旅行资源按什么逻辑分布？为什么某些地方出好风景、某些地方出历史文化？</li>
+  <li><strong>帮你想清楚自己喜欢什么</strong>——不是"推荐你去大理"，而是"如果你喜欢 X 类型的旅行，去大理适合，因为……"</li>
+  <li><strong>快速估算时间和花费</strong>——每个区域每个季节玩什么、最少需要几天</li>
+</ol>
+<p>读完它，下次打开机票 app 的时候，你脑子里不是一个模糊的"想去云南"，而是"想去西南、春季、以自然风光为主、大约需要一周"。</p>
+<div class="insight">旅行决策的四个维度：<strong>区域→类型→季节→时间。</strong>按这个顺序筛选，决策成本降低 80%。</div>
+</section>
+
+<!-- ═══════ 如果你只有X天 ═══════ -->
+<section id="quick-pick">
+<h2>速查：如果你只有 X 天——能去哪？</h2>
+<p>不想从头读到尾？先看这个决策矩阵。选你有的天数，找到最佳选项：</p>
+
+<div class="card"><h4>⏱️ 只有 3 天（含周末）</h4>
+<p><strong>适合：</strong>单城市深度游、或者一个紧凑景区。</p>
+<table>
+  <tr><th>类型</th><th>去哪</th><th>为什么</th></tr>
+  <tr><td>🏙️ 城市探索</td><td>北京 / 成都 / 西安 / 广州 / 长沙</td><td>交通方便，3天能逛完核心区+吃够</td></tr>
+  <tr><td>🏞️ 自然风光</td><td>桂林阳朔 / 张家界</td><td>机场直达，景区集中，3天刚好</td></tr>
+  <tr><td>🏛️ 文化</td><td>洛阳（龙门石窟+白马寺）/ 大同（云冈石窟）</td><td>单点深度，不用到处跑</td></tr>
+  <tr><td>🏝️ 滨海</td><td>厦门 / 青岛 / 大连</td><td>城市+海边，节奏舒适</td></tr>
+</table></div>
+
+<div class="card"><h4>⏱️ 有 5 天（请两天假+周末）</h4>
+<p><strong>适合：</strong>一个完整区域、或两个城市的串联。</p>
+<table>
+  <tr><th>类型</th><th>去哪</th><th>为什么</th></tr>
+  <tr><td>🏙️ 城市+周边</td><td>成都+都江堰青城山 / 北京+承德</td><td>一个大城市深度+一个周边世界遗产</td></tr>
+  <tr><td>🏯 古城线</td><td>山西古建精华（大同→平遥）</td><td>中国古建筑最密集的走廊</td></tr>
+  <tr><td>🏔️ 自然风光</td><td>九寨沟+黄龙 / 黄山+宏村</td><td>一个顶级景区+一个小众补充</td></tr>
+  <tr><td>🏝️ 海岛</td><td>海南三亚 / 北海涠洲岛</td><td>纯躺，不需要太多时间</td></tr>
+  <tr><td>🍜 美食双城</td><td>成都+重庆</td><td>高铁1.5小时，全程以吃为主线</td></tr>
+</table></div>
+
+<div class="card"><h4>⏱️ 有 7 天（黄金周或年假）</h4>
+<p><strong>适合：</strong>一个完整省份、或一条经典线路。</p>
+<table>
+  <tr><th>类型</th><th>去哪</th><th>为什么</th></tr>
+  <tr><td>🌄 云南经典</td><td>昆明→大理→丽江→香格里拉</td><td>中国最经典的"第一次长途旅行"线路</td></tr>
+  <tr><td>🏯 山西古建全线</td><td>大同→应县→五台山→佛光寺→平遥</td><td>需要自驾，7天刚好不赶</td></tr>
+  <tr><td>🐫 丝绸之路</td><td>兰州→张掖→嘉峪关→敦煌</td><td>一路向西，每天一个世界级景点</td></tr>
+  <tr><td>🏔️ 川西小环线</td><td>成都→四姑娘山→丹巴→新都桥→康定</td><td>中国最美自驾路线之一</td></tr>
+  <tr><td>🏝️ 海南环岛</td><td>海口→文昌→三亚→陵水</td><td>建议自驾，一路吃海鲜看海</td></tr>
+</table></div>
+
+<div class="card"><h4>⏱️ 有 10-14 天（需要攒年假）</h4>
+<p><strong>适合：</strong>新疆、西藏、或者两条线路的组合。</p>
+<table>
+  <tr><th>类型</th><th>去哪</th><th>为什么</th></tr>
+  <tr><td>🏔️ 北疆大环线</td><td>乌鲁木齐→喀纳斯→伊犁→吐鲁番</td><td>至少10天，秋天去——一生一次</td></tr>
+  <tr><td>🏔️ 西藏深度</td><td>拉萨→纳木错→日喀则→珠峰大本营</td><td>需要适应高反，不能赶</td></tr>
+  <tr><td>🏔️ 稻城亚丁+川西</td><td>成都→康定→理塘→稻城→亚丁</td><td>高海拔徒步，需要预留适应时间</td></tr>
+  <tr><td>🗺️ 两省组合</td><td>成都+云南 / 西安+甘肃 / 桂林+贵州</td><td>时间够的情况下可以串两个相邻区域</td></tr>
+</table></div>
+
+<div class="era-summary">如果你看完这张表已经决定去哪了——直接跳到对应的区域章节。如果你还没决定——往下读七种旅行范式，先搞清楚自己喜欢什么。</div>
+</section>
+
+<!-- ═══════ 地理底盘 ═══════ -->
+<section id="geo-base">
+<h2>第一章：地理底盘——山和水决定了去哪玩</h2>
+
+<p>中国不是均匀分布的。想搞懂"哪里好玩"，先看三样东西：地势、气候、水系。</p>
+
+<div class="card">
+<h4>地势：三级阶梯就是三条风景带</h4>
+<table>
+  <tr><th>阶梯</th><th>范围</th><th>出什么</th></tr>
+  <tr><td><strong>第一级（最高）</strong></td><td>青藏高原</td><td>雪山、湖泊、藏文化、极致风光——给能吃苦的人</td></tr>
+  <tr><td><strong>第二级（中间）</strong></td><td>内蒙古高原→黄土高原→云贵高原→四川盆地→塔里木盆地</td><td>草原、沙漠、峡谷、喀斯特、盆地——中国 80% 的自然风景集中在这里</td></tr>
+  <tr><td><strong>第三级（最低）</strong></td><td>东北平原→华北平原→长江中下游平原→东南丘陵→珠江三角洲</td><td>历史古城、水乡、美食、现代化都市——给人最多的"便利"和"人文"</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h4>气候：纬度决定温度，海拔决定凉快</h4>
+<p>同纬度，海拔每高 1000 米，温度降 6°C。这条规律解释了为什么夏天要去高原。</p>
+<table>
+  <tr><th>气候带</th><th>大致区域</th><th>旅行含义</th></tr>
+  <tr><td><strong>寒温带</strong></td><td>黑龙江北部、青藏高原</td><td>冬天去体验极致寒冷，夏天去避暑</td></tr>
+  <tr><td><strong>中温带/暖温带</strong></td><td>东北大部、华北、西北</td><td>春秋两季黄金，夏天偏热，冬天太冷——但冰雪和暖气是另一种体验</td></tr>
+  <tr><td><strong>亚热带</strong></td><td>长江流域、西南、华南</td><td>四季皆可，但夏季湿热、梅雨季要避开</td></tr>
+  <tr><td><strong>热带</strong></td><td>海南、云南西双版纳</td><td>冬天避寒圣地，夏天太热</td></tr>
+</table>
+</div>
+
+<div class="era-summary">记住三条线：<strong>胡焕庸线（黑河→腾冲）</strong>以西，人口稀少、风景宏大、交通不便——适合深度游；以东，城市密集、设施完善、文化厚重——适合第一次出远门。<strong>秦岭—淮河</strong>以南，潮湿多雨、植被茂密；以北，干燥多风、四季分明。这两条线就把中国的旅行地图画清楚了。</div>
+</section>
+
+<!-- ═══════ 旅行范式 ═══════ -->
+<section id="paradigms">
+<h2>第二章：七种旅行范式——先弄清楚你喜欢什么</h2>
+<p>很多人说"我想去旅游"但其实不知道自己到底想干什么——看风景？吃好吃的？拍照发朋友圈？躺在海边啥也不干？下面七种范式帮你自我诊断。大多数人是其中两三种的混合。</p>
+
+<div class="card">
+<h4>🏛️ 范式一：古城古镇——在旧时光里散步</h4>
+<p><strong>核心体验：</strong>没有汽车的街道、老建筑里喝杯茶、石板路上的脚步声。慢。</p>
+<p><strong>代表目的地：</strong>平遥（保存最完整的明清县城，可上城墙绕一圈）、丽江（雪山下的流水古城，商业化但魅力不减）、大理（苍山洱海间的古城，可以租电动车环海）、凤凰（沱江边的吊脚楼，清晨有雾气最美）、周庄/同里/西塘（江南水乡，小桥流水人家）</p>
+<p><strong>怎么判断适不适合你：</strong>如果你在古镇里待两个小时就无聊了——你不是这个类型。如果你是那种能在咖啡馆窗口坐一下午的人——找到组织了。</p>
+<p><strong>建议天数：</strong>2-3 天一个古镇。</p>
+</div>
+
+<div class="card">
+<h4>🏔️ 范式二：自然风光——去见识地球长什么样</h4>
+<p><strong>核心体验：</strong>震撼。站在一个让你说不出话的地方，掏出手机发现怎么拍都不对——现场比照片震撼一百倍。</p>
+<p><strong>代表目的地：</strong>九寨沟（水是蓝绿色的，秋天层林尽染——中国自然风光的顶配）、张家界（石英砂岩峰林，阿凡达取景地，云雾天最像仙境）、黄山（奇松怪石云海温泉，一步一景，西海大峡谷最险最美）、桂林阳朔（喀斯特山水，坐竹筏从桂林漂到阳朔，两岸都是山水画）、稻城亚丁（高原上的三座神山，体力要求高但值得）</p>
+<p><strong>怎么判断：</strong>如果你看到别人发的风光照会心跳加速——是的。如果你觉得"山不都差不多"——选其他范式。</p>
+<p><strong>建议天数：</strong>单个景区 2-4 天。九寨沟多给一天，稻城亚丁至少 3 天（海拔适应+徒步）。</p>
+</div>
+
+<div class="card">
+<h4>⛰️ 范式三：雪山高原——去最高的地方喘口气</h4>
+<p><strong>核心体验：</strong>稀薄的空气、极致的安静、离天最近的感觉。身体在地狱，眼睛在天堂。</p>
+<p><strong>代表目的地：</strong>西藏（布达拉宫、纳木错、珠峰大本营——需要时间适应高反，最少一周）、川西（四姑娘山、色达、稻城——比西藏更方便，成都出发可自驾）、滇西北（梅里雪山日照金山、雨崩徒步——适合初级高原体验者）</p>
+<p><strong>怎么判断：</strong>如果你愿意用身体的不舒服换眼睛的享受——是的。如果海拔一高就受不了——先从 3000 米以下的地方练起。</p>
+<p><strong>建议天数：</strong>西藏至少 7-10 天（适应高反就要 2 天），川西短线 3-5 天。</p>
+</div>
+
+<div class="card">
+<h4>🏝️ 范式四：海岛滨海——什么也不想，就躺着</h4>
+<p><strong>核心体验：</strong>沙滩、海鲜、日出、海浪声。目标不是"看什么"而是"不干什么"。</p>
+<p><strong>代表目的地：</strong>三亚（中国最好的热带海滩，冬天避寒圣地）、厦门鼓浪屿（不是纯海滩，是"海上花园"——老别墅+钢琴声+小吃）、青岛（红瓦绿树碧海蓝天，夏天喝啤酒吃蛤蜊）、大连（北方滨海城市的底子，有轨电车+海鲜+俄罗斯风情街）、涠洲岛（北海附近，火山岛，比三亚人少）</p>
+<p><strong>怎么判断：</strong>如果你理想中的假期是"什么都不做"——是的。</p>
+<p><strong>建议天数：</strong>3-5 天。躺够了就走。</p>
+</div>
+
+<div class="card">
+<h4>🍜 范式五：美食之旅——以吃为目的地</h4>
+<p><strong>核心体验：</strong>订机票是为了去吃一顿。行程按饭点规划。吃完就走。</p>
+<p><strong>代表目的地：</strong>成都（火锅、串串、兔头、甜水面——可以连吃三天不重样，苍蝇馆子比大餐厅好吃）、重庆（火锅的发源地之一，小面、江湖菜，山城爬坡可以消耗卡路里）、广州（早茶、烧腊、煲仔饭、糖水——可以吃一天不重样）、西安（肉夹馍、凉皮、羊肉泡馍、biangbiang面——碳水爱好者天堂）、新疆（大盘鸡、羊肉串、手抓饭、烤包子——肉食者不可能不爱）</p>
+<p><strong>怎么判断：</strong>如果你到一个新城市，第一件事是打开大众点评——不需要判断了，你就是。</p>
+<p><strong>建议天数：</strong>一个城市 2-4 天狂吃。成都+重庆可以串起来一周。</p>
+</div>
+
+<div class="card">
+<h4>🛕 范式六：文化朝圣——为了一个地方学了一段历史</h4>
+<p><strong>核心体验：</strong>站在千年前的遗址前，感觉到时间的重量。知识储备决定体验上限。</p>
+<p><strong>代表目的地：</strong>敦煌莫高窟（提前一个月约票，看之前先读点佛教艺术入门——否则进去只能"哇好漂亮"然后两小时出来）、洛阳龙门石窟（奉先寺卢舍那大佛，据说是按武则天的脸雕的）、西安兵马俑（当你站在一号坑前，眼前是两千年前的军队——需要事先知道这是秦始皇，否则就是一堆泥人）、山西古建线（佛光寺、南禅寺、应县木塔——中国现存最老的木建筑，很多在村子里，需要自驾）、曲阜孔庙（儒家文化的原点）</p>
+<p><strong>怎么判断：</strong>如果你去故宫会租讲解器并且全程听完——是的。</p>
+<p><strong>建议天数：</strong>单点 1-2 天。山西古建线需要一周。</p>
+</div>
+
+<div class="card">
+<h4>🏙️ 范式七：城市探索——活在一座城市的节奏里</h4>
+<p><strong>核心体验：</strong>不是打卡景点，而是像本地人一样生活——逛菜市场、坐地铁、在街角咖啡馆发呆、去博物馆泡一下午。</p>
+<p><strong>代表目的地：</strong>北京（故宫+国博+胡同+涮羊肉，三天不够）、上海（外滩+法租界老洋房+当代艺术+本帮菜，适合 city walk）、杭州（西湖+灵隐寺+龙井茶园+江南驿，可以骑车环湖）、成都（人民公园掏耳朵+喝盖碗茶+看熊猫，节奏最舒服的城市之一）</p>
+<p><strong>怎么判断：</strong>如果你觉得"去一个城市不一定要看什么景点，就在街上走走也挺好"——就是你。</p>
+<p><strong>建议天数：</strong>单个城市 3-5 天。北京值得一周。</p>
+</div>
+
+<div class="era-summary">大部分人不是单一类型——你可能是"自然风光+美食"（去成都看青城山然后吃火锅），或者"文化朝圣+古城"（去西安看兵马俑然后逛回民街）。先选 1-2 个主导范式，再选区域，这就是旅行的起点。</div>
+</section>
+
+<!-- ═══════ 出行人群 ═══════ -->
+<section id="who-with">
+<h2>别看漏了：你和谁去——决定玩法的隐藏变量</h2>
+<p>同样的目的地，一个人去和带五岁小孩去，是两种完全不同的旅行。别在选完区域和范式之后才发现"这条路推不了婴儿车"。</p>
+
+<div class="card"><h4>🧍 一个人（solo）</h4>
+<p><strong>核心约束：</strong>安全第一、社交需求、不想太孤独、所有决策自己扛。</p>
+<table>
+  <tr><th>推什么</th><th>避什么</th></tr>
+  <tr><td>城市深度游——北京/成都/广州/上海，公共交通发达、青旅文化好、容易认识人</td><td>纯自驾无人区——新疆戈壁、青海无人区，车坏了没人帮</td></tr>
+  <tr><td>青旅+社交型目的地——大理、丽江（青旅文化浓厚，院子里就能搭上话）</td><td>高难度徒步 solo——虎跳峡、稻城亚丁长线，一个人出事没照应</td></tr>
+  <tr><td>美食线路——成都/重庆/潮汕/西安，一个人吃饭不尴尬（小吃为主）</td><td>"度假村模式"——三亚、长白山滑雪度假村，一个人住大床房贵且无聊</td></tr>
+  <tr><td>成熟的国际背包客线路——昆大丽、桂林阳朔，设施完善、信息透明</td><td>过于偏僻的古建线——山西村里某些点公交不到、打不到车</td></tr>
+</table></div>
+
+<div class="card"><h4>👫 情侣/朋友（2-4人）</h4>
+<p><strong>核心约束：</strong>兴趣可能不一致、行程别排太满（累是吵架第一原因）、需要拍照好看的地方。</p>
+<table>
+  <tr><th>推什么</th><th>避什么</th></tr>
+  <tr><td>几乎全能——这是最灵活的出行人群。江南、云南、川西、西北都可</td><td>不要把行程排成"军训"——每天两个点最多了，留出吵架和好用的 buffer 时间</td></tr>
+  <tr><td>自驾线路——川西小环线、青海环线、海南环岛，副驾有人聊天</td><td>兴趣差异大的目的地混搭——一个人想爬雪山一个人想躺海滩，先谈好</td></tr>
+  <tr><td>有"出片"属性的地方——九寨沟、喀纳斯秋景、厦门鼓浪屿</td><td>过于硬核的——西藏高反严重时照顾对方会很累</td></tr>
+</table></div>
+
+<div class="card"><h4>👨‍👩‍👧 带娃/带老人（家庭）</h4>
+<p><strong>核心约束：</strong>体力、医疗、应急是硬指标。不能"来都来了硬走"。</p>
+<table>
+  <tr><th>推什么</th><th>严格避开</th></tr>
+  <tr><td>城市游——北京（故宫/动物园/科技馆）、上海（迪士尼）、广州（长隆）</td><td>高海拔——西藏（>3500m）、稻城亚丁（徒步>4000m），小孩和老人风险极高</td></tr>
+  <tr><td>海滨——三亚、厦门、青岛、大连，沙滩可以放电一整天</td><td>长途徒步——虎跳峡、雨崩、华山长空栈道</td></tr>
+  <tr><td>成熟景区——九寨沟（有观光车）、张家界（有缆车）、黄山（有索道）、桂林阳朔</td><td>医疗条件差的地方——新疆偏远地区、西藏阿里、青海可可西里</td></tr>
+  <tr><td>自驾但选好路——海南环岛、云南（昆明→大理，全高速）、江南水乡</td><td>路况差的自驾——川西某些非铺装路、新疆部分无人区</td></tr>
+  <tr><td>节奏放慢——每天只安排一个主景点，下午三点以后自由时间</td><td>"顺便去一下"——带老人小孩不存在"顺便"，每个点都是正式决策</td></tr>
+</table></div>
+
+<div class="era-summary">选目的地之前先问自己一个问题：<strong>这次是和谁？</strong>如果带老人小孩，先把西藏和稻城划掉——不是不能去，是风险和体验不成比例。一个人的话，城市探索和青旅文化是最好的起点，别第一次 solo 就去西北自驾。</div>
+</section>
+
+<!-- ═══════ 东北 ═══════ -->
+<section id="northeast">
+<h2>第三章：东北——冰雪、森林与工业记忆</h2>
+<p class="subtitle" style="margin-bottom:20px;">黑龙江·吉林·辽宁</p>
+
+<div class="region-card northeast">
+<h3>🎭 旅行节奏</h3>
+<p>东北的旅行分为完全不同的两个模式：<strong>冬天</strong>（11月-2月）来体验极寒——哈尔滨冰雪大世界、雪乡、长白山滑雪、查干湖冬捕，温度可能到 -30°C 但室内有暖气；<strong>夏天</strong>（6-8月）来避暑——长白山天池、大连海滩、漠河极光（概率不高但可以吹牛）。春秋两季比较平淡，不是最佳窗口。</p>
+
+<div class="info-grid">
+<div><span class="label">最佳季节</span><br>冬季（12-2月，冰雪）或夏季（7-8月，避暑）</div>
+<div><span class="label">建议天数</span><br>5-7 天（哈长沈三选二）</div>
+<div><span class="label">交通中枢</span><br>哈尔滨、长春、沈阳、大连</div>
+<div><span class="label">适合人群</span><br>不怕冷/想滑雪/喜欢俄式风情/工业怀旧</div>
+</div>
+</div>
+
+<div class="card"><h4>精华：去哪、玩什么</h4>
+<table>
+  <tr><th>目的地</th><th>玩什么</th><th>一句话</th><th>天数</th></tr>
+  <tr><td><strong>哈尔滨</strong></td><td>冰雪大世界（12月底开放）、中央大街（俄式建筑群）、索菲亚教堂、松花江上滑冰</td><td>"东方莫斯科"——冬天去的理由就是它</td><td>2-3 天</td></tr>
+  <tr><td><strong>长白山</strong></td><td>天池（概率看运气）、滑雪（万达/鲁能度假区）、温泉</td><td>冬天滑雪+泡温泉，夏天看天池（更容易看到）</td><td>2-3 天</td></tr>
+  <tr><td><strong>大连</strong></td><td>滨海路骑行、星海广场、发现王国、海鲜</td><td>东北最"不像东北"的城市，适合夏天来</td><td>2-3 天</td></tr>
+  <tr><td><strong>漠河</strong></td><td>北极村、圣诞村、白桦林</td><td>中国最北端，"找北"之旅，交通不便但仪式感强</td><td>2-3 天</td></tr>
+  <tr><td><strong>沈阳</strong></td><td>故宫（比北京的小但也是世界遗产）、张氏帅府、西塔韩国街</td><td>满清发家地+近代史，城市探索型首选</td><td>1-2 天</td></tr>
+</table></div>
+
+<div class="highlight-box">🍜 <strong>东北吃什么：</strong>锅包肉（哈尔滨版酸甜、辽宁版番茄汁）、铁锅炖（大鹅/排骨/鱼，冬天一群人围着大锅吃）、烧烤（东北烧烤是一个独立菜系）、冷面（夏天吃凉的荞麦面）、冻梨冻柿子（冬天的街头小吃）。分量大到南方人可能会被吓到。</div>
+
+<div class="era-summary">东北的核心卖点是"极致体验"——要么极致冷（冰雪），要么极致舒服（夏天 20°C）。最大的门槛是冬天太冷了，但如果你能接受 -30°C 的体感，冰雪大世界的视觉冲击会让你觉得值回机票。夏天去长白山看天池概率更高。</div>
+
+<div class="highlight-box">🚗 <strong>交通中枢：</strong>哈尔滨（冰雪游起点）→ 长白山（飞长白山机场或从延吉/长春火车）。<strong>经典串联：</strong>哈尔滨（2天）→ 亚布力滑雪（1天）→ 长白山（2-3天），以哈尔滨为据点辐射。</div>
+</section>
+
+<!-- ═══════ 华北 ═══════ -->
+<section id="north">
+<h2>第四章：华北——历史的中心舞台</h2>
+<p class="subtitle" style="margin-bottom:20px;">北京·天津·河北·山西·内蒙古</p>
+
+<div class="region-card north">
+<h3>🎭 旅行节奏</h3>
+<p>华北是<strong>中国文化密度最高的区域</strong>——北京和山西两个地方就能各玩一周不重样。内蒙古是另一个世界：草原和沙漠，适合自驾。春秋两季（4-5月和9-10月）最舒服，夏天北京很热，冬天很冷但淡季人少、票价便宜。</p>
+
+<div class="info-grid">
+<div><span class="label">最佳季节</span><br>春季（4-5月）和秋季（9-10月）</div>
+<div><span class="label">建议天数</span><br>北京 4-5 天，山西古建线 5-7 天，内蒙古 3-5 天</div>
+<div><span class="label">交通中枢</span><br>北京（集散中心）</div>
+<div><span class="label">适合人群</span><br>历史迷/古建爱好者/首都打卡/草原自驾</div>
+</div>
+</div>
+
+<div class="card"><h4>精华：去哪、玩什么</h4>
+<table>
+  <tr><th>目的地</th><th>玩什么</th><th>一句话</th><th>天数</th></tr>
+  <tr><td><strong>北京</strong></td><td>故宫（至少半天）、长城（八达岭或慕田峪）、颐和园、国博、胡同骑行（什刹海→南锣鼓巷）</td><td>中国唯一一个"必须要来一次"的城市</td><td>4-5 天</td></tr>
+  <tr><td><strong>山西古建线</strong></td><td>大同云冈石窟→应县木塔→五台山→佛光寺→平遥古城</td><td>中国古建筑的半壁江山，需要自驾或包车</td><td>5-7 天</td></tr>
+  <tr><td><strong>内蒙古</strong></td><td>呼伦贝尔草原（7-8月最绿）、响沙湾沙漠、满洲里俄罗斯风情</td><td>天苍苍野茫茫，适合自驾，路况好车少</td><td>3-5 天</td></tr>
+  <tr><td><strong>天津</strong></td><td>五大道洋楼区、意式风情区、天津之眼、听相声</td><td>离北京半小时高铁，适合顺路逛一天</td><td>1-2 天</td></tr>
+  <tr><td><strong>承德</strong></td><td>避暑山庄（清代皇家园林+外八庙）</td><td>"清代版颐和园"，比颐和园大八倍</td><td>1-2 天</td></tr>
+</table></div>
+
+<div class="highlight-box">🍜 <strong>华北吃什么：</strong>北京烤鸭、涮羊肉、炸酱面、豆汁焦圈（慎点）、天津煎饼果子（和外地的不一样）、山西刀削面、莜面、内蒙古手把肉、奶茶（咸的）。北京是碳水和肉的天堂。</div>
+
+<div class="era-summary">华北的核心是历史厚度。北京和山西两个目的地撑起了整个板块——北京是"必须去一次"的首都，山西是"去了才知道厉害"的古建宝藏。内蒙古草原和沙漠是另一个次元，适合穿插。</div>
+
+<div class="highlight-box">🚗 <strong>交通中枢：</strong>北京（全国最大集散地，高铁辐射所有华北城市）。<strong>经典串联：</strong>北京（4天）→ 高铁1.5h至大同（云冈石窟）→ 包车走山西古建线（应县木塔→五台山→佛光寺→平遥，5-7天）。内蒙古需单独安排，从北京飞呼伦贝尔2h。</div>
+</section>
+
+<!-- ═══════ 西北 ═══════ -->
+<section id="northwest">
+<h2>第五章：西北——丝绸之路与极致地貌</h2>
+<p class="subtitle" style="margin-bottom:20px;">陕西·甘肃·宁夏·青海·新疆</p>
+
+<div class="region-card northwest">
+<h3>🎭 旅行节奏</h3>
+<p>西北是中国<strong>地貌多样性最炸裂</strong>的区域——沙漠、戈壁、草原、雪山、丹霞、盐湖全塞在这里。缺点是<strong>距离超大</strong>——景点之间动辄几百公里，不适合"特种兵"式打卡。秋季（9-10月）是黄金季节：天高云淡、胡杨林变金黄、气候舒适。夏季青海湖油菜花海，但新疆部分地区太热。</p>
+
+<div class="info-grid">
+<div><span class="label">最佳季节</span><br>秋季（9-10月，胡杨林季）</div>
+<div><span class="label">建议天数</span><br>甘肃走廊 5-7 天，新疆至少 7-10 天，青海环线 4-5 天</div>
+<div><span class="label">交通中枢</span><br>西安、兰州、西宁、乌鲁木齐</div>
+<div><span class="label">适合人群</span><br>风光摄影/自驾爱好者/丝绸之路情怀/不怕坐车</div>
+</div>
+</div>
+
+<div class="card"><h4>精华：去哪、玩什么</h4>
+<table>
+  <tr><th>目的地</th><th>玩什么</th><th>一句话</th><th>天数</th></tr>
+  <tr><td><strong>西安</strong></td><td>兵马俑（必去）、城墙骑行、回民街、陕西历史博物馆（难约但值得）</td><td>"一座长安城，半部中国史"——中国最有资格当首都的城市</td><td>3-4 天</td></tr>
+  <tr><td><strong>甘肃走廊</strong></td><td>敦煌莫高窟→鸣沙山月牙泉→嘉峪关→张掖七彩丹霞</td><td>丝绸之路精华段，从兰州一路向西，每个点之间 3-5 小时车程</td><td>5-7 天</td></tr>
+  <tr><td><strong>青海环线</strong></td><td>青海湖（7-8月油菜花）、茶卡盐湖（天空之镜）、祁连草原</td><td>"大西北的小江南"——海拔较高但风景密度高</td><td>4-5 天</td></tr>
+  <tr><td><strong>新疆</strong></td><td>喀纳斯（9月底秋景封神）、赛里木湖、伊犁草原、吐鲁番火焰山</td><td>新疆一个省的面积=16个韩国，需要分北疆/南疆两次去</td><td>7-14 天</td></tr>
+  <tr><td><strong>宁夏</strong></td><td>沙坡头（沙漠+黄河）、西夏王陵、镇北堡影视城</td><td>西北最小省份，2-3天就能转完</td><td>2-3 天</td></tr>
+</table></div>
+
+<div class="highlight-box">🍜 <strong>西北吃什么：</strong>西安面食（肉夹馍、凉皮、泡馍、biangbiang面——碳水天堂）、兰州牛肉面（"一清二白三红四绿五黄"，出了甘肃就不是这个味了）、新疆大盘鸡+羊肉串+手抓饭+烤包子+水果（哈密瓜、葡萄——8-9月最佳）、青海酸奶和手抓羊肉。</div>
+
+<div class="era-summary">西北的核心问题是"距离"。你花在路上的时间可能比玩的时间还长——但这本身也是体验：戈壁公路上开车，两边是看不到头的地平线，车上放着公路音乐。如果你受不了连续坐 4 小时车——选其他区域，或者只去西安。如果能接受——西北是此生必去。</div>
+
+<div class="highlight-box">🚗 <strong>交通中枢：</strong>西安（陕西起点）→ 兰州（甘肃起点）→ 西宁（青海起点）→ 乌鲁木齐（新疆起点）。<strong>经典串联：</strong>西安（3天）→ 飞兰州 → 包车/拼车走甘肃走廊（张掖→嘉峪关→敦煌，5-7天）；青海环线以西宁为据点自驾4-5天；新疆独立成行，不与其它省份串联。</div>
+</section>
+
+<!-- ═══════ 西南 ═══════ -->
+<section id="southwest">
+<h2>第六章：西南——中国最丰富的旅行目的地</h2>
+<p class="subtitle" style="margin-bottom:20px;">四川·重庆·云南·贵州·西藏</p>
+
+<div class="region-card southwest">
+<h3>🎭 旅行节奏</h3>
+<p>西南覆盖了全部七种旅行范式——古城（大理丽江）、自然风光（九寨沟稻城）、雪山高原（西藏川西）、美食（成都重庆）、文化（三星堆、贵州苗寨）。<strong>几乎每个人都能在这里找到适合的旅行。</strong>季节依海拔而定：低海拔的成都重庆一年四季，高海拔的西藏川西夏秋最佳。春季（3-5月）云南贵州花季，秋季（9-10月）四川盆地最舒服。</p>
+
+<div class="info-grid">
+<div><span class="label">最佳季节</span><br>依海拔：低海拔四季，高海拔夏秋</div>
+<div><span class="label">建议天数</span><br>成都+周边 4-5 天，云南至少 7 天，西藏至少 7-10 天</div>
+<div><span class="label">交通中枢</span><br>成都、昆明、重庆</div>
+<div><span class="label">适合人群</span><br>几乎所有人——总有一款适合你</div>
+</div>
+</div>
+
+<div class="card"><h4>精华：去哪、玩什么</h4>
+<table>
+  <tr><th>目的地</th><th>玩什么</th><th>一句话</th><th>天数</th></tr>
+  <tr><td><strong>成都</strong></td><td>大熊猫基地、人民公园喝茶、宽窄巷子、都江堰、青城山</td><td>"少不入川"——这座城市会让你不想走</td><td>3-4 天</td></tr>
+  <tr><td><strong>九寨沟</strong></td><td>五花海、诺日朗瀑布、珍珠滩（秋天层林尽染最震撼）</td><td>中国自然风光的顶配，一生至少去一次</td><td>2-3 天</td></tr>
+  <tr><td><strong>川西</strong></td><td>四姑娘山、色达佛学院、稻城亚丁、理塘</td><td>318 国道上的秘境，自驾天堂，海拔循序渐进</td><td>5-7 天</td></tr>
+  <tr><td><strong>重庆</strong></td><td>洪崖洞夜景、长江索道、磁器口、武隆天生三桥</td><td>8D 魔幻城市——你以为在一楼，其实在十三楼</td><td>2-3 天</td></tr>
+  <tr><td><strong>云南</strong></td><td>大理（苍山洱海+古城）、丽江（玉龙雪山+古城）、香格里拉、西双版纳</td><td>"彩云之南"——地级市之间风格差异巨大</td><td>7-10 天</td></tr>
+  <tr><td><strong>贵州</strong></td><td>黄果树瀑布、千户苗寨、荔波小七孔、梵净山</td><td>"中国最被低估的旅行省份"——山水+民族风情</td><td>5-7 天</td></tr>
+  <tr><td><strong>西藏</strong></td><td>布达拉宫、大昭寺、纳木错、珠峰大本营</td><td>需要提前适应高反，不是"说走就走"的地方</td><td>7-14 天</td></tr>
+</table></div>
+
+<div class="highlight-box">🍜 <strong>西南吃什么：</strong>川菜（麻辣——火锅、水煮鱼、回锅肉、麻婆豆腐）、重庆火锅（比成都更辣）、云南过桥米线、菌子火锅（雨季限定，小心不要中毒）、汽锅鸡、贵州酸汤鱼、折耳根（爱的人爱死，恨的人想死）、西藏甜茶和藏面。</div>
+
+<div class="era-summary">西南的厉害之处是<strong>全能</strong>——想看风景有九寨沟稻城，想放松有成都大理，想挑战有西藏川西，想吃饭——这里是中国美食密度最高的区域之一。如果你不知道去哪，先从西南开始。</div>
+
+<div class="highlight-box">🚗 <strong>交通中枢：</strong>成都（四川+川西+西藏的跳板）→ 重庆（1.5h高铁）→ 昆明（云南入口）→ 贵阳（贵州入口）。<strong>经典串联：</strong>成都+重庆双城（高铁1.5h，6-7天）→ 成都+九寨沟（飞黄龙机场，4-5天）→ 成都+川西小环线（自驾，5-7天）→ 云南昆大丽（火车串联，7-10天）→ 贵州（高铁串黄果树+荔波+千户苗寨，5-7天）。西藏独立成行。</div>
+</section>
+
+<!-- ═══════ 华中 ═══════ -->
+<section id="central">
+<h2>第七章：华中——山水之间，承东启西</h2>
+<p class="subtitle" style="margin-bottom:20px;">河南·湖北·湖南</p>
+
+<div class="region-card central">
+<h3>🎭 旅行节奏</h3>
+<p>华中的定位有点尴尬——不是"第一选择"，但藏着几个<strong>世界级的单体景点</strong>。张家界、洛阳龙门石窟、三峡、武当山——每一个都值得单独规划。春秋两季最佳（4-5月和9-10月），夏天长江流域湿热难受，冬天没有北方供暖的室内又不暖和。</p>
+
+<div class="info-grid">
+<div><span class="label">最佳季节</span><br>春秋（4-5月和9-10月）</div>
+<div><span class="label">建议天数</span><br>湖南 5-6 天，湖北 4-5 天，河南 3-4 天</div>
+<div><span class="label">交通中枢</span><br>武汉、长沙、郑州</div>
+<div><span class="label">适合人群</span><br>自然风光+人文混合</div>
+</div>
+</div>
+
+<div class="card"><h4>精华：去哪、玩什么</h4>
+<table>
+  <tr><th>目的地</th><th>玩什么</th><th>一句话</th><th>天数</th></tr>
+  <tr><td><strong>张家界</strong></td><td>国家森林公园、天门山（玻璃栈道）、大峡谷玻璃桥</td><td>"阿凡达取景地，云雾天最美"——石英砂岩峰林全球独此一家</td><td>2-3 天</td></tr>
+  <tr><td><strong>长沙</strong></td><td>岳麓山、橘子洲、湖南省博（马王堆女尸）、茶颜悦色</td><td>"中国最会搞钱的美食城市"——小龙虾和奶茶的城市</td><td>2-3 天</td></tr>
+  <tr><td><strong>洛阳</strong></td><td>龙门石窟（卢舍那大佛）、白马寺、洛阳博物馆</td><td>"中国唯一一个叫'神都'的城市"——唐朝的东都</td><td>2-3 天</td></tr>
+  <tr><td><strong>武汉</strong></td><td>黄鹤楼、东湖骑行、湖北省博（曾侯乙编钟）、户部巷</td><td>"九省通衢"——交通枢纽，适合中转时玩 1-2 天</td><td>1-2 天</td></tr>
+  <tr><td><strong>三峡</strong></td><td>游轮（重庆→宜昌，4天3晚）、三峡大坝、小三峡</td><td>坐游轮看两岸峡谷——中国最经典的"慢旅行"</td><td>4 天</td></tr>
+  <tr><td><strong>武当山</strong></td><td>金顶（日出）、紫霄宫、太子坡（"九曲黄河墙"）</td><td>"太极拳的祖庭"——道教圣地，比少林寺安静</td><td>2 天</td></tr>
+</table></div>
+
+<div class="highlight-box">🍜 <strong>华中吃什么：</strong>长沙臭豆腐、口味虾、剁椒鱼头（辣度和成都不相上下）、武汉热干面、鸭脖、豆皮、河南烩面、胡辣汤、洛阳水席（24道菜全带汤）。华中是碳水+辣的组合。</div>
+
+<div class="era-summary">华中的正确打开方式：<strong>把它当成一个"深度游"区域。</strong>不是第一次出门的首选，但当你把热门目的地走得差不多了，张家界和洛阳龙门石窟值得专门飞一趟。三峡游轮是独特的体验——在船上看着峡谷缓缓后退，节奏慢下来。</div>
+
+<div class="highlight-box">🚗 <strong>交通中枢：</strong>武汉（高铁十字枢纽，东西南北都经过）、长沙（湖南跳板）、郑州（河南跳板）。<strong>经典串联：</strong>张家界+凤凰古城（4-5天，长沙中转）→ 洛阳+郑州（3-4天，高铁串联）→ 长江三峡游轮（重庆→宜昌，4天3晚，独立线路）。三个方向互不串联——华中不像西南那样能一条线串起来。</div>
+</section>
+
+<!-- ═══════ 华东 ═══════ -->
+<section id="east">
+<h2>第八章：华东——江南的精致与齐鲁的厚重</h2>
+<p class="subtitle" style="margin-bottom:20px;">上海·江苏·浙江·安徽·江西·山东·福建</p>
+
+<div class="region-card east">
+<h3>🎭 旅行节奏</h3>
+<p>华东是中国<strong>最"舒适"的旅行区域</strong>——交通便利、基础设施好、不用太吃苦、一年四季都有东西看。但同时也有尴尬：热门景点人山人海（尤其是节假日）、商业化程度高（江南水乡快变成江南商铺了）。春季（3-5月）是黄金期——江南春色、烟雨蒙蒙。</p>
+
+<div class="info-grid">
+<div><span class="label">最佳季节</span><br>春季（3-5月，江南烟雨）和秋季（9-10月）</div>
+<div><span class="label">建议天数</span><br>江南（沪苏杭）5-7 天，山东 4-5 天，福建 4-5 天</div>
+<div><span class="label">交通中枢</span><br>上海、杭州、南京</div>
+<div><span class="label">适合人群</span><br>第一次远行/蜜月/不想太苦/喜欢精致感</div>
+</div>
+</div>
+
+<div class="card"><h4>精华：去哪、玩什么</h4>
+<table>
+  <tr><th>目的地</th><th>玩什么</th><th>一句话</th><th>天数</th></tr>
+  <tr><td><strong>上海</strong></td><td>外滩（浦西看浦东天际线）、法租界骑行、上海博物馆、迪士尼</td><td>"魔都"——中国最像现代城市的城市</td><td>3-4 天</td></tr>
+  <tr><td><strong>杭州</strong></td><td>西湖（骑车环湖最舒服）、灵隐寺、龙井茶园、西溪湿地</td><td>"上有天堂下有苏杭"——西湖不收费，但人巨多</td><td>2-3 天</td></tr>
+  <tr><td><strong>苏州</strong></td><td>古典园林（拙政园、留园）、平江路、苏州博物馆（贝聿铭设计）</td><td>"园林之城"——最好的江南浓缩版</td><td>2-3 天</td></tr>
+  <tr><td><strong>黄山</strong></td><td>奇松怪石云海日出、西海大峡谷</td><td>"五岳归来不看山，黄山归来不看岳"——名不虚传</td><td>2 天</td></tr>
+  <tr><td><strong>南京</strong></td><td>中山陵、明孝陵、夫子庙、南京博物院</td><td>"六朝古都"——历史感最深沉的省会城市</td><td>2-3 天</td></tr>
+  <tr><td><strong>山东</strong></td><td>泰山（夜爬看日出）、曲阜孔庙、青岛（夏天海滩+啤酒）</td><td>"一山一水一圣人"——泰山+孔庙+青岛啤酒</td><td>4-5 天</td></tr>
+  <tr><td><strong>福建</strong></td><td>厦门鼓浪屿、武夷山、福建土楼</td><td>闽南文化+山海风光，节奏偏慢</td><td>4-5 天</td></tr>
+  <tr><td><strong>江西</strong></td><td>庐山（避暑）、景德镇（陶瓷文化）、婺源（春天的油菜花）</td><td>"中国最'憋屈'的旅游大省"——有资源但存在感不高</td><td>3-5 天</td></tr>
+</table></div>
+
+<div class="highlight-box">🍜 <strong>华东吃什么：</strong>上海小笼包、生煎、葱油拌面、本帮红烧肉；杭州西湖醋鱼、东坡肉、片儿川；南京盐水鸭、鸭血粉丝汤；苏州松鼠鳜鱼、糖粥；山东煎饼、鲁菜（葱烧海参）；福建佛跳墙、沙茶面、土笋冻（沙虫做的，心理建设要做好）。华东的口味偏甜——不是成都那种麻辣。</div>
+
+<div class="era-summary">华东是<strong>最"安全"的旅行选择</strong>——住宿好找、交通方便、不担心语言、不担心吃饭。但节假日的人山人海是最大减分项。如果可以，<strong>不要在黄金周去华东。</strong>春季的江南水乡最有味道，秋天去黄山看云海最佳。</div>
+
+<div class="highlight-box">🚗 <strong>交通中枢：</strong>上海（国际入口+高铁枢纽）→ 杭州（1h）→ 苏州（0.5h）→ 南京（1h）。高铁网最密的区域，城市间1小时内到达。<strong>经典串联：</strong>沪苏杭金三角（5-7天，住上海 day trip 苏州杭州）→ 黄山+宏村（3天，杭州/南京中转）→ 山东齐鲁线（济南→泰安→曲阜→青岛，5天）→ 福建（厦门+土楼+武夷山，4-5天，独立于江南板块）。</div>
+</section>
+
+<!-- ═══════ 华南 ═══════ -->
+<section id="south">
+<h2>第九章：华南——亚热带的山海与美食</h2>
+<p class="subtitle" style="margin-bottom:20px;">广东·广西·海南</p>
+
+<div class="region-card south">
+<h3>🎭 旅行节奏</h3>
+<p>华南的旅行价值被严重低估了——大部分人只知道"冬天去海南""去广东吃早茶"。实际上，<strong>广西的桂林阳朔是中国最早的"国际旅行名片"</strong>，广东的美食密度全国第一，海南不只是三亚。最佳季节是冬季（11-3月）——华南的冬天=北方的秋天，温度舒服得刚好。</p>
+
+<div class="info-grid">
+<div><span class="label">最佳季节</span><br>冬季（11-3月，避寒）</div>
+<div><span class="label">建议天数</span><br>桂林阳朔 3-4 天，广东 3-5 天，海南 4-6 天</div>
+<div><span class="label">交通中枢</span><br>广州、深圳、南宁、海口</div>
+<div><span class="label">适合人群</span><br>美食优先/冬季避寒/喜欢热带风光/不想穿羽绒服</div>
+</div>
+</div>
+
+<div class="card"><h4>精华：去哪、玩什么</h4>
+<table>
+  <tr><th>目的地</th><th>玩什么</th><th>一句话</th><th>天数</th></tr>
+  <tr><td><strong>桂林阳朔</strong></td><td>漓江竹筏、十里画廊骑行、遇龙河、龙脊梯田</td><td>"桂林山水甲天下"——山水画里骑电动车</td><td>3-4 天</td></tr>
+  <tr><td><strong>广州</strong></td><td>早茶（点都德或广州酒家）、沙面、陈家祠、长隆</td><td>"吃在广州"——可以吃五天不重样</td><td>2-3 天</td></tr>
+  <tr><td><strong>深圳</strong></td><td>世界之窗、深圳湾公园、华侨城创意园</td><td>"不是旅游城市"——但年轻人多、创业氛围好</td><td>1-2 天</td></tr>
+  <tr><td><strong>海南</strong></td><td>三亚海滩（亚龙湾/海棠湾）、蜈支洲岛潜水、海口骑楼老街</td><td>"中国版的东南亚"——冬天来这里，穿短袖</td><td>4-6 天</td></tr>
+  <tr><td><strong>北海涠洲岛</strong></td><td>火山岛、天主教堂、海鲜市场</td><td>"北海银滩+涠洲岛"——人比三亚少，性价比高</td><td>2-3 天</td></tr>
+  <tr><td><strong>潮汕</strong></td><td>牛肉火锅、肠粉、工夫茶、南澳岛</td><td>"为了一顿牛肉火锅去潮汕"——不是玩笑</td><td>2-3 天</td></tr>
+</table></div>
+
+<div class="highlight-box">🍜 <strong>华南吃什么：</strong>广东早茶（虾饺、烧卖、凤爪、肠粉）、煲仔饭、烧腊（叉烧、烧鹅）、潮汕牛肉火锅（肉是现切的，涮 8 秒）、糖水（双皮奶、杨枝甘露）；广西螺蛳粉（"臭但上瘾"）、桂林米粉；海南文昌鸡、清补凉、椰子饭。华南是<strong>中国最值得"以吃为目的"的区域</strong>。</div>
+
+<div class="era-summary">华南冬季是黄金时段——当北方在水深火热的零下温度中，你在三亚穿短袖吃椰子。桂林阳朔是老牌国际旅游目的地，服务成熟但商业化也重。如果你是一个"美食驱动型"旅行者，华南值得专门飞一趟——不为别的，就为了吃。</div>
+
+<div class="highlight-box">🚗 <strong>交通中枢：</strong>广州（美食+交通总枢纽）→ 深圳（1h高铁）→ 桂林（3h高铁）→ 海口/三亚（飞1h）。<strong>经典串联：</strong>桂林+阳朔（3-4天，高铁直达）→ 广州+潮汕（3-5天美食之旅，高铁串联）→ 海南环岛（5-7天自驾，从海口开始）。三个方向独立——华南以吃为核心串联。如果只选一个：桂林阳朔看山水，广州顺德吃美食，海南三亚躺海滩。</div>
+</section>
+
+<!-- ═══════ 四季去哪 ═══════ -->
+<section id="seasons">
+<h2>第十章：四季去哪儿——一张矩阵</h2>
+
+<div class="season-grid">
+  <div class="season-box spring">
+    <h4>🌸 春季（3-5月）</h4>
+    <p><strong>首选：</strong>江南（苏杭、婺源油菜花）、云南（大理樱花、罗平油菜花）、贵州（百里杜鹃）</p>
+    <p><strong>次选：</strong>北京（气温适宜）、武汉（樱花季但人多爆炸）、洛阳（牡丹花会）</p>
+    <p><strong>别去：</strong>海南（开始热了）、东北（没冰没雪没花，只有风）</p>
+  </div>
+  <div class="season-box summer">
+    <h4>☀️ 夏季（6-8月）</h4>
+    <p><strong>首选：</strong>高原——青海湖油菜花、川西、西藏、长白山、呼伦贝尔草原、内蒙古</p>
+    <p><strong>次选：</strong>大连青岛（海边）、庐山（避暑）、贵州（凉快+瀑布水量大）</p>
+    <p><strong>别去：</strong>长江流域城市（武汉重庆南京——火炉）、海南（热+台风）</p>
+  </div>
+  <div class="season-box autumn">
+    <h4>🍂 秋季（9-10月）</h4>
+    <p><strong>首选：</strong>新疆喀纳斯（9月底秋景封神）、九寨沟（层林尽染）、西北胡杨林、北京香山</p>
+    <p><strong>次选：</strong>南京梧桐、西安（凉爽）、黄山（云海季）</p>
+    <p><strong>别去：</strong>没有特别不能去的地方——秋天几乎全国都适合</p>
+  </div>
+  <div class="season-box winter">
+    <h4>❄️ 冬季（11-2月）</h4>
+    <p><strong>首选：</strong>海南三亚（避寒）、哈尔滨冰雪大世界、长白山滑雪、西双版纳（热带）</p>
+    <p><strong>次选：</strong>北京故宫雪景（可遇不可求）、西安（淡季人少票价低）、云南（气候温和）</p>
+    <p><strong>别去：</strong>九寨沟（部分区域冬季关闭）、川西高海拔（道路可能封闭）</p>
+  </div>
+</div>
+
+<div class="era-summary">记住一句话：<strong>夏天去高海拔，冬天去低纬度，春秋两季随便去。</strong>中国的地势差异给了你全年都有地方可去的选择权——夏天嫌热就上高原，冬天嫌冷就下海南。</div>
+</section>
+
+<!-- ═══════ 黄金周替代方案 ═══════ -->
+<section id="holiday">
+<h2>附录一：黄金周替代方案——人再多也有地方躲</h2>
+<p>中国的法定长假就那么几个。不是所有人都有年假自由——但也不是所有地方长假都挤。<strong>关键是"反向选择"。</strong></p>
+
+<div class="card"><h4>🇨🇳 十一（国庆，7天）——全国最挤，但不是全国都挤</h4>
+<table>
+  <tr><th>❌ 别去（人山人海）</th><th>✅ 去这些（相对人少）</th><th>理由</th></tr>
+  <tr><td>黄山、泰山、华山</td><td><strong>山西古建线</strong></td><td>古建分散在村里，不会出现"一万人堵在索道口"</td></tr>
+  <tr><td>西湖、丽江古城</td><td><strong>贵州</strong>（黄果树+荔波+苗寨）</td><td>贵州旅游还在上升期，知名度不如云南但风景不输</td></tr>
+  <tr><td>三亚、厦门</td><td><strong>甘肃丝绸之路</strong></td><td>景点之间距离大，游客自然分流，不会扎堆</td></tr>
+  <tr><td>张家界、九寨沟</td><td><strong>川西</strong></td><td>十月的川西秋景封神（新都桥、稻城），但大部分人被"高原"劝退</td></tr>
+  <tr><td>故宫、兵马俑</td><td><strong>城市反向游</strong>：平日拥挤的大城市反而空了——去上海法租界骑车、成都人民公园喝茶</td><td>长假期间北上广深反而安静</td></tr>
+</table></div>
+
+<div class="card"><h4>🧧 春节（7天）——南方人往北跑，北方人往南跑</h4>
+<table>
+  <tr><th>❌ 别去</th><th>✅ 去这些</th><th>理由</th></tr>
+  <tr><td>三亚（房价翻三倍，沙滩上都是人）</td><td><strong>云南小众</strong>（腾冲、建水、沙溪）</td><td>气候温和，不是大理丽江那种"春节限流"级别</td></tr>
+  <tr><td>哈尔滨冰雪大世界（排队两小时看一个冰雕）</td><td><strong>福建土楼+厦门</strong></td><td>冬天不冷，游客密度远低于海南</td></tr>
+  <tr><td>雪乡</td><td><strong>广西</strong>（桂林阳朔冬天是淡季，但风景不差分毫）</td><td>冬天漓江有雾，比夏天更有仙气</td></tr>
+  <tr><td>东南亚热门海岛</td><td><strong>西安</strong>（春节期间的西安年味最浓，但游客不如十一多）</td><td>灯会、庙会、回民街——过年的西安是最有味道的</td></tr>
+  <tr><td>-</td><td><strong>去一个有暖气的北方城市过冬</strong>（北京胡同大雪、哈尔滨中央大街）</td><td>南方人体验真正的冬天——不是湿冷魔法攻击</td></tr>
+</table></div>
+
+<div class="card"><h4>🌸 五一/清明/端午（3-5天）——短线游的高峰</h4>
+<table>
+  <tr><th>❌ 别去</th><th>✅ 去这些</th><th>理由</th></tr>
+  <tr><td>任何"5A级景区"</td><td><strong>周边冷门</strong>：城市周边的小山、小湖、小古镇</td><td>长假短假最大的区别——短线游大家全挤在周边热门地</td></tr>
+  <tr><td>热门古镇（周庄、乌镇）</td><td><strong>省内二三线</strong>：不在旅游雷达上的城市反而舒服</td><td>比如浙江不去杭州去绍兴、江苏不去苏州去镇江</td></tr>
+  <tr><td>任何需要坐索道的地方</td><td><strong>城市深度游</strong>：选一个没去过的大城市，逛博物馆、吃本地菜</td><td>城市越大越不依赖单一景点</td></tr>
+</table></div>
+
+<div class="era-summary">黄金周的核心策略是<strong>"别人去东你往西，别人看山你看寺"</strong>。不是没有地方可去——是大部分人只会去那几个地方。山西古建线、贵州山水、甘肃丝路——长假去这些地方，体验不会比平时差太多。</div>
+</section>
+
+<!-- ═══════ 线路时间表 ═══════ -->
+<section id="routes">
+<h2>附录二：经典线路时间速查表</h2>
+<p>按"最少需要几天"排序，大约适合普通人（不是特种兵也不是深度游）。</p>
+
+<div style="margin:20px 0;">
+  <div class="route-row"><span class="route-name">🏙️ 北京经典</span><span class="route-days">4-5 天</span><span class="route-note">故宫+长城+颐和园+国博+胡同，飞机/高铁到北京</span></div>
+  <div class="route-row"><span class="route-name">🏛️ 西安深度</span><span class="route-days">3-4 天</span><span class="route-note">兵马俑+城墙+陕博+回民街+华清池</span></div>
+  <div class="route-row"><span class="route-name">🏔️ 成都+周边</span><span class="route-days">4-5 天</span><span class="route-note">熊猫+茶馆+都江堰+青城山+峨眉山（可选）</span></div>
+  <div class="route-row"><span class="route-name">🍜 成都+重庆双城</span><span class="route-days">6-7 天</span><span class="route-note">高铁1.5小时串起来，全程以吃为主线</span></div>
+  <div class="route-row"><span class="route-name">🏯 江南巡礼</span><span class="route-days">5-7 天</span><span class="route-note">上海→苏州→杭州，顺路可以加西塘或乌镇</span></div>
+  <div class="route-row"><span class="route-name">🗿 山西古建线</span><span class="route-days">5-7 天</span><span class="route-note">大同→应县→五台山→佛光寺→平遥，需自驾/包车</span></div>
+  <div class="route-row"><span class="route-name">🏞️ 桂林阳朔</span><span class="route-days">3-4 天</span><span class="route-note">漓江+十里画廊+龙脊梯田</span></div>
+  <div class="route-row"><span class="route-name">⛰️ 张家界+凤凰</span><span class="route-days">4-5 天</span><span class="route-note">张家界森林公园+天门山→凤凰古城</span></div>
+  <div class="route-row"><span class="route-name">🏔️ 九寨沟+黄龙</span><span class="route-days">3-4 天</span><span class="route-note">建议飞九寨黄龙机场，别从成都坐大巴（8小时）</span></div>
+  <div class="route-row"><span class="route-name">🐫 丝绸之路精华</span><span class="route-days">6-8 天</span><span class="route-note">兰州→张掖→嘉峪关→敦煌，一路向西</span></div>
+  <div class="route-row"><span class="route-name">🏔️ 川西小环线</span><span class="route-days">5-7 天</span><span class="route-note">成都→四姑娘山→丹巴→新都桥→康定→成都</span></div>
+  <div class="route-row"><span class="route-name">🌄 云南经典</span><span class="route-days">7-10 天</span><span class="route-note">昆明→大理→丽江→香格里拉（自北向南或反向）</span></div>
+  <div class="route-row"><span class="route-name">🌿 青海环线</span><span class="route-days">4-6 天</span><span class="route-note">西宁→青海湖→茶卡盐湖→祁连→门源</span></div>
+  <div class="route-row"><span class="route-name">❄️ 东北冰雪</span><span class="route-days">5-7 天</span><span class="route-note">哈尔滨→雪乡/亚布力→长白山（冬季限定）</span></div>
+  <div class="route-row"><span class="route-name">🏝️ 海南环岛</span><span class="route-days">5-7 天</span><span class="route-note">海口→文昌→三亚→陵水（建议自驾）</span></div>
+  <div class="route-row"><span class="route-name">🕌 北疆大环线</span><span class="route-days">8-14 天</span><span class="route-note">乌鲁木齐→喀纳斯→伊犁→吐鲁番（秋天最佳）</span></div>
+  <div class="route-row"><span class="route-name">🏔️ 西藏朝圣</span><span class="route-days">7-10 天</span><span class="route-note">拉萨→纳木错→日喀则→珠峰大本营（需适应高反）</span></div>
+</div>
+</section>
+
+<!-- ═══════ 预算矩阵 ═══════ -->
+<section id="budget">
+<h2>附录三：预算矩阵——不同区域、不同档次花多少钱</h2>
+<p>以下为 5-7 天行程的人均参考预算（不含你飞到区域中枢的机票）。<strong>数会变、档次感不会变。</strong></p>
+
+<div class="card"><h4>💰 成本档位说明</h4>
+<table>
+  <tr><th>档位</th><th>日常花费</th><th>主要成本驱动</th><th>代表区域</th></tr>
+  <tr><td>💰 低</td><td>穷游 ¥2000-3500 / 舒适 ¥3500-5500 / 享受 ¥7000+</td><td>交通便利、住宿选择多、餐饮便宜</td><td>江南、北京、成都、长沙、桂林</td></tr>
+  <tr><td>💰💰 中</td><td>穷游 ¥3500-5500 / 舒适 ¥5500-8500 / 享受 ¥10000+</td><td>需要包车/拼车部分路段、景区分散</td><td>云南、川西、东北冰雪、海南淡季</td></tr>
+  <tr><td>💰💰💰 高</td><td>穷游 ¥5000-8000 / 舒适 ¥8000-13000 / 享受 ¥15000+</td><td>全程需要包车、住宿有限、门票贵</td><td>甘肃丝路、青海环线、九寨沟、海南旺季</td></tr>
+  <tr><td>💰💰💰💰 极高</td><td>穷游 ¥6000-10000 / 舒适 ¥10000-18000 / 享受 ¥20000+</td><td>偏远、资源稀缺、必须参团或长途包车</td><td>新疆北疆、西藏</td></tr>
+</table>
+<p><strong>穷游=</strong>青旅/经济酒店+公共交通/拼车+街头小吃为主；<strong>舒适=</strong>快捷/三星酒店+部分包车+正常餐厅；<strong>享受=</strong>四星+/精品民宿+全程包车/租车+fine dining。</p>
+</div>
+
+<div class="card"><h4>🗺️ 主要线路预算一览</h4>
+<table>
+  <tr><th>线路</th><th>档位</th><th>穷游</th><th>舒适</th><th>享受</th><th>花钱大头</th></tr>
+  <tr><td>江南（沪苏杭）</td><td>💰</td><td>¥2500-3500</td><td>¥4000-6000</td><td>¥8000+</td><td>高铁票、园林门票（单个¥50-100）</td></tr>
+  <tr><td>北京</td><td>💰</td><td>¥2500-3500</td><td>¥4000-5500</td><td>¥7000+</td><td>住宿（北京酒店比门票贵得多）</td></tr>
+  <tr><td>成都+重庆双城</td><td>💰</td><td>¥2000-3500</td><td>¥3500-5500</td><td>¥7000+</td><td>吃——但吃再贵也贵不到哪去</td></tr>
+  <tr><td>桂林阳朔</td><td>💰</td><td>¥2000-3500</td><td>¥3500-5500</td><td>¥7000+</td><td>竹筏、演出（印象刘三姐）</td></tr>
+  <tr><td>山西古建线</td><td>💰</td><td>¥2500-3500</td><td>¥4000-6000</td><td>¥7500+</td><td>包车（必须），住宿便宜</td></tr>
+  <tr><td>云南（昆大丽）</td><td>💰💰</td><td>¥3500-5500</td><td>¥5500-8500</td><td>¥10000+</td><td>景区分散，城市间火车/大巴</td></tr>
+  <tr><td>川西小环线</td><td>💰💰</td><td>¥3500-5500</td><td>¥5500-8500</td><td>¥11000+</td><td>包车（必须）、高反药物/氧气</td></tr>
+  <tr><td>东北冰雪（冬）</td><td>💰💰</td><td>¥3500-5500</td><td>¥5500-8500</td><td>¥11000+</td><td>冬季机票、滑雪票、防寒装备</td></tr>
+  <tr><td>九寨沟+黄龙</td><td>💰💰💰</td><td>¥3500-5500</td><td>¥5500-8500</td><td>¥11000+</td><td>飞黄龙机场贵，门票+观光车贵</td></tr>
+  <tr><td>甘肃丝路</td><td>💰💰💰</td><td>¥4000-6500</td><td>¥6500-10000</td><td>¥13000+</td><td>全程包车，莫高窟门票贵且难约</td></tr>
+  <tr><td>青海环线</td><td>💰💰💰</td><td>¥3500-6000</td><td>¥6000-9000</td><td>¥12000+</td><td>必须包车，住宿选择少（旺季暴涨）</td></tr>
+  <tr><td>海南（旺季冬）</td><td>💰💰💰</td><td>¥4000-6000</td><td>¥6500-10000</td><td>¥15000+</td><td>冬季是旺季，机票+酒店翻倍</td></tr>
+  <tr><td>北疆大环线</td><td>💰💰💰💰</td><td>¥6000-10000</td><td>¥10000-16000</td><td>¥20000+</td><td>极大且偏远，全需包车，秋天是旺季</td></tr>
+  <tr><td>西藏</td><td>💰💰💰💰</td><td>¥5000-9000</td><td>¥9000-16000</td><td>¥18000+</td><td>必须参团或包车，机票本身就贵</td></tr>
+  <tr><td>稻城亚丁+川西</td><td>💰💰💰</td><td>¥4500-7000</td><td>¥7000-11000</td><td>¥14000+</td><td>高海拔+偏远，交通+住宿双高</td></tr>
+</table>
+<p style="font-size:13px;color:var(--text-soft);margin-top:12px;"><strong>省钱的核心：</strong>避开旺季。海南春节的价格是淡季的3倍。同样的体验，云南3月和10月差一倍以上。<strong>时间自由是你最大的省钱工具。</strong></p>
+</div>
+
+<div class="era-summary">大体规律：<strong>越往西北越贵、越高海拔越贵、越旺季越贵。</strong>江南和成都这类区域，穷游很舒服——公共交通好、青旅多、吃便宜。新疆和西藏这类区域，省钱空间很有限——基础成本（交通+住宿下限）就很高。如果你预算有限，从 💰 档位开始。</div>
+</section>
+
+<!-- ═══════ 出行贴士 ═══════ -->
+<section id="tips">
+<h2>附录四：出行贴士——让自己少受罪</h2>
+
+<div class="card"><h4>⏰ 什么时候订票</h4>
+<ul>
+  <li><strong>机票：</strong>提前 2-4 周最划算。太早和太晚都贵。周二周三的票通常比周末便宜。</li>
+  <li><strong>火车票：</strong>提前 15 天开售，节假日秒空——设好闹钟抢。</li>
+  <li><strong>景区门票：</strong>故宫、莫高窟、国博等热门需要在公众号上提前约——莫高窟旺季提前一个月！</li>
+  <li><strong>酒店：</strong>节假日酒店翻倍，提前一个月订。淡季可以到了再找——价格更好。</li>
+</ul></div>
+
+<div class="card"><h4>🚫 什么时候别出门</h4>
+<ul>
+  <li><strong>黄金周（十一、春节）：</strong>全国 14 亿人同时出行——景区限流、高速堵车、酒店翻三倍。如果只能在黄金周出行，选冷门目的地（比如山西古建线而非黄山）。</li>
+  <li><strong>小长假（五一、清明、端午）：</strong>短线游爆满，热门景点人挤人。选择周边冷门目的地。</li>
+  <li><strong>寒暑假：</strong>学生客流 + 家长客流，景区全是带娃的。但如果你自己也有娃——没办法。</li>
+</ul></div>
+
+<div class="card"><h4>🎒 带什么</h4>
+<ul>
+  <li><strong>一双好走的鞋。</strong>这是最重要的装备。别穿新鞋出门。</li>
+  <li><strong>充电宝。</strong>中国几乎所有支付和导航都靠手机。</li>
+  <li><strong>身份证。</strong>没有身份证在中国寸步难行——酒店、火车、景区全要刷。</li>
+  <li><strong>高原地区：</strong>防晒霜+墨镜+保温杯。高原的紫外线比海边还强，不是因为热，是因为空气稀薄。</li>
+</ul></div>
+
+<div class="era-summary">出行贴士的核心就三条：<strong>避开黄金周、穿好鞋、带身份证。</strong>剩下的都是细节。</div>
+</section>
+
+</main>
+
+<!-- ═══════ SCRIPTS ═══════ -->
+<script>
+// Search
+(function(){
+  const input = document.getElementById('searchInput');
+  const info = document.getElementById('searchInfo');
+  const sections = document.querySelectorAll('section');
+  if(!input) return;
+  
+  function doSearch(){
+    const q = input.value.trim().toLowerCase();
+    
+    // 先清除所有旧标记，并合并相邻文本节点（这是修复的关键）
+    document.querySelectorAll('mark').forEach(m=>{
+      const parent = m.parentNode;
+      parent.replaceChild(document.createTextNode(m.textContent), m);
+      parent.normalize(); // 合并相邻文本节点，防止词被切在两段
+    });
+    info.classList.remove('visible');
+    
+    if(q.length < 1) return;
+    
+    let count = 0;
+    sections.forEach(s=>{
+      const walker = document.createTreeWalker(s, NodeFilter.SHOW_TEXT);
+      const replacements = [];
+      let node;
+      while(node = walker.nextNode()){
+        const p = node.parentNode;
+        if(!p || p.tagName === 'SCRIPT' || p.tagName === 'STYLE' || p.tagName === 'MARK') continue;
+        const txt = node.textContent;
+        if(txt.toLowerCase().indexOf(q) !== -1) replacements.push(node);
+      }
+      // 用 fragment 一次性替换，处理同一文本节点中的多个匹配
+      replacements.forEach(node=>{
+        const txt = node.textContent;
+        const lower = txt.toLowerCase();
+        const frag = document.createDocumentFragment();
+        let last = 0, idx = lower.indexOf(q);
+        while(idx !== -1){
+          if(idx > last) frag.appendChild(document.createTextNode(txt.substring(last, idx)));
+          const mk = document.createElement('mark');
+          mk.textContent = txt.substring(idx, idx + q.length);
+          frag.appendChild(mk);
+          count++;
+          last = idx + q.length;
+          idx = lower.indexOf(q, last);
+        }
+        if(last < txt.length) frag.appendChild(document.createTextNode(txt.substring(last)));
+        node.parentNode.replaceChild(frag, node);
+      });
+    });
+    
+    info.textContent = count > 0 ? '找到 ' + count + ' 处匹配' : '未找到匹配项';
+    info.classList.add('visible');
+  }
+  input.addEventListener('input', doSearch);
+})();
+
+// Active nav tracking
+(function(){
+  const navs = document.querySelectorAll('.sidebar nav a');
+  const sections = document.querySelectorAll('section[id]');
+  if(!navs.length) return;
+  window.addEventListener('scroll', ()=>{
+    let current = '';
+    sections.forEach(s=>{ const top = s.getBoundingClientRect().top; if(top < 200) current = s.id; });
+    navs.forEach(a=>{ a.classList.toggle('active', a.getAttribute('href') === '#'+current); });
+  });
+})();
+</script>
+
+</body>
+</html>

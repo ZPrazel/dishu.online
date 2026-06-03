@@ -1,0 +1,1289 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 全景图谱 — 从宏观到技术</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<style>
+:root {
+  --bg: #f7f8fa; --bg2: #fff; --bg3: #eef1f5; --card: #fff;
+  --border: #dde1e8; --text: #2c3038; --text2: #5f6570;
+  --accent: #2563eb; --accent2: #7c3aed; --accent3: #059669;
+  --accent4: #dc2626; --gold: #b45309; --radius: 10px; --radius-sm: 6px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-hover: 0 4px 16px rgba(0,0,0,.08);
+  --nav-w: 220px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; font-size:16px; }
+body {
+  background:var(--bg); color:var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  line-height:1.8; overflow-x:hidden;
+}
+
+/* ====== SIDEBAR NAV ====== */
+.sidebar {
+  position:fixed; top:0; left:0; width:var(--nav-w); height:100vh;
+  background:var(--bg2); border-right:1px solid var(--border);
+  z-index:200; overflow-y:auto; overflow-x:hidden;
+  display:flex; flex-direction:column; padding:20px 0;
+}
+.side-logo {
+  padding:8px 20px 20px; font-weight:800; font-size:1rem;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  border-bottom:1px solid var(--border); margin-bottom:8px;
+}
+.side-group { padding:8px 0; }
+.side-group-title {
+  font-size:0.7rem; font-weight:700; color:var(--text2); text-transform:uppercase;
+  letter-spacing:.06em; padding:4px 20px 6px;
+}
+.side-a {
+  display:block; padding:6px 20px; font-size:0.82rem; color:var(--text2);
+  text-decoration:none; border-left:3px solid transparent; transition:all .15s;
+}
+.side-a:hover, .side-a.active {
+  color:var(--accent); background:rgba(37,99,235,.06); border-left-color:var(--accent);
+}
+
+/* ====== MAIN CONTENT ====== */
+main { margin-left:var(--nav-w); padding:0 40px; max-width:1000px; }
+
+/* Hero */
+.hero { padding:72px 0 48px; }
+.hero h1 { font-size:clamp(1.8rem,4vw,2.6rem); font-weight:900; letter-spacing:-0.02em; margin-bottom:10px; background:linear-gradient(135deg,var(--accent),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.hero .sub { font-size:1rem; color:var(--text2); max-width:560px; margin-bottom:24px; }
+.hero-badges { display:flex; gap:8px; flex-wrap:wrap; }
+.badge { padding:4px 14px; border-radius:18px; font-size:0.78rem; border:1px solid var(--border); color:var(--text2); background:var(--bg2); box-shadow:var(--shadow); }
+
+/* Sections */
+.section { padding:52px 0; }
+.sec-title { font-size:clamp(1.3rem,3vw,1.6rem); font-weight:800; margin-bottom:6px; color:var(--text); display:flex; align-items:center; gap:8px; }
+.sec-desc { color:var(--text2); margin-bottom:28px; font-size:0.9rem; max-width:660px; }
+.sec-title-sm { color:var(--text); font-size:1.05rem; font-weight:700; margin:32px 0 12px; padding-left:12px; border-left:3px solid var(--accent); }
+
+/* Cards */
+.card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(260px,1fr)); gap:14px; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow); transition:all .2s; }
+.card:hover { box-shadow:var(--shadow-hover); transform:translateY(-1px); }
+.card-icon { font-size:1.6rem; margin-bottom:8px; display:block; }
+.card h3 { font-size:1rem; font-weight:700; margin-bottom:6px; color:var(--text); }
+.card p { font-size:0.85rem; color:var(--text2); line-height:1.6; }
+.tag { display:inline-block; padding:2px 10px; border-radius:12px; font-size:0.7rem; margin-top:6px; font-weight:600; }
+.tb { background:rgba(37,99,235,.1); color:var(--accent); }
+.tg { background:rgba(5,150,105,.1); color:var(--accent3); }
+.tp { background:rgba(124,58,237,.1); color:var(--accent2); }
+.tr { background:rgba(220,38,38,.1); color:var(--accent4); }
+.tgo { background:rgba(180,83,9,.1); color:var(--gold); }
+
+/* Pipeline */
+.pipeline { display:flex; flex-wrap:wrap; gap:8px; align-items:center; justify-content:center; margin:18px 0; }
+.pn { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:12px 14px; text-align:center; min-width:80px; flex:1; max-width:170px; }
+.pn .ni { font-size:1.5rem; display:block; margin-bottom:4px; }
+.pn .nt { font-weight:700; font-size:0.82rem; color:var(--text); }
+.pn .nd { font-size:0.7rem; color:var(--text2); margin-top:2px; line-height:1.4; }
+.pa { font-size:1.2rem; color:var(--accent); display:flex; align-items:center; }
+
+/* Timeline */
+.timeline { position:relative; padding-left:26px; }
+.timeline::before { content:''; position:absolute; left:7px; top:8px; bottom:8px; width:2px; background:var(--border); }
+.tl-i { position:relative; margin-bottom:16px; }
+.tl-d { position:absolute; left:-22px; top:6px; width:12px; height:12px; border-radius:50%; background:var(--accent); border:2px solid var(--bg); }
+.tl-y { font-size:0.76rem; color:var(--accent); font-weight:700; }
+.tl-t { font-weight:700; color:var(--text); margin:1px 0; }
+.tl-c { font-size:0.82rem; color:var(--text2); }
+
+/* Formula */
+.formula {
+  background:var(--bg3); padding:16px 20px; border-radius:var(--radius-sm);
+  margin:14px 0; border:1px solid var(--border); overflow-x:auto; text-align:center;
+}
+.formula .katex { font-size:1.05rem; }
+
+/* Back to top */
+#btt {
+  position:fixed; bottom:28px; right:28px; width:42px; height:42px;
+  border-radius:50%; background:var(--accent); color:#fff; border:none;
+  font-size:1.2rem; cursor:pointer; box-shadow:0 2px 12px rgba(37,99,235,.3);
+  opacity:0; transform:translateY(20px); transition:all .3s; z-index:300;
+  display:flex; align-items:center; justify-content:center;
+}
+#btt.show { opacity:1; transform:translateY(0); }
+
+/* Highlight / Insight */
+.hlb {
+  background:rgba(37,99,235,.04); border:1px solid rgba(37,99,235,.2);
+  border-radius:var(--radius); padding:16px 20px; margin:16px 0;
+}
+.hlb h4 { color:var(--accent); margin-bottom:5px; }
+.hlb p { font-size:0.86rem; color:var(--text2); }
+.insight { background:rgba(180,83,9,.04); border:1px solid rgba(180,83,9,.2); border-radius:var(--radius); padding:16px 20px; margin:16px 0; }
+.insight::before { content:'💡 '; }
+
+/* Flow */
+.fr { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:10px 0; }
+.fb { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius-sm); padding:8px 12px; font-size:0.78rem; font-weight:600; color:var(--text); text-align:center; }
+.fb.ac { border-color:var(--accent); background:rgba(37,99,235,.06); color:var(--accent); }
+.fa { color:var(--accent); font-weight:bold; font-size:1rem; }
+
+/* Architecture */
+.arch { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:18px; margin:12px 0; text-align:center; font-size:0.8rem; }
+.arch-row { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:6px 0; }
+.arch-box { background:var(--bg2); border:1px solid var(--border); border-radius:5px; padding:7px 12px; min-width:50px; box-shadow:var(--shadow); }
+.arch-box.ah { border-color:var(--accent); color:var(--accent); font-weight:700; }
+.arch-box.ag { border-color:var(--accent3); color:var(--accent3); font-weight:700; }
+.arch-arrow-down { font-size:1.1rem; color:var(--text2); margin:3px 0; }
+
+/* Tables */
+.ctbl { width:100%; border-collapse:collapse; font-size:0.82rem; margin:12px 0; }
+.ctbl th { background:var(--bg3); color:var(--text); padding:10px 12px; text-align:left; font-weight:700; border-bottom:2px solid var(--border); }
+.ctbl td { padding:9px 12px; border-bottom:1px solid var(--border); color:var(--text2); }
+.ctbl tr:hover td { background:rgba(37,99,235,.02); }
+
+/* Learning path steps */
+.lp-steps { display:flex; flex-direction:column; gap:0; margin:16px 0; }
+.lp-step { display:flex; gap:16px; position:relative; }
+.lp-num {
+  width:40px; height:40px; min-width:40px; border-radius:50%;
+  background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:1rem; z-index:1;
+}
+.lp-line { position:absolute; left:19px; top:40px; bottom:0; width:2px; background:var(--border); z-index:0; }
+.lp-step:last-child .lp-line { display:none; }
+.lp-content { padding-bottom:20px; padding-top:4px; }
+.lp-content h4 { color:var(--text); margin-bottom:4px; font-size:0.95rem; }
+.lp-content p { font-size:0.84rem; color:var(--text2); }
+
+/* Skill tree */
+.skill-tree { display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr)); gap:10px; margin:12px 0; }
+.skill-node { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-sm); padding:14px; box-shadow:var(--shadow); }
+.skill-node h5 { font-size:0.85rem; color:var(--text); margin-bottom:4px; }
+.skill-node .st { font-size:0.76rem; color:var(--text2); line-height:1.5; }
+
+footer { text-align:center; padding:32px 0; color:var(--text2); font-size:0.78rem; border-top:1px solid var(--border); margin-top:32px; }
+
+@media (max-width:860px) {
+  .sidebar { display:none; }
+  main { margin-left:0; padding:0 20px; }
+  .card-grid { grid-template-columns:1fr; }
+  .pipeline { flex-direction:column; align-items:stretch; }
+  .pa { transform:rotate(90deg); justify-content:center; }
+  .pn { max-width:none; }
+  .skill-tree { grid-template-columns:1fr; }
+}
+
+/* Code */
+code { background:var(--bg3); padding:1px 5px; border-radius:3px; font-size:0.85em; font-family:"SF Mono","Cascadia Code","Consolas","Monaco",monospace; color:var(--accent4); }
+pre { background:var(--bg3); padding:14px 18px; border-radius:var(--radius-sm); overflow-x:auto; margin:12px 0; border:1px solid var(--border); line-height:1.55; }
+pre code { background:none; padding:0; font-size:0.8rem; color:var(--text); }
+/* Self-check */
+.check { background:linear-gradient(135deg,#eef7ff,#f0f4ff); border:1px solid #c4d8f0; border-radius:var(--radius-sm); padding:16px 20px; margin:18px 0; }
+.check h5 { color:#2c5f8a; margin:0 0 8px; font-size:0.88rem; }
+.check li { color:var(--text2); font-size:0.84rem; margin:4px 0; padding-left:4px; }
+.check li::marker { color:var(--accent); }
+/* Glossary */
+
+/* Glossary */
+.glossary { columns:2; column-gap:24px; }
+.glossary dt { color:var(--accent); font-weight:600; font-size:0.84rem; margin-top:8px; break-inside:avoid; }
+.glossary dd { color:var(--text2); font-size:0.8rem; margin:2px 0 8px 12px; break-inside:avoid; }
+
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-track { background:var(--bg); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+</style>
+<style>
+.kb-back-btn {
+  position: fixed; bottom: 28px; left: 28px; z-index: 99999;
+  background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(139,94,60,0.2);
+  border-radius: 24px; padding: 8px 18px;
+  font-size: 13px; color: #8b5e3c; text-decoration: none;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  transition: all 0.25s; display: inline-flex; align-items: center; gap: 6px;
+  letter-spacing: 0.04em;
+}
+.kb-back-btn:hover {
+  background: rgba(255,255,255,1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+  border-color: rgba(139,94,60,0.4);
+}
+</style>
+</head>
+<body>
+<a href="../index.html" class="kb-back-btn">鈫?鐭ヨ瘑搴?/a>
+
+
+<!-- ====== SIDEBAR ====== -->
+<aside class="sidebar">
+  <div class="side-logo">🤖 AI 全景图谱</div>
+  <div class="side-group">
+    <div class="side-group-title">宏观视野</div>
+    <a class="side-a active" href="#hero">概览</a>
+    <a class="side-a" href="#chain">产业链</a>
+    <a class="side-a" href="#economy">经济与社会</a>
+    <a class="side-a" href="#opp">普通人机会</a>
+  </div>
+  <div class="side-group">
+    <div class="side-group-title">技术脉络</div>
+    <a class="side-a" href="#ml">零、数学速成</a>
+    <a class="side-a" href="#python">一、Python 速成</a>
+    <a class="side-a" href="#dl">二、机器学习</a>
+    <a class="side-a" href="#nn">三、神经网络</a>
+    <a class="side-a" href="#pytorch">四、PyTorch 系统入门</a>
+    <a class="side-a" href="#cnn">五、CNN 卷积网络</a>
+    <a class="side-a" href="#rnn">六、RNN 与 LSTM</a>
+    <a class="side-a" href="#trans">七、Transformer</a>
+    <a class="side-a" href="#pretrain">八、预训练时代</a>
+    <a class="side-a" href="#llm">九、LLM 技术栈</a>
+    <a class="side-a" href="#agent">十、AI Agent</a>
+    <a class="side-a" href="#codex">十一、Codex 编程</a>
+    <a class="side-a" href="#langchain">十二、LangChain</a>
+  </div>
+  <div class="side-group">
+    <div class="side-group-title">实践指南</div>
+    <a class="side-a" href="#engineer">AI 应用工程师路径</a>
+    <a class="side-a" href="#models">主流模型对比</a>
+  </div>
+</aside>
+
+<main>
+
+<!-- ====== HERO ====== -->
+<section class="hero" id="hero">
+<h1>理解 AI，掌控未来</h1>
+<p class="sub">两条脉络系统梳理 —— 宏观产业格局与财富逻辑，技术原理与演进路径。外加一份专为「非科班 AI 应用工程师」设计的知识地图。</p>
+<div class="hero-badges">
+<span class="badge">📊 宏观产业</span><span class="badge">🔬 技术原理</span><span class="badge">💰 投资机会</span>
+<span class="badge">🤖 Agent</span><span class="badge">💻 Codex</span><span class="badge">🦞 LangChain</span>
+<span class="badge">📐 公式直觉</span><span class="badge">🛠️ 应用工程师路径</span>
+</div>
+</section>
+
+<!-- ======================================================================== -->
+<!-- MACRO -->
+<!-- ======================================================================== -->
+<section class="section" id="macro">
+<div class="sec-title">📊 第一条脉络：宏观视野</div>
+<p class="sec-desc">技术革命从来不只是技术问题——它重塑产业链、改写财富规则、重构社会秩序。</p>
+
+<h3 id="chain" class="sec-title-sm">🏭 AI 产业链全景</h3>
+<div class="pipeline">
+<div class="pn"><span class="ni">⚡</span><div class="nt">上游：算力基建</div><div class="nd">GPU/TPU芯片<br>数据中心<br>能源电力</div></div>
+<span class="pa">→</span>
+<div class="pn"><span class="ni">🗃️</span><div class="nt">上游：数据层</div><div class="nd">数据采集标注<br>数据交易市场<br>合成数据</div></div>
+<span class="pa">→</span>
+<div class="pn"><span class="ni">🧠</span><div class="nt">中游：模型层</div><div class="nd">大模型研发<br>开源/闭源<br>微调与部署</div></div>
+<span class="pa">→</span>
+<div class="pn"><span class="ni">🛠️</span><div class="nt">中游：工具层</div><div class="nd">MLOps平台<br>向量数据库<br>Agent框架</div></div>
+<span class="pa">→</span>
+<div class="pn"><span class="ni">🚀</span><div class="nt">下游：应用层</div><div class="nd">AI搜索/编程<br>AI教育/医疗<br>自动驾驶</div></div>
+</div>
+
+<div class="card-grid">
+<div class="card"><span class="card-icon">💻</span><h3>算力：AI 的「新石油」</h3><p>训练 GPT-4 级别模型需上万张 H100 GPU，单卡 $30,000+。NVIDIA 市值突破万亿不是泡沫——芯片出口管制已成大国博弈核心工具。全球数据中心年耗电量已超部分国家全国用电。</p><span class="tag tb">上游核心</span></div>
+<div class="card"><span class="card-icon">🗄️</span><h3>数据：AI 的「粮食」</h3><p>高质量公开文本数据正在枯竭。Reddit、StackOverflow、新闻媒体对 AI 公司关闭免费访问。数据标注产业达百亿美元规模，合成数据（AI 生成训练数据）成为替代方案。</p><span class="tag tg">上游核心</span></div>
+<div class="card"><span class="card-icon">🔌</span><h3>能源：隐秘的瓶颈</h3><p>一次 GPT-4 训练耗电约 50 GWh——5000 个美国家庭全年用电量。微软签核聚变购电协议，Google 投地热。AI 竞赛的尽头是能源竞赛。</p><span class="tag tp">上游核心</span></div>
+</div>
+
+<h3 id="economy" class="sec-title-sm">💹 经济与社会的重塑</h3>
+<div class="card-grid">
+<div class="card"><span class="card-icon">📈</span><h3>生产力跃升</h3><p>麦肯锡预测生成式 AI 每年为全球经济增加 <b>$2.6-4.4 万亿</b>。程序员效率提升 50%+，内容生产边际成本趋近于零。这不是渐进改良，是<b>生产函数的阶跃变化</b>。</p><span class="tag tgo">万亿级市场</span></div>
+<div class="card"><span class="card-icon">🔄</span><h3>就业结构重塑</h3><p>「AI 不会取代你，但会用 AI 的人会」。翻译、初级编程、数据录入首当其冲。创意策划、复杂谈判、情感关怀、跨领域整合等「人性密集型」岗位反而升值。</p><span class="tag tr">关键变量</span></div>
+<div class="card"><span class="card-icon">🏢</span><h3>商业模式重构</h3><p>「一人公司」成为可能：个人借 AI 工具完成过去十人团队的工作。每个垂直行业都值得用 AI 重做一遍——法律、会计、保险、房地产……</p><span class="tag tb">范式转移</span></div>
+<div class="card"><span class="card-icon">🎓</span><h3>教育革命</h3><p>AI 家教实现真正因材施教。核心能力从「知识记忆」转向「提出好问题、批判性思维、跨领域联想」——这些恰恰是当前应试教育最薄弱的环节。</p></div>
+<div class="card"><span class="card-icon">🏥</span><h3>医疗突破</h3><p>AI 影像诊断超资深医生。AlphaFold 3 预测生命分子结构，药物研发周期从十年压缩到数月。个性化医疗从概念走向临床。</p></div>
+<div class="card"><span class="card-icon">⚖️</span><h3>治理挑战</h3><p>深度伪造威胁选举、算法偏见固化不平等。欧盟 AI Act 率先分级立法，中国推行生成式 AI 备案制。全球 AI 治理与军备竞赛同步展开。</p></div>
+</div>
+
+<h3 id="opp" class="sec-title-sm">💰 普通人如何攫取利益？</h3>
+<div class="hlb"><h4>🎯 核心框架：三层机会模型</h4>
+<p style="font-size:0.84rem;">AI 带来的机会不是均匀分布的——它像一个三层蛋糕。顶层是「卖铲子的」（基础设施），中层是「用铲子的」（应用层），底层是「被铲子改变的人」（消费者/工作者）。普通人的最佳策略：<b>押注顶层确定性 + 在中层建立个人壁垒 + 积极利用底层变化。</b></p></div>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">第一层：投资——押注「一定发生」的事</h4>
+<p style="color:var(--text2);font-size:0.86rem;">
+不赌单一技术路线或公司——赌<b>趋势本身</b>。AI 渗透率只会越来越高，算力需求只会越来越大，数据只会越来越值钱。在这个前提下：
+</p>
+<table class="ctbl">
+<tr><th>确定性</th><th>方向</th><th>逻辑</th><th>风险</th></tr>
+<tr><td><b>★★★★★</b></td><td>算力（NVDA/AMD/芯片 ETF）</td><td>所有 AI 公司都要买芯片，且供不应求</td><td>估值高、周期波动</td></tr>
+<tr><td><b>★★★★☆</b></td><td>电力/数据中心基础设施</td><td>AI 训练和推理耗电呈指数增长</td><td>政策风险</td></tr>
+<tr><td><b>★★★☆☆</b></td><td>AI 应用层（广告/客服/编程工具）</td><td>每轮技术革命最终最大的赢家常在应用层</td><td>竞争激烈、赢家未定</td></tr>
+<tr><td><b>反向下注</b></td><td>AI 做不到的事：线下体验/手工艺/真人情感</td><td>稀缺性反向上升</td><td>市场小、流动性差</td></tr>
+</table>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">第二层：职业——成为「AI 编排者」而非「AI 操作员」</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+2023 年，会写 Prompt 的人是稀缺人才。2025 年，Prompt Engineering 已经不再是独立岗位——它融入了产品经理、设计师、运营的日常工作中，就像「会用 Excel」一样从简历亮点变成了默认要求。职业红利正在从「会用 AI」向「会设计 AI 工作流」迁移。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>三条高确定性路径：</b><br>
+① <b>AI+专业护城河：</b>律师×AI 合同审查、医生×AI 影像辅助、教师×AI 个性化辅导。AI 放大你的专业知识，但专业知识本身仍是壁垒——AI 不会通过法考。<br>
+② <b>AI Workflow 设计师：</b>不是写 Prompt，是设计一整条 AI 流水线——数据从哪来、经过哪些模型、输出到哪去、中间怎么做质量把控。这需要系统思维而非单点技能，AI 暂时做不到。<br>
+③ <b>垂直行业 AI 化顾问：</b>成千上万的传统中小企业需要人帮他们理解「AI 能帮我的业务做什么」——不是教他们用 ChatGPT，是帮他们找到 AI 在具体业务流中的切入点。这是未来 3-5 年最大的蓝海。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">第三层：创业——抓住「还不够好」的缝隙</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+当前 AI 产品的共同特征：<b>能力 80 分但体验 30 分。</b>模型的回答质量已经很高了，但产品化的最后一公里——工作流集成、数据安全、团队协作、行业知识定制——几乎空白。这就是机会。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>具体方向：</b>① <b>本地私有化部署：</b>帮律师、医生、政府机构部署本地大模型——数据不出门，但享受 AI 能力。② <b>AI 内容/IP 产品化：</b>AI 生图 + 3D 打印文创（你们已经在做的方向）、AI 生成个性化教育内容。③ <b>AI 培训/咨询：</b>帮传统企业一把手理解 AI 的战略价值——注意不是教写 Prompt，是帮他们看到「AI 怎么改变我的商业模式」。④ <b>Agent 定制开发：</b>为特定行业开发专用 Agent——房产中介 Agent（自动回客户 + 匹配房源 + 预约看房）、餐饮 Agent（库存预测 + 自动订货 + 差评自动回复）。
+</p>
+</section>
+
+<!-- ======================================================================== -->
+<!-- TECH -->
+<!-- ======================================================================== -->
+<section class="section" id="tech">
+<div class="sec-title">🔬 第二条脉络：技术全貌（教科书式）</div>
+<p class="sec-desc">从「什么是学习」开始，逐步推导到 Transformer、LLM、Agent。重在讲清每个概念的<b>动机</b>（为什么需要它）、<b>思想</b>（怎么工作）、<b>衔接</b>（技术演进的逻辑线）。</p>
+
+<!-- ====== 0. MATH ====== -->
+<h3 id="ml" class="sec-title-sm">零、数学速成：理解 AI 所需的最小数学工具箱</h3>
+
+<h4 style="color:var(--text);margin:14px 0 6px;">0.1 向量：AI 世界的「原子」</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+在 AI 中，<b>一切都用向量表示</b>。一个词 → 一个向量（Embedding）。一张图 → 一组向量。一段话 → 一个向量序列。<b>向量就是一列数字</b>，比如一个 3 维向量 <b>v</b> = [2, 5, 1]。每个维度代表一种「属性」——在词向量的世界里，可能第 1 维代表「性别倾向」，第 2 维代表「大小」，第 3 维代表「情感色彩」。你不必知道每个维度具体代表什么——模型自己学会的。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>向量的点积</b>衡量两个向量的「相似度」。点积越大，方向越一致。计算：<b>v</b>·<b>w</b> = v₁w₁ + v₂w₂ + ... + v<sub>n</sub>w<sub>n</sub>。例如 [1,2,3]·[4,5,6] = 1×4 + 2×5 + 3×6 = 4+10+18 = <b>32</b>。如果两个向量完全相同，点积最大；完全相反，点积为负。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">0.2 矩阵乘法：AI 的核心计算原语</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+神经网络中的每一层，本质上是<b>输入向量 × 权重矩阵 = 输出向量</b>。矩阵乘法规则：A 的列数必须等于 B 的行数。结果矩阵的第 (i,j) 位置 = A 的第 i 行 与 B 的第 j 列的<b>点积</b>。
+</p>
+<div class="formula">$$
+\begin{bmatrix} 1 & 2 & 3 \\ 4 & 5 & 6 \end{bmatrix}
+\times
+\begin{bmatrix} a & d \\ b & e \\ c & f \end{bmatrix}
+=
+\begin{bmatrix} 1a+2b+3c & 1d+2e+3f \\ 4a+5b+6c & 4d+5e+6f \end{bmatrix}
+$$</div>
+<p style="color:var(--text2);font-size:0.84rem;">
+一个 2×3 矩阵 乘 3×2 矩阵 = 2×2 矩阵。Transformer 的 Self-Attention 中 Q×Kᵀ 就是矩阵乘法——计算每个词与每个词的相似度。GPU 被设计成极其擅长这种运算——这就是为什么深度学习能爆发。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">0.3 导数的直觉：变化有多快？</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+导数回答了「如果我稍微改变输入，输出会变多少」。对于 f(x)=x²，f'(x)=2x。当 x=3 时，f'(3)=6——意味着在 x=3 附近，x 每增加 0.01，f(x) 约增加 0.06。<b>在 AI 中，导数 = 梯度 = 告诉你调整参数的方向和幅度</b>。梯度下降就是沿着「负梯度方向」走——哪个方向让损失下降最快就往哪走。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>链式法则</b>：如果 z = g(f(x))，那么 dz/dx = g'(f(x)) × f'(x)。这是反向传播的数学基础——误差从输出层，经链式法则一层层「传」回输入层，算出每一层参数的梯度。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">0.4 Softmax：把任意数字变成概率</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+AI 经常输出一组「分数」（logits），比如 [2.0, 1.0, 0.1]。Softmax 把它们变成概率分布（所有值在 0~1 之间，且加起来 = 1）：
+</p>
+<div class="formula">$$
+\mathrm{Softmax}(z_i) = \frac{e^{z_i}}{\sum_j e^{z_j}}
+$$</div>
+<p style="color:var(--text2);font-size:0.84rem;">
+对 [2.0, 1.0, 0.1]：e²=7.39, e¹=2.72, e<sup>0.1</sup>=1.11，总和=11.22。结果：<b>[0.66, 0.24, 0.10]</b>——模型认为第一类的概率是 66%。Transformer 的 Attention 用 Softmax 把相似度分数变成注意力权重。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">0.5 概率与统计：理解「不确定性」</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+AI 输出的不是「答案」，是<b>概率分布</b>。分类模型说「90% 概率是猫」——这个 90% 怎么来的、意味着什么，就是概率统计要回答的。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>期望（Expectation）：</b>E[X] = Σ x·P(x)。如果你玩一个游戏：80% 概率赢 100 元，20% 概率输 50 元。期望收益 = 0.8×100 + 0.2×(−50) = <b>70 元</b>。模型训练中，损失的期望值越小越好。<br>
+<b>贝叶斯定理：</b>P(A|B) = P(B|A)·P(A) / P(B)。直观含义：在看到新证据 B 之后，你对 A 的信念如何更新。比如：已知「咳嗽的人中有 5% 是肺炎」，但你突然发烧了——发烧+咳嗽同时出现时肺炎概率大幅上升。AI 中的 Naive Bayes 分类器、贝叶斯神经网络都基于此。<br>
+<b>交叉熵（Cross-Entropy）：</b>衡量两个概率分布的「距离」。分类任务最常用的损失函数——真实标签是 [1,0,0]（100% 是猫），模型输出 [0.7,0.2,0.1]。交叉熵 = −(1×log0.7 + 0×log0.2 + 0×log0.1) = −log0.7 ≈ <b>0.36</b>。输出越接近真实，交叉熵越小。这就是为什么分类模型用 <code>CrossEntropyLoss</code>。
+</p>
+<div class="insight">向量、矩阵乘法、导数、Softmax、概率——五个概念，构成了理解所有现代 AI 的数学基础。看到向量知道「这是 Embedding」，看到矩阵乘法知道「这是 Attention 在算相似度」，看到 Softmax 知道「这是把分数转概率」，看到交叉熵知道「这是损失函数在量偏差」。</div>
+
+<div class="check"><h5>✅ 检验你是否理解（数学）</h5><ol>
+<li>Softmax([2.0, 1.0, 0.1]) ≈ [0.66, 0.24, 0.10]。如果输入变成 [10.0, 1.0, 0.1]，第一项的输出会更接近 0.66 还是更接近 1.0？为什么？</li>
+<li>交叉熵公式里有一个 log——如果模型对正确答案的输出是 0.9，交叉熵 ≈ 0.105；如果输出是 0.5，交叉熵 ≈ 0.693。直觉上解释：为什么 0.5 的「惩罚」比 0.9 大得多？</li>
+<li>你能用一句话告诉一个没学过数学的人：矩阵乘法 A×B 中，结果的第 i 行第 j 列是什么？</li>
+</ol></div>
+
+<!-- ====== 1. Python ====== -->
+<h3 id="python" class="sec-title-sm">一、Python 速成：把数学变成代码</h3>
+
+<h4 style="color:var(--text);margin:14px 0 6px;">1.1 为什么先学 Python 再学 ML？</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:10px;">
+前面学的向量、矩阵、导数——在 Python 里几乎都是一行代码。不先掌握 Python，后面的公式只能「看」不能「试」。而且 AI 招聘中 Python 是默认前提——不要求精通 C++，但必须能流畅地用 Python 操作数据和调用模型。本章聚焦于<b>AI 场景中最常用的 Python 能力</b>，不做百科全书。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">1.2 NumPy：AI 世界的「计算器」</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+Python 原生的列表做不了高效数值计算。NumPy 提供了 <b>ndarray</b>（多维数组）——它既是向量、也是矩阵、也是 Tensor。PyTorch 的 Tensor 设计直接沿袭了 NumPy。
+</p>
+<pre><code>import numpy as np
+
+# 向量 = 一维数组
+v = np.array([2, 5, 1])
+w = np.array([4, 5, 6])
+dot = np.dot(v, w)        # 点积 = 2×4+5×5+1×6 = 39
+
+# 矩阵 = 二维数组
+A = np.array([[1,2,3], [4,5,6]])   # 2×3
+B = np.array([[1,0], [0,1], [1,1]]) # 3×2
+C = A @ B                  # 矩阵乘法 @ = 2×2 结果
+print(C.shape)             # (2, 2)
+
+# Softmax 实现（3行）
+def softmax(z):
+    e = np.exp(z - np.max(z))  # 减最大值防溢出
+    return e / e.sum()
+
+print(softmax(np.array([2.0, 1.0, 0.1])))  # [0.66 0.24 0.10]</code></pre>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">1.3 必备工具链</h4>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>数学计算：</b><code>numpy</code>（数组运算）、<code>scipy</code>（科学计算）。<b>数据处理：</b><code>pandas</code>（DataFrame，类似 Excel）、<code>matplotlib</code>（画图看训练曲线）。<b>模型：</b><code>scikit-learn</code>（传统 ML）、<code>torch</code>（深度学习）、<code>transformers</code>（HuggingFace）。<b>环境：</b><code>pip install</code> + 虚拟环境（<code>python -m venv ai_env</code>）——避免项目间依赖冲突。Jupyter Notebook 适合探索，VS Code + Copilot 适合工程。
+</p>
+
+<div class="insight">NumPy 的 <code>np.dot</code> 就是向量点积，<code>A @ B</code> 就是矩阵乘法，<code>np.exp</code> 就是 eˣ。数学公式里的每一个符号在 NumPy 里都有一一对应的函数——这就是为什么 Python 是 AI 的通用语言。</div>
+
+<div class="check"><h5>✅ 检验你是否理解（Python）</h5><ol>
+<li>用 NumPy 写一个函数 <code>mse_loss(y_pred, y_true)</code>，计算均方误差。提示：只需要 <code>np.mean</code> 和 <code>** 2</code>。</li>
+<li>为什么 Softmax 实现中要先 <code>np.exp(z - np.max(z))</code> 而不是直接 <code>np.exp(z)</code>？想想 z = [1000, 900, 800] 会怎样。</li>
+<li>你有一个 3×3 的矩阵 M。写一行代码取它的第 2 列（索引 1）。</li>
+</ol></div>
+
+<!-- ====== 2. ML ====== -->
+<h3 id="dl" class="sec-title-sm">二、机器学习：从一条直线开始</h3>
+
+<h4 style="color:var(--text);margin:14px 0 6px;">2.1 一个具体例子：预测房价</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:10px;">
+假设你有 3 个房屋数据：面积 50m² → 卖 150 万；80m² → 220 万；120m² → 310 万。你想预测 100m² 的房子卖多少钱。人脑会「画一条穿过这些点的直线」——机器学习做的事完全一样，只是用数学来精确做。
+</p>
+<p style="color:var(--text2);font-size:0.86rem;">
+我们的模型：<b>房价 = w × 面积 + b</b>。w 是斜率（每平米加多少钱），b 是截距（基础价）。目标：找到最好的 w 和 b，让预测值与真实值的差距最小。
+</p>
+<div class="formula">$$
+\mathrm{Loss}(w,b) = \frac{1}{3} \Big[ (150 - (50w+b))^2 + (220 - (80w+b))^2 + (310 - (120w+b))^2 \Big]
+$$</div>
+<p style="color:var(--text2);font-size:0.84rem;">这就是<b>均方误差（MSE）</b>——平方让大误差受到更严厉的惩罚。训练 = 不断调整 w 和 b，让 Loss 越来越小。对于这个简单问题，数学上可以直接解出最优 w≈2.29, b≈32.9。但对于上亿参数的大模型，只能靠<b>梯度下降</b>迭代逼近。</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">2.2 梯度下降：一步一步走向最优</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+梯度 = 损失函数对所有参数的偏导数组成的向量。它指向「损失上升最快」的方向。所以我们<b>往反方向走</b>：
+</p>
+<div class="formula">$$
+w_{\text{新}} = w_{\text{旧}} - \eta \cdot \frac{\partial \mathrm{Loss}}{\partial w}
+\qquad\Big|\qquad
+b_{\text{新}} = b_{\text{旧}} - \eta \cdot \frac{\partial \mathrm{Loss}}{\partial b}
+$$</div>
+<p style="color:var(--text2);font-size:0.84rem;">η（学习率）是最关键的调参——太大：在山谷两侧震荡不收敛；太小：下山太慢。实际工程中常用 <b>Adam 优化器</b>，它自动调整每个参数的学习率，比手动调靠谱得多。每次处理一小批数据（Mini-batch，如 32 个样本）算梯度更新，称为一个 <b>iteration</b>。遍历完整个数据集称为一个 <b>Epoch</b>。</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">2.3 从直线到曲线：为什么需要非线性</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+房价和面积的关系可能不是严格的直线——60m² 以下单价高（小户型抢手），200m² 以上单价也高（豪宅溢价），中间相对便宜。一条直线（线性模型）无法捕捉这种 U 形曲线。我们需要<b>能拟合曲线的模型</b>——这就是神经网络要做的事。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>三大学习范式：</b>① <b>监督学习</b>（有标签数据，如已知房价）——最常见；② <b>无监督学习</b>（无标签，找隐藏结构，如客户分群）；③ <b>强化学习</b>（与环境交互试错，如 AlphaGo）。本文后续主要讨论监督学习，因为它覆盖了 90% 的商业 AI 应用。
+</p>
+
+<div class="check"><h5>✅ 检验你是否理解（机器学习）</h5><ol>
+<li>我们预测房价的例子中，w=2.29 表示什么？如果 w 变成了 5.0，「面积每增加 1m² 房价上涨多少」这个解读会怎么变？</li>
+<li>学习率 η=0.01 和 η=100 分别会导致什么问题？用「下山」的比喻解释。</li>
+<li>监督学习和无监督学习的根本区别是什么？给每个举一个不是你教材里的新例子。</li>
+</ol></div>
+
+<!-- ====== 3. NN ====== -->
+<h3 id="nn" class="sec-title-sm">三、神经网络：多层 + 非线性 = 万能拟合器</h3>
+
+<h4 style="color:var(--text);margin:14px 0 6px;">3.1 一个神经元做什么？加权求和 + 激活</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+一个神经元接收 n 个输入 x₁...x<sub>n</sub>，各自乘以权重 w₁...w<sub>n</sub>，加上偏置 b，再过激活函数 σ：
+</p>
+<div class="formula">$$
+\mathrm{output} = \sigma( w_1 x_1 + w_2 x_2 + \cdots + w_n x_n + b )
+$$</div>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>具体例子：</b>假设权重 w=[0.5, -0.3, 0.8]，偏置 b=0.1，输入 x=[2, 5, 1]，使用 ReLU 激活（σ(x)=max(0,x)）。计算：0.5×2 + (-0.3)×5 + 0.8×1 + 0.1 = 1−1.5+0.8+0.1 = <b>0.4</b>。ReLU(0.4) = 0.4。如果没有激活函数（σ(x)=x），多层网络退化成一个线性变换——层数再多也没用。激活函数<b>引入非线性</b>，让网络能拟合任意复杂函数。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">3.2 多层感知机（MLP）：堆叠出深度</h4>
+<p style="color:var(--text2);font-size:0.86rem;">
+单个神经元只能画一条直线（或一个超平面）。把神经元排成层，层与层之间全连接，前一层的输出作为后一层的输入——这就是<b>多层感知机（MLP）</b>。第 1 层提取简单模式（比如边缘），第 2 层组合成复杂特征（比如「圆形+尖耳=猫脸」），第 3 层进一步抽象……每一层都在对上一层的特征做更高阶的组合。这就是「深度」的含义——不是层数多就叫深度，是<b>特征的抽象层级在增加</b>。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>关键认知：</b>一个足够宽的单隐藏层网络已经可以拟合任意连续函数（万能逼近定理）。但「能拟合」和「能高效学习」是两回事——深层网络用更少的参数实现相同的表达能力，因为每一层都在<b>复用</b>前一层的特征，而不是从零拼凑。这就是深度学习比浅层网络好的根本原因。
+</p>
+<div class="arch">
+<div style="color:var(--text2);margin-bottom:6px;font-size:0.82rem;">MLP 示意：输入(3) → 隐藏层1(4) → 隐藏层2(3) → 输出(1)</div>
+<div class="arch-row"><div class="arch-box ah">x₁</div><div class="arch-box ah">x₂</div><div class="arch-box ah">x₃</div></div>
+<div class="arch-arrow-down">↓ W₁ (4×3) + ReLU ↓</div>
+<div class="arch-row"><div class="arch-box">h₁₁</div><div class="arch-box">h₁₂</div><div class="arch-box">h₁₃</div><div class="arch-box">h₁₄</div></div>
+<div class="arch-arrow-down">↓ W₂ (3×4) + ReLU ↓</div>
+<div class="arch-row"><div class="arch-box">h₂₁</div><div class="arch-box">h₂₂</div><div class="arch-box">h₂₃</div></div>
+<div class="arch-arrow-down">↓ W₃ (1×3) + Sigmoid ↓</div>
+<div class="arch-row"><div class="arch-box ag">ŷ</div></div>
+</div>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">3.3 反向传播：整个深度学习的发动机</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+有了网络结构，剩下的核心问题是：<b>怎么让网络知道自己错在哪，并修正？</b>答案是反向传播。
+</p>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+一次训练迭代分两步——<b>前向传播</b>和<b>反向传播</b>。前向传播就是数据从输入层一路流到输出层，算出预测值 ŷ。然后计算损失 Loss(ŷ, y<sub>真实</sub>)——一个数字，衡量预测有多差。反向传播要做的是：<b>搞清楚每个参数（W₁、W₂、W₃ 以及对应的偏置）对这个损失「贡献」了多少「责任」。</b>
+</p>
+<p style="color:var(--text2);font-size:0.84rem;margin-bottom:6px;">
+怎么算？<b>链式法则</b>。想象一排多米诺骨牌：推倒第一块 → 第二块倒 → 第三块倒 → 最后一块。如果你想改变最后一块倒下的速度，你需要知道每一块对下一块的影响有多大，然后反推。链式法则就是数学版的这个逻辑。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+以 W₃ 为例：∂Loss/∂W₃ = ∂Loss/∂ŷ × ∂ŷ/∂h₂ × ∂h₂/∂W₃。每个因子都是可计算的（Loss 对 ŷ 的导数、ŷ 对 h₂ 的导数取决于激活函数、h₂ 对 W₃ 的导数就是上一层的输出）。算出梯度后：W₃ ← W₃ − η·∂Loss/∂W₃——往损失减小的方向挪一小步。PyTorch 的 <code>autograd</code> 自动完成这一切：你只写前向传播，它自动追踪所有运算并算出梯度。这是现代深度学习框架最大的便利。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">3.4 常用激活函数</h4>
+<table class="ctbl">
+<tr><th>函数</th><th>公式</th><th>特点</th></tr>
+<tr><td><b>ReLU</b></td><td style="font-family:monospace;">max(0, x)</td><td>正区间梯度=1（不消失），计算极快。默认首选</td></tr>
+<tr><td><b>GELU</b></td><td style="font-family:monospace;">x·Φ(x)</td><td>ReLU 平滑版，BERT/GPT 等现代 Transformer 标配</td></tr>
+<tr><td><b>Sigmoid</b></td><td style="font-family:monospace;">1/(1+e⁻ˣ)</td><td>输出 (0,1)，适合二分类输出层。隐藏层已基本淘汰（梯度消失）</td></tr>
+<tr><td><b>Softmax</b></td><td style="font-family:monospace;">eᶻⁱ/Σeᶻʲ</td><td>多分类输出层专用——把 logits 变成概率分布</td></tr>
+</table>
+
+<div class="insight">2012 年深度学习不是「突然变好」——是 GPU 算力 + ImageNet 大数据 + ReLU/Dropout/BatchNorm 等训练技巧，三条腿同时到齐，量变引发质变。</div>
+
+<div class="check"><h5>✅ 检验你是否理解（神经网络）</h5><ol>
+<li>如果没有激活函数（σ(x)=x），三层全连接网络等价于什么？为什么说「层数再多也没用」？</li>
+<li>反向传播中，如果某层的激活函数是 Sigmoid 且输入很大（比如 x=10），梯度大约是多少？这会导致什么问题？</li>
+<li>BatchNorm 解决了什么问题？用自己的话解释，不要引用原文。</li>
+</ol></div>
+
+<!-- ====== 4. PyTorch ====== -->
+<h3 id="pytorch" class="sec-title-sm">四、PyTorch 系统入门：现代深度学习的「操作系统」</h3>
+
+<h4 style="color:var(--text);margin:14px 0 6px;">4.1 为什么 AI 工程师招聘都要求 PyTorch？</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:10px;">
+PyTorch 不是众多框架中的一个——它是<b>事实标准</b>。99% 的论文开源代码用 PyTorch，HuggingFace 全系基于 PyTorch，所有大模型（Llama/Qwen/DeepSeek）的训练和推理代码都是 PyTorch。TensorFlow 已退居工业部署场景。学会 PyTorch 意味着你能看懂任何论文的开源实现、能微调任何开源模型、能在招聘中过关。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">4.2 Tensor：会算梯度的多维数组</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+Tensor 本质是 NumPy 数组的「可自动求导版本」。创建、运算、形状操作与 NumPy 几乎一致：
+</p>
+<pre><code>import torch
+
+# 创建 Tensor
+x = torch.tensor([2.0, 5.0, 1.0])
+W = torch.randn(3, 4)          # 3×4 随机矩阵
+b = torch.zeros(4)              # 偏置
+
+# 运算和 NumPy 一样
+y = x @ W + b                   # 矩阵乘法 + 广播
+print(y.shape)                  # torch.Size([4])
+
+# 搬到 GPU（一行搞定）
+if torch.cuda.is_available():
+    x, W, b = x.cuda(), W.cuda(), b.cuda()</code></pre>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">4.3 Autograd：自动求导——PyTorch 的核心魔法</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+设置 <code>requires_grad=True</code> 后，PyTorch 记录每一步运算。调用 <code>.backward()</code> 自动算出所有参数的梯度。这就是为什么你不需要手写反向传播：
+</p>
+<pre><code># 模拟：y = w·x + b，求 ∂Loss/∂w
+w = torch.tensor([2.0], requires_grad=True)
+x = torch.tensor([3.0])
+y = w * x                        # y = 6.0
+loss = (y - 10) ** 2             # loss = (6-10)² = 16
+loss.backward()                  # 自动计算梯度
+print(w.grad)                    # ∂loss/∂w = 2×(6-10)×3 = -24</code></pre>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">4.4 nn.Module：搭建网络的乐高积木</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+所有神经网络层的基类。定义一个模型 = 继承 <code>nn.Module</code>，在 <code>__init__</code> 中定义层，在 <code>forward</code> 中定义数据流向：
+</p>
+<pre><code>import torch.nn as nn
+
+class SimpleMLP(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.fc1 = nn.Linear(784, 256)   # 输入→隐藏
+        self.fc2 = nn.Linear(256, 10)    # 隐藏→输出(10类)
+        self.relu = nn.ReLU()
+
+    def forward(self, x):
+        x = self.relu(self.fc1(x))
+        return self.fc2(x)              # 输出 logits
+
+model = SimpleMLP()
+print(model)  # 打印网络结构</code></pre>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">4.5 训练循环：所有深度学习项目的统一模板</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+无论训练 CNN、Transformer 还是 GPT，训练循环的结构完全一致——理解这一个模板，你就理解了 90% 的 PyTorch 代码：
+</p>
+<pre><code>model = SimpleMLP()
+criterion = nn.CrossEntropyLoss()        # 损失函数
+optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+
+for epoch in range(10):                  # 遍历数据 10 次
+    for x_batch, y_batch in dataloader:  # 每次取一批
+        optimizer.zero_grad()            # 清零梯度
+        outputs = model(x_batch)         # 前向传播
+        loss = criterion(outputs, y_batch) # 算损失
+        loss.backward()                  # 反向传播
+        optimizer.step()                 # 更新参数
+    print(f"Epoch {epoch}, Loss: {loss.item():.4f}")</code></pre>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">4.6 常用组件速查</h4>
+<table class="ctbl">
+<tr><th>组件</th><th>作用</th><th>示例</th></tr>
+<tr><td><b>nn.Linear</b></td><td>全连接层（Wx+b）</td><td><code>nn.Linear(784, 256)</code></td></tr>
+<tr><td><b>nn.Conv2d</b></td><td>2D 卷积层</td><td><code>nn.Conv2d(3, 64, kernel_size=3)</code></td></tr>
+<tr><td><b>nn.LSTM</b></td><td>LSTM 序列层</td><td><code>nn.LSTM(256, 512, num_layers=2)</code></td></tr>
+<tr><td><b>nn.ReLU / GELU</b></td><td>激活函数</td><td><code>nn.ReLU()</code> / <code>nn.GELU()</code></td></tr>
+<tr><td><b>nn.Dropout</b></td><td>正则化（防过拟合）</td><td><code>nn.Dropout(0.1)</code></td></tr>
+<tr><td><b>nn.CrossEntropyLoss</b></td><td>分类损失函数</td><td>自动含 Softmax，输入 logits 即可</td></tr>
+<tr><td><b>DataLoader</b></td><td>批量加载数据</td><td><code>DataLoader(dataset, batch_size=32, shuffle=True)</code></td></tr>
+</table>
+
+<div class="insight">PyTorch 的学习曲线：先用 NumPy 理解数组运算（1 天），再用 <code>nn.Module</code> 搭网络（1 天），最后掌握训练循环模板（1 天）。三天足够从零到能跑一个 MNIST 分类器。之后每遇到一个新架构，本质都是换 <code>forward</code> 里的内容——循环模板不变。</div>
+
+<div class="check"><h5>✅ 检验你是否理解（PyTorch）</h5><ol>
+<li>训练循环中 <code>optimizer.zero_grad()</code> 是干什么的？如果忘了写这一行会发生什么？</li>
+<li><code>loss.backward()</code> 之后，模型的哪些参数被更新了？需要再执行什么才能真正更新？</li>
+<li>你定义了 <code>nn.Linear(784, 256)</code>。这个层有多少个可训练参数？（含 bias）</li>
+</ol></div>
+
+<!-- ====== 5. CNN ====== -->
+<h3 id="cnn" class="sec-title-sm">五、卷积神经网络（CNN）：教会机器「看」</h3>
+
+<h4 style="color:var(--text);margin:14px 0 6px;">5.1 全连接网络为什么搞不定图像？</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+一张 224×224×3（RGB）的图片 = <b>150,528 个像素值</b>。如果第一隐藏层有 1000 个神经元，参数量 = 150,528×1000 ≈ <b>1.5 亿</b>——这只是第一层。更致命的是：全连接把像素当作孤立的数，完全无视「相邻像素更相关」这个空间结构。猫在图的左上角还是右下角，全连接根本不知道——它缺少<b>平移不变性</b>。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">5.2 卷积操作：滑动窗口 × 逐元素乘加</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+卷积的核心：用一个小矩阵（<b>卷积核/Kernel</b>，如 3×3）在输入图像上滑动，每个位置做逐元素乘积累加。一个卷积核检测一种模式——水平边缘、垂直边缘、某种纹理。多个卷积核并行检测多种模式。
+</p>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+<b>具体演算——5×5 输入与 3×3 卷积核：</b>
+</p>
+<div class="formula">$$
+\begin{bmatrix}
+1 & 2 & 1 & 0 & 0 \\
+0 & 1 & 2 & 3 & 1 \\
+1 & 0 & 1 & 2 & 1 \\
+0 & 1 & 0 & 1 & 2 \\
+1 & 2 & 1 & 0 & 1
+\end{bmatrix}
+\circledast
+\begin{bmatrix}
+1 & 0 & -1 \\
+1 & 0 & -1 \\
+1 & 0 & -1
+\end{bmatrix}
+$$</div>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>第 1 步：</b>核放在输入左上角 3×3 区域 [1,2,1; 0,1,2; 1,0,1]，逐元素乘加：1×1+2×0+1×(−1) + 0×1+1×0+2×(−1) + 1×1+0×0+1×(−1) = 1+0−1+0+0−2+1+0−1 = <b>−2</b>。这成为输出矩阵的 (1,1) 位置。<br>
+<b>第 2 步：</b>核右移一格到 [2,1,0; 1,2,3; 0,1,2]，同样计算得 <b>−3</b>。滑动到最右下角，最终得到一个 <b>3×3 的输出（特征图）</b>。输出尺寸 = 输入尺寸 − 核尺寸 + 1 = 5−3+1 = 3。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">3.3 卷积的两大杀招</h4>
+<p style="color:var(--text2);font-size:0.84rem;">
+① <b>参数共享：</b>同一个 3×3 核（仅 9 个参数）在整张图上滑动复用。无论猫在左上角还是右下角，「猫耳朵检测器」都能工作——这就是平移不变性的数学实现。② <b>局部连接（稀疏交互）：</b>输出每个位置只看输入的 3×3 邻域，而非全部像素。参数量从 O(n²) 降到 O(k²)，k 是核大小。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">3.4 Pooling（池化）：压缩 + 保留关键信息</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+卷积后特征图仍然较大，用池化降采样。最常见的 <b>Max Pooling 2×2</b>：把特征图按 2×2 分块，每块取最大值。
+</p>
+<div class="formula">$$
+\mathrm{MaxPool}_{2\times 2}\!\left(\begin{bmatrix} 3 & 5 \\ 1 & 2 \end{bmatrix}\right) = 5
+$$</div>
+<p style="color:var(--text2);font-size:0.84rem;">作用：① 减小尺寸 → 减少计算量；② 增大感受野（更深层能看到更大的原始图像区域）；③ 轻微平移不变性（池化后轻微位移不改变输出）。</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">5.5 CNN 完整结构 + 经典架构演进</h4>
+<div class="fr">
+<div class="fb"><b>Conv</b><br><span style="font-weight:400;font-size:.7rem;">提取特征</span></div><span class="fa">→</span>
+<div class="fb"><b>ReLU</b><br><span style="font-weight:400;font-size:.7rem;">非线性</span></div><span class="fa">→</span>
+<div class="fb"><b>Pool</b><br><span style="font-weight:400;font-size:.7rem;">降采样</span></div><span class="fa">→</span>
+<div class="fb ac">重复N次</div><span class="fa">→</span>
+<div class="fb"><b>Flatten</b><br><span style="font-weight:400;font-size:.7rem;">拉平</span></div><span class="fa">→</span>
+<div class="fb ac"><b>FC</b><br><span style="font-weight:400;font-size:.7rem;">分类输出</span></div>
+</div>
+<p style="color:var(--text2);font-size:0.84rem;margin-top:8px;">
+<b>关键里程碑：</b>LeNet(1998,手写数字)→<b>AlexNet(2012,深度学习爆发)</b>→VGG(2014,更深更规整)→<b>ResNet(2015,残差连接突破152层)</b>→EfficientNet(2019,效率优先)。ResNet 的 Skip Connection（输出=F(x)+x）确保深层至少不比浅层差——这个思想后来启发了 Transformer 的残差连接。
+</p>
+<h4 style="color:var(--text);margin:18px 0 6px;">PyTorch 实战：3 行定义一个 CNN</h4>
+<pre><code># 一个经典的微型 CNN（CIFAR-10 上能跑出 70%+）
+class TinyCNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.conv1 = nn.Conv2d(3, 16, 3, padding=1)   # 3通道→16通道, 保持尺寸
+        self.conv2 = nn.Conv2d(16, 32, 3, padding=1)
+        self.pool = nn.MaxPool2d(2, 2)                  # 尺寸减半
+        self.fc = nn.Linear(32 * 8 * 8, 10)            # 全连接分类(10类)
+
+    def forward(self, x):    # x: (batch, 3, 32, 32)
+        x = self.pool(torch.relu(self.conv1(x)))       # → (batch,16,16,16)
+        x = self.pool(torch.relu(self.conv2(x)))       # → (batch,32,8,8)
+        x = x.view(x.size(0), -1)                       # 拉平 → (batch, 2048)
+        return self.fc(x)                               # → (batch, 10)
+# 理解了以上代码 = 理解了 CNN 的所有工程实现</code></pre>
+
+<div class="check"><h5>✅ 检验你是否理解（CNN）</h5><ol>
+<li>一个 3×3 卷积核在 32×32 的图像上滑动（padding=0, stride=1），输出特征图的尺寸是多少？</li>
+<li>MaxPool(2,2) 把一个 16×16 的特征图变成多大？参数量为多少？</li>
+<li>TinyCNN 中 <code>x.view(x.size(0), -1)</code> 做了什么？-1 的含义是什么？</li>
+</ol></div>
+
+<!-- ====== 6. RNN/LSTM ====== -->
+<h3 id="rnn" class="sec-title-sm">六、序列模型：RNN 与 LSTM</h3>
+
+<h4 style="color:var(--text);margin:14px 0 6px;">6.1 为什么图像模型搞不定文本？</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+CNN 处理空间结构（相邻像素），但文本有时序依赖：「我昨天去了___，买了很多东西」——空白处填「超市」还是「医院」取决于前面「去了」和后面「买东西」。模型需要<b>记住上文并理解顺序</b>。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">6.2 RNN：带循环连接的网络</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+RNN 在每个时间步做两件事：① 读取当前输入 x<sub>t</sub>；② 结合上一时刻的隐藏状态 h<sub>t-1</sub>（记忆），产生新的隐藏状态 h<sub>t</sub>：
+</p>
+<div class="formula">$$
+h_t = \tanh( W_{xh} \cdot x_t + W_{hh} \cdot h_{t-1} + b )
+$$</div>
+<p style="color:var(--text2);font-size:0.84rem;">
+h<sub>t</sub> 是整个历史 x₁...x<sub>t</sub> 的压缩表示。像边看书边记笔记——每读一句更新笔记。但致命问题：序列长时，反向传播的梯度需要连乘很多次。如果乘数 &lt; 1，梯度指数衰减到 0（<b>梯度消失</b>——第 1 个词对第 100 个词几乎无影响）。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">6.3 LSTM：用门控机制控制记忆流</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+LSTM 引入三个「门」（都是 Sigmoid 函数，输出 0~1，控制信息通过比例）和一个独立的「细胞状态」C<sub>t</sub>（高速公路——关键信息可以几乎无损地跨越很长距离）：
+</p>
+<table class="ctbl">
+<tr><th>门</th><th>作用</th><th>直观理解</th></tr>
+<tr><td><b>遗忘门 f<sub>t</sub></b></td><td>f<sub>t</sub>·C<sub>t-1</sub>，决定丢弃哪些旧记忆</td><td>上下文变了，之前的无关信息该清掉</td></tr>
+<tr><td><b>输入门 i<sub>t</sub></b></td><td>i<sub>t</sub>·C̃<sub>t</sub>，决定写入哪些新信息</td><td>当前句子有重要新事实，记下来</td></tr>
+<tr><td><b>输出门 o<sub>t</sub></b></td><td>o<sub>t</sub>·tanh(C<sub>t</sub>)，决定输出什么</td><td>回答问题时从记忆里提取相关内容</td></tr>
+</table>
+<p style="color:var(--text2);font-size:0.84rem;">LSTM 统治 NLP 近二十年（1997-2017）。但它的根本问题不是「记忆好不好」，而是<b>处理方式串行</b>——必须按顺序一个词一个词读，无法并行。GPU 的大量核心闲置。这就引出了 Transformer。</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">PyTorch 实战：3 行定义一个 LSTM</h4>
+<pre><code># LSTM 在 PyTorch 里是一个现成的模块
+lstm = nn.LSTM(input_size=256, hidden_size=512, num_layers=2, batch_first=True)
+# input:  (batch, seq_len, 256) → input_size 对应词向量维度
+# output: (batch, seq_len, 512) → 每个时间步都输出隐藏状态
+# hn, cn: (2, batch, 512)      → 最后一层的最终隐藏状态和细胞状态
+
+# 完整情感分类示例
+class SentimentRNN(nn.Module):
+    def __init__(self, vocab_size, embed_dim, hidden_dim, num_classes):
+        super().__init__()
+        self.embedding = nn.Embedding(vocab_size, embed_dim)
+        self.lstm = nn.LSTM(embed_dim, hidden_dim, batch_first=True)
+        self.fc = nn.Linear(hidden_dim, num_classes)
+    def forward(self, x):
+        x = self.embedding(x)
+        _, (hn, _) = self.lstm(x)        # 只取最后隐藏状态
+        return self.fc(hn[-1])            # 用最后一层做分类</code></pre>
+
+<div class="check"><h5>✅ 检验你是否理解（RNN/LSTM）</h5><ol>
+<li>RNN 的梯度消失为什么对长文本是致命的？如果一段话只有 3 个词，梯度消失还严重吗？</li>
+<li>LSTM 的遗忘门输出 0.1 意味着什么？输出 0.9 呢？</li>
+<li>为什么 LSTM 的细胞状态 C<sub>t</sub> 被比喻为「高速公路」？</li>
+</ol></div>
+
+<!-- ====== 7. Transformer ====== -->
+<h3 id="trans" class="sec-title-sm">七、Transformer：用注意力取代循环</h3>
+
+<h4 style="color:var(--text);margin:14px 0 6px;">7.1 核心思想：让每个词同时「看到」所有词</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+RNN：读「猫 追 老鼠 ， 它 跑 得 很快」→ 第 7 个词「它」要和第 1 个词「猫」建立联系，信息需要跨越 6 步。Transformer：所有 8 个词之间<b>直接建立联系</b>，信息距离恒为 1。Self-Attention 就是实现这个「全连接信息交换」的机制。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">7.2 Self-Attention 的完整计算过程</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+输入：n 个词的向量（每个 d 维）。第 1 步：每个词通过三个不同的权重矩阵 W<sub>Q</sub>、W<sub>K</sub>、W<sub>V</sub> 生成 <b>Query、Key、Value</b> 三个向量。第 2 步：用 Q 和 K 计算注意力分数矩阵：
+</p>
+<div class="formula">$$
+\mathrm{Score}_{ij} = \frac{Q_i \cdot K_j}{\sqrt{d_k}}
+$$</div>
+<p style="color:var(--text2);font-size:0.84rem;margin-bottom:8px;">
+Q<sub>i</sub>（词 i 的 Query）与 K<sub>j</sub>（词 j 的 Key）做点积——衡量「词 i 对词 j 有多关注」。除以 √d<sub>k</sub> 是缩放因子：d<sub>k</sub> 太大时点积会很大，导致 Softmax 梯度消失。
+</p>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+<b>具体示例——句子「猫 追 老鼠」（d<sub>k</sub>=4，缩放因子=2）：</b></p>
+<div class="formula">$$
+\begin{bmatrix}
+0.8 & 0.3 & 0.1 \\
+0.2 & 0.9 & 0.4 \\
+0.1 & 0.3 & 0.7
+\end{bmatrix}
+\xrightarrow{\text{Softmax}}
+\begin{bmatrix}
+\mathbf{0.58} & 0.25 & 0.17 \\
+0.20 & \mathbf{0.52} & 0.28 \\
+0.18 & 0.27 & \mathbf{0.55}
+\end{bmatrix}
+$$</div>
+<p style="color:var(--text2);font-size:0.84rem;">
+每行是一个词对所有词的注意力分布（和为 1）。对角线最大——每个词最关注自己（这合理，自己的信息最重要）。注意「追」对「猫」和「老鼠」都有较高关注——因为动词需要主语和宾语的信息。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+最后一步：用注意力权重对 Value 加权求和——每个词的输出 = 所有词 Value 的加权混合。
+</p>
+<div class="formula">$$
+\mathrm{Output}_i = \sum_j \mathrm{AttentionWeight}_{ij} \times V_j
+$$</div>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">7.3 Multi-Head Attention + Positional Encoding</h4>
+<p style="color:var(--text2);font-size:0.86rem;">
+<b>Multi-Head：</b>并行运行 8 组独立的 Q/K/V 投影，每组关注不同层面——头 1 关注语法结构（主谓宾），头 2 关注语义指代（代词→名词），头 3 关注位置关系（相邻词）。所有头的输出拼接后做一次线性变换。就像多个专家从不同角度分析同一句话。<br>
+<b>Positional Encoding：</b>Self-Attention 不管词序——「猫追老鼠」和「老鼠追猫」有相同的注意力分数。所以需要用正弦/余弦函数为每个位置生成唯一编码，直接加到词向量上。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">7.4 Transformer 架构总览</h4>
+<div class="arch">
+<div style="display:flex;gap:30px;justify-content:center;flex-wrap:wrap;">
+<div style="flex:1;min-width:180px;">
+<div style="color:var(--accent);font-weight:700;margin-bottom:6px;">Encoder（×N层）</div>
+<div class="arch-row" style="flex-direction:column;align-items:center;">
+<div class="arch-box ag">Input Embedding + Pos</div>
+<div class="arch-arrow-down">↓</div>
+<div class="arch-box ah">Multi-Head Self-Attention</div>
+<div class="arch-arrow-down">↓</div>
+<div class="arch-box">Add & Norm (残差)</div>
+<div class="arch-arrow-down">↓</div>
+<div class="arch-box">Feed Forward (MLP)</div>
+<div class="arch-arrow-down">↓</div>
+<div class="arch-box">Add & Norm</div>
+</div>
+</div>
+<div style="flex:1;min-width:180px;">
+<div style="color:var(--accent3);font-weight:700;margin-bottom:6px;">Decoder（×N层）</div>
+<div class="arch-row" style="flex-direction:column;align-items:center;">
+<div class="arch-box ag">Output Embedding + Pos</div>
+<div class="arch-arrow-down">↓</div>
+<div class="arch-box ah">Masked Multi-Head Attn</div>
+<div class="arch-arrow-down">↓</div>
+<div class="arch-box ah">Cross-Attn (看Encoder)</div>
+<div class="arch-arrow-down">↓</div>
+<div class="arch-box">Feed Forward</div>
+<div class="arch-arrow-down">↓</div>
+<div class="arch-box ag">Linear + Softmax → 输出</div>
+</div>
+</div>
+</div>
+</div>
+<p style="color:var(--text2);font-size:0.84rem;">
+GPT 只用了 Decoder（自回归，逐词生成），BERT 只用了 Encoder（双向理解）。现代大模型大多走 GPT 路线——因为「生成」被证明是更通用的能力。
+</p>
+
+<div class="insight">Transformer 不是「比 RNN 好一点」，而是从根本上改变了信息流动方式。RNN 中信息沿时间轴线性传播（n 个词需要 n 步），Transformer 中所有词直接互联（距离恒为 1）。这为 Scale 到千亿参数铺平了道路。</div>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">PyTorch 实战：从头写 Scaled Dot-Product Attention</h4>
+<pre><code>import torch.nn.functional as F
+
+def scaled_dot_product_attention(Q, K, V, mask=None):
+    """Q,K,V: (batch, heads, seq_len, d_k)"""
+    d_k = Q.size(-1)
+    scores = Q @ K.transpose(-2, -1) / (d_k ** 0.5)   # 缩放的矩阵乘法
+    if mask is not None:
+        scores = scores.masked_fill(mask == 0, -1e9)   # 屏蔽未来词
+    attn = F.softmax(scores, dim=-1)                    # Softmax 转概率
+    return attn @ V                                      # 加权求和
+
+# 这就是 Attention Is All You Need 的核心——不到 10 行。</code></pre>
+
+<div class="check"><h5>✅ 检验你是否理解（Transformer）</h5><ol>
+<li>Self-Attention 中除以 √d<sub>k</sub> 是为什么？如果 d<sub>k</sub>=64，不除这个数会怎样？</li>
+<li>Multi-Head Attention 的 8 个头各自学到了什么不同的东西？为什么不用 800 个头？</li>
+<li>BERT（Encoder）和 GPT（Decoder）的注意力机制有什么区别？这导致了它们各自擅长什么任务？</li>
+</ol></div>
+
+<!-- ====== 8. Pretrain ====== -->
+<h3 id="pretrain" class="sec-title-sm">八、预训练时代：BERT、GPT 与 Scaling Law</h3>
+
+<h4 style="color:var(--text);margin:14px 0 6px;">8.1 预训练的核心逻辑</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:8px;">
+2018 年前：每个 NLP 任务单独收集标注数据、从头训练模型——数据贵、模型弱。预训练范式：先在<b>海量无标注文本</b>（整个维基百科 + 书籍 + 网页）上训练一个通才模型，再针对具体任务微调。就像先博览群书打基础，再针对特定考试突击——效率天差地别。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">8.2 两条路线：BERT vs GPT</h4>
+<table class="ctbl">
+<tr><th></th><th>BERT (Google, 2018)</th><th>GPT (OpenAI, 2018→)</th></tr>
+<tr><td><b>架构</b></td><td>Transformer Encoder</td><td>Transformer Decoder</td></tr>
+<tr><td><b>注意力</b></td><td>双向——同时看前后文</td><td>单向（Masked）——只看上文，逐词预测</td></tr>
+<tr><td><b>预训练</b></td><td>MLM：遮住15%的词，让模型猜</td><td>自回归：给定上文预测下一个词</td></tr>
+<tr><td><b>擅长</b></td><td>理解（分类、实体识别、问答）</td><td>生成（续写、翻译、对话、代码）</td></tr>
+</table>
+<p style="color:var(--text2);font-size:0.84rem;">GPT 路线最终胜出——因为「能生成」意味着理解了（理解了才能输出），而且自回归本质让它可以处理任意任务（只需换 Prompt，不改结构）。</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">8.3 Scaling Law 与涌现</h4>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">
+OpenAI 2020 年发现：模型性能与参数量/数据量/计算量呈<b>幂律关系</b>（对数坐标上是一条直线）——花钱就能可靠预测性能提升。GPT-1 (1.17亿)→GPT-2 (15亿)→GPT-3 (1750亿)→GPT-4 (~1.8万亿)。每次扩大规模，不仅原有能力变强，还会<b>涌现</b>出小模型完全不具备的能力——思维链推理、上下文学习、代码生成——这些能力<b>并没有被专门训练</b>，是规模超过临界点后自发出现的。
+</p>
+<div class="hlb"><h4>关键含义</h4><p style="font-size:0.84rem;">涌现意味着我们不完全理解大模型为什么有这些能力——它像一个我们建造但尚未完全理解的复杂系统。既是机遇（远未到天花板），也是风险（不可预测）。</p></div>
+
+<div class="check"><h5>✅ 检验你是否理解（预训练）</h5><ol>
+<li>BERT 的 MLM（遮住词让模型猜）和 GPT 的自回归（预测下一个词）——为什么 GPT 的路线最终胜出了？</li>
+<li>Scaling Law 说的是什么？「涌现」和 Scaling Law 之间有什么关系？</li>
+<li>如果让你选：在 1 万条高质量标注数据上微调，还是在 10 亿条低质量数据上预训练——哪个对下游任务更有帮助？为什么？</li>
+</ol></div>
+
+<!-- ====== 9. LLM Tech ====== -->
+<h3 id="llm" class="sec-title-sm">九、大模型技术栈：Prompt、RAG、微调、RLHF</h3>
+
+<h4 style="color:var(--text);margin:14px 0 6px;">9.1 Prompt Engineering——不是玄学，是工程</h4>
+<p style="color:var(--text2);font-size:0.86rem;">
+LLM 不是搜索引擎——你提问的方式直接决定回答质量。想想你和一个知识渊博但缺乏背景信息的同事说话：如果你说「帮我看这个」，他不知道你在说什么；如果你说「你是一位经验丰富的 Python 后端工程师，请审查以下代码的安全漏洞，按严重程度排序」，他能给出高质量回答。<b>Prompt 就是在给 LLM 补上下文。</b>
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+核心技巧：<b>角色设定</b>（缩小 LLM 的行为空间——「你是一位医生」vs「你是 AI」会得到完全不同的回答风格）、<b>Few-shot</b>（给 2-3 个示例——人类也是这么学新格式的）、<b>Chain-of-Thought</b>（「一步步思考」——强制模型在给出最终答案前先输出推理过程，准确率大幅提升）、<b>结构化输出</b>（指定 JSON 格式——让下游代码能消费）。基本功：理解 token 不是字（一个中文字≈1.5 token，一个英文单词≈1.3 token），上下文窗口（GPT-4 的 128k ≈ 一本中篇小说，Claude 的 200k ≈ 《三体》第一本），以及窗口满了以后「中间的内容被遗忘」的诡异现象。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">9.2 RAG——让 LLM 的回答有据可依</h4>
+<p style="color:var(--text2);font-size:0.86rem;">
+Prompt Engineering 解决的是「怎么问」，但没解决两个硬伤：① LLM 的知识停在训练截止日——你问它 2025 年的事，它只能猜；② LLM 会「幻觉」——自信地编造不存在的论文、虚构的法律条文、捏造的历史事件。这些不是 bug，是自回归模型的<b>固有属性</b>——它被训练来预测下一个 token，不是判断事实。
+</p>
+<p style="color:var(--text2);font-size:0.86rem;margin-top:6px;">
+<b>RAG 的解法：</b>用户提问 → 从外部知识库检索相关文档 → 把所有文档拼进 Prompt → LLM 基于「现在你看到了这些资料」来生成回答。关键是：<b>不是让 LLM 记住知识，是让 LLM 在使用知识的那一刻「看到」它。</b> 就像开卷考试——不需要背，但需要知道怎么翻书和怎么用翻到的内容。
+</p>
+<div class="fr">
+<div class="fb"><b>离线</b>：文档→切割→向量化→存入向量数据库</div><span class="fa">+</span>
+<div class="fb ac"><b>在线</b>：提问→检索→拼 Prompt→LLM 生成</div>
+</div>
+<p style="color:var(--text2);font-size:0.84rem;margin-top:6px;">
+<b>RAG 比微调的关键优势：</b>便宜（更新文档即可，不需要重新训练）、可追溯（告诉用户「这句话来自文档 X 第 3 段」）、热更新（知识库加一篇新文章，立即生效）。<b>关键调参：</b>chunk size——太大检索不准（混杂无关内容），太小丢失上下文（「他」指代谁看不到了）。Embedding 模型选择——OpenAI 的 text-embedding-3、BGE、Jina 各有优劣。检索策略——纯语义检索可能漏掉精确关键词（「2025年GDP增长率」这种查询需要 BM25 关键字匹配辅助），理想做法是混合检索 + Rerank 精排。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>一句话决策框架：</b>知识经常更新 → RAG。需要学风格/格式/推理方式（比如用你的语气写邮件、按你的风格写代码）→ 微调。两者不互斥——可以先微调让模型学会你的风格，再用 RAG 注入最新事实。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">9.3 LoRA 微调——个人也能玩大模型</h4>
+<p style="color:var(--text2);font-size:0.86rem;">
+全量微调千亿参数不切实际——需要几百 GB 显存、几十万条数据、数万美元算力。<b>LoRA（Low-Rank Adaptation）</b>的巧思来自一个数学直觉：模型在下游任务上需要调整的「变化量」ΔW 通常是<b>低秩的</b>——意味着可以用两个小矩阵 A×B 来近似这个大变化量。冻结原有权重 W，只训练 A 和 B。前向传播变成 h = Wx + <b>BAx</b>。训练量降为原来的千分之一（比如 7B 模型只需训练几十 MB 的参数），推理时 BA 可合并回 W 不增加延迟。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>这意味着什么：</b>你可以在 RTX 4090（消费级显卡，约 1.5 万元）上微调 Llama-3-8B，用你自己的 1000 条对话数据训练一个具有你个人风格的助手。这在 2023 年之前是无法想象的。LoRA 让「自己训练模型」从一个组织级任务变成了个人项目。
+</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">9.4 RLHF——让模型「对齐」人类偏好</h4>
+<p style="color:var(--text2);font-size:0.86rem;">
+预训练模型什么都会说，但不一定让人满意——它可能给出危险建议、使用不礼貌的语气、或回避本应直面的问题。问题根源：预训练的目标是「预测下一个 token」，不是「让人类满意」。<b>RLHF（Reinforcement Learning from Human Feedback）</b>就是弥补这个 GAP 的。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>具体怎么做：</b>① 收集人类标注——给标注员看同一个 Prompt 的多个回答，让他们排序「哪个更好」；② 用这些排序数据训练一个「奖励模型」——输入 (Prompt, 回答)，输出一个分数；③ 用强化学习（PPO 算法）微调 LLM，让它生成的回答获得高奖励分。ChatGPT 相对于 GPT-3 的惊艳提升，RLHF 贡献了绝大部分。
+</p>
+<p style="color:var(--text2);font-size:0.84rem;">
+<b>深层含义：</b>RLHF 本质上是在用人类价值观「蒸馏」进模型。这个过程决定了模型的政治倾向、道德边界、幽默风格。OpenAI 的模型回答审慎（甚至保守）、Claude 更强调伦理——这些差异主要来自 RLHF 阶段，而非预训练数据。如果你以后做模型产品，RLHF 是你塑造「模型性格」的核心手段。</p>
+
+<div class="check"><h5>✅ 检验你是否理解（LLM 技术栈）</h5><ol>
+<li>RAG 和微调（Fine-tune）各自解决什么问题？什么场景下用 RAG，什么场景下用微调？</li>
+<li>LoRA 为什么能让个人在消费级 GPU 上微调 7B 模型？它「牺牲」了什么？</li>
+<li>RLHF 中的「奖励模型」是怎么训练出来的？如果没有这个中间模型，直接让人类打分可行吗？</li>
+</ol></div>
+
+<!-- ====== 10. Agent ====== -->
+<h3 id="agent" class="sec-title-sm">十、AI Agent：从「回答」到「执行」</h3>
+
+<h4 style="color:var(--text);margin:14px 0 6px;">10.1 LLM 的局限与 Agent 的突破</h4>
+<p style="color:var(--text2);font-size:0.86rem;">GPT-4 能告诉你如何订机票，但它不能自己订——被关在对话框里。Agent = <b>LLM（大脑）+ 工具（手）+ 记忆（经验）+ 规划（思考链）</b>。从「顾问」升级为「执行者」。</p>
+
+<h4 style="color:var(--text);margin:18px 0 6px;">10.2 Agent 工作循环</h4>
+<div class="fr">
+<div class="fb ac">🎯 目标</div><span class="fa">→</span><div class="fb">LLM 分解任务</div><span class="fa">→</span>
+<div class="fb ac">选工具执行</div><span class="fa">→</span><div class="fb">观察结果</div><span class="fa">→</span>
+<div class="fb ac">反思调整</div><span class="fa">→</span><div class="fb">达成/重试</div>
+</div>
+<p style="color:var(--text2);font-size:0.84rem;margin-top:8px;">核心是 <b>ReAct 模式</b>（Reasoning + Acting）：Think → Act → Observe → Think → ... 循环直到目标达成。代表性项目：<b>AutoGPT</b>（首个爆火开源 Agent）→ <b>CrewAI</b>（多 Agent 协作）→ <b>CoPaw</b>（Agent 操作系统）→ <b>Devin</b>（AI 软件工程师）→ <b>Manus</b>（通用 Agent 走向消费者）。趋势：2023=LLM 年，2024-2025=Agent 年。</p>
+
+<div class="check"><h5>✅ 检验你是否理解（Agent）</h5><ol>
+<li>Agent 和普通 LLM 调用最本质的区别是什么？用自己的话，不要用「大脑+手+记忆」这个比喻。</li>
+<li>ReAct 循环如果陷入死循环怎么办？（提示：想想真实世界你如何打破僵局）</li>
+<li>多 Agent 系统相比单 Agent 的优势和风险各是什么？</li>
+</ol></div>
+
+<!-- ====== 11. Codex ====== -->
+<h3 id="codex" class="sec-title-sm">十一、Codex 与 AI 编程</h3>
+<div class="fr">
+<div class="fb"><b>2021</b><br>Copilot<br>代码补全</div><span class="fa">→</span>
+<div class="fb ac"><b>2023</b><br>GPT-4 解释器<br>写+运行+调试</div><span class="fa">→</span>
+<div class="fb"><b>2024</b><br>Cursor/Windsurf<br>AI 原生 IDE</div><span class="fa">→</span>
+<div class="fb ac"><b>2024</b><br>Devin<br>独立完成开发</div><span class="fa">→</span>
+<div class="fb"><b>2025</b><br>Claude Code<br>终端自然语言编程</div>
+</div>
+<p style="color:var(--text2);font-size:0.84rem;margin-top:8px;">程序员角色从「写代码的人」→「定义需求 + 审查 AI 输出 + 设计架构的人」。贬值：语法记忆。升值：系统设计、需求理解、代码审查。</p>
+
+<div class="check"><h5>✅ 检验你是否理解（Codex/AI 编程）</h5><ol>
+<li>AI 编程工具从 2021 到 2025 的演进主线是什么？（不是罗列产品，是找规律）</li>
+<li>如果你现在是一个非科班但会用 AI 编程的人——你和传统程序员的竞争壁垒分别是什么？</li>
+</ol></div>
+
+<!-- ====== 12. LangChain ====== -->
+<h3 id="langchain" class="sec-title-sm">十二、LangChain（🦞龙虾）</h3>
+<p style="color:var(--text2);font-size:0.86rem;margin-bottom:6px;">Lang→龙，Chain→虾（中文圈谐音梗）。LLM 应用开发的<b>乐高式框架</b>——把 LLM 调用、工具使用、记忆管理、RAG 串联成工作流。</p>
+<table class="ctbl">
+<tr><th>模块</th><th>作用</th></tr>
+<tr><td><b>Model I/O</b></td><td>统一调用各种 LLM（OpenAI/Anthropic/本地），代码写法一致</td></tr>
+<tr><td><b>Chains</b></td><td>串联多个调用：总结→翻译→润色，像 Linux 管道</td></tr>
+<tr><td><b>Agents</b></td><td>LLM 自主选择工具，ReAct 模式</td></tr>
+<tr><td><b>Retrieval</b></td><td>RAG 一条龙：文档加载→分割→向量化→检索→增强生成</td></tr>
+<tr><td><b>Memory</b></td><td>对话历史管理，多后端（内存/Redis/DB）</td></tr>
+</table>
+<p style="color:var(--text2);font-size:0.84rem;"><b>LangGraph</b> 是其进化版——用有向图取代线性链，支持循环、分支、并行、多 Agent。竞品：<b>LlamaIndex</b>（偏 RAG）、<b>Semantic Kernel</b>（微软/.NET）、<b>DSPy</b>（斯坦福/声明式）。</p>
+
+<div class="check"><h5>✅ 检验你是否理解（LangChain）</h5><ol>
+<li>LangChain 的核心抽象是什么？如果不用框架、手写一个 RAG 应用，你需要处理哪些 LangChain 替你封装了的细节？</li>
+<li>LangGraph 相比 LangChain 的 Chain，最关键的升级是什么？用一个具体的场景说明。</li>
+</ol></div>
+
+</section>
+
+<!-- ======================================================================== -->
+<!-- GLOSSARY -->
+<!-- ======================================================================== -->
+<section class="section" id="glossary">
+<div class="sec-title">📖 术语索引</div>
+<p class="sec-desc">按字母序排列，覆盖全文所有关键术语。Ctrl+F 或滚动查找。</p>
+<dl class="glossary">
+<dt>Agent</dt><dd>LLM + 工具 + 记忆 + 规划的自主执行系统，能从「回答」升级为「执行」</dd>
+<dt>Attention (注意力)</dt><dd>让模型在处理一个词时动态关注其他相关词的机制，Transformer 的核心</dd>
+<dt>Autograd</dt><dd>PyTorch 的自动求导引擎——记录每一步运算，自动算出所有参数梯度</dd>
+<dt>Backpropagation (反向传播)</dt><dd>用链式法则从输出层向输入层逐层计算梯度，深度学习训练的核心算法</dd>
+<dt>Batch Normalization (BN)</dt><dd>对每层输入做标准化，稳定训练、允许更高学习率</dd>
+<dt>Bayes' Theorem (贝叶斯定理)</dt><dd>P(A|B) = P(B|A)·P(A)/P(B)——描述如何根据新证据更新信念</dd>
+<dt>Chain-of-Thought (CoT, 思维链)</dt><dd>让 LLM 在给出最终答案前先输出中间推理步骤，显著提高复杂问题准确率</dd>
+<dt>CNN (卷积神经网络)</dt><dd>用卷积核在图像上滑动提取局部特征，擅长图像识别</dd>
+<dt>Convolution (卷积)</dt><dd>小矩阵（核）在输入上滑动做逐元素乘加，检测特定模式（边缘/纹理）</dd>
+<dt>Cross-Entropy (交叉熵)</dt><dd>衡量两个概率分布差异的指标，分类任务默认损失函数</dd>
+<dt>DataLoader</dt><dd>PyTorch 批量加载数据的工具，支持打乱、多线程预取</dd>
+<dt>Dropout</dt><dd>训练时随机丢弃部分神经元，防止过拟合</dd>
+<dt>Embedding</dt><dd>把离散符号（词/ID）映射到稠密向量，语义相近的词向量也相近</dd>
+<dt>Encoder-Decoder</dt><dd>编码器提取输入表示，解码器生成输出序列——Transformer 的架构骨架</dd>
+<dt>Epoch</dt><dd>遍历完整个训练集一次</dd>
+<dt>Fine-tuning (微调)</dt><dd>在预训练模型基础上用下游任务数据继续训练，适配特定场景</dd>
+<dt>Gradient (梯度)</dt><dd>损失函数对各参数偏导数组成的向量——指向损失上升最快的方向</dd>
+<dt>Gradient Descent (梯度下降)</dt><dd>沿梯度反方向更新参数，逐步逼近损失最小值</dd>
+<dt>GPU</dt><dd>图形处理器，擅长大规模并行矩阵运算——深度学习算力基础</dd>
+<dt>Hallucination (幻觉)</dt><dd>LLM 自信地生成看似合理但事实错误的内容</dd>
+<dt>HuggingFace</dt><dd>AI 模型「应用商店」——开源模型、数据集、训练工具的集中平台</dd>
+<dt>Hyperparameter (超参数)</dt><dd>训练前由人设定的参数——学习率、层数、隐藏维度、batch size 等</dd>
+<dt>Inference (推理)</dt><dd>训练完成后用模型对新数据做预测，不更新参数</dd>
+<dt>LangChain</dt><dd>LLM 应用开发框架——链式串联 LLM 调用、工具、RAG、记忆</dd>
+<dt>Learning Rate (η, 学习率)</dt><dd>梯度下降的步长——太大震荡，太小太慢</dd>
+<dt>LLM (大语言模型)</dt><dd>在超大文本语料上训练的 Transformer 模型——GPT、Claude、Llama 等</dd>
+<dt>Logits</dt><dd>模型最后一层输出的原始分数（未经 Softmax 转换）</dd>
+<dt>LoRA (Low-Rank Adaptation)</dt><dd>冻结原权重、添加低秩可训练矩阵的微调方法——大幅降低训练成本</dd>
+<dt>Loss Function (损失函数)</dt><dd>衡量模型预测与真实值差距的函数——MSE（回归）、Cross-Entropy（分类）</dd>
+<dt>LSTM (长短期记忆)</dt><dd>RNN 升级版——用门控机制控制信息流，缓解梯度消失</dd>
+<dt>MLP (多层感知机)</dt><dd>由多层全连接 + 激活函数组成的神经网络，最基础的形式</dd>
+<dt>Multi-Head Attention</dt><dd>并行运行多组独立的 Q/K/V 投影，每组关注不同信息层面</dd>
+<dt>NumPy</dt><dd>Python 数值计算库——ndarray 是 AI 数据结构的基石</dd>
+<dt>Overfitting (过拟合)</dt><dd>模型对训练数据记得太死，泛化到新数据时表现差</dd>
+<dt>Parameters (参数)</dt><dd>模型中学到的权重和偏置——w 和 b</dd>
+<dt>Pooling (池化)</dt><dd>对特征图降采样——MaxPool 取区域内最大值，减小尺寸、增大感受野</dd>
+<dt>Positional Encoding</dt><dd>为每个词位置注入唯一编码信号，解决 Self-Attention 不感知顺序的问题</dd>
+<dt>Pre-training (预训练)</dt><dd>在海量无标注数据上先训练通才模型，再针对具体任务微调</dd>
+<dt>Prompt Engineering</dt><dd>精心设计输入提示以引导 LLM 产生期望输出的工程技术</dd>
+<dt>PyTorch</dt><dd>深度学习框架事实标准——Tensor + Autograd + nn.Module</dd>
+<dt>RAG (检索增强生成)</dt><dd>检索外部文档→拼入 Prompt→LLM 生成——让 LLM 能回答训练数据外的问题</dd>
+<dt>ReAct</dt><dd>Reasoning + Acting 循环——Agent 的核心工作模式</dd>
+<dt>ReLU</dt><dd>max(0,x)——最常用的激活函数，正区间梯度=1，计算极快</dd>
+<dt>ResNet (残差网络)</dt><dd>引入 Skip Connection（输出=F(x)+x），让深层网络至少不比浅层差</dd>
+<dt>RLHF (人类反馈强化学习)</dt><dd>用人类偏好训练奖励模型，再用强化学习对齐 LLM 输出</dd>
+<dt>RNN (循环神经网络)</dt><dd>带循环连接的序列模型——每个时间步结合当前输入和上一时刻隐藏状态</dd>
+<dt>Scaling Law</dt><dd>模型性能与参数量/数据量/计算量呈幂律关系——可预测性能提升</dd>
+<dt>Self-Attention</dt><dd>序列中每个词同时关注所有词（包括自己），信息距离恒为 1</dd>
+<dt>Softmax</dt><dd>把任意实数向量映射为概率分布（各项>0，和为1）</dd>
+<dt>Tensor</dt><dd>多维数组的统称——标量(0维)→向量(1维)→矩阵(2维)→更高维</dd>
+<dt>Tokenizer</dt><dd>把原始文本切分成 token（词/子词），再映射为整数 ID</dd>
+<dt>Training Loop (训练循环)</dt><dd>forward→loss→backward→optimizer.step() 的四步循环</dd>
+<dt>Transformer</dt><dd>完全基于 Attention 的架构——2017 年提出，此后几乎统治了所有 NLP/AI 任务</dd>
+<dt>Vanishing Gradient (梯度消失)</dt><dd>反向传播时梯度指数衰减——深层几乎学不到任何东西</dd>
+<dt>Vector Database (向量数据库)</dt><dd>存储和检索高维向量的专用数据库——RAG 的检索后端</dd>
+</dl>
+</section>
+
+<!-- ======================================================================== -->
+<!-- AI APPLICATION ENGINEER LEARNING PATH -->
+<!-- ======================================================================== -->
+<section class="section" id="engineer">
+<div class="sec-title">🛠️ 第三条脉络：AI 应用工程师知识地图</div>
+<p class="sec-desc">面向<strong>非 CS 科班出身</strong>、但能借助 Agent 和 AI 工具解决实际问题、甚至直接上手深度学习的人。不需要成为数学博士——但需要知道「什么工具解决什么问题」以及「出现问题时往哪个方向排查」。</p>
+
+<div class="hlb">
+<h4>🎯 这个路径的定位</h4>
+<p style="font-size:0.86rem;">
+你不是要去 FAANG 面算法岗，也不需要手推反向传播。你的目标是：<b>能用 AI（包括 Agent、大模型、甚至自己训练/微调小模型）解决实际业务问题</b>。这需要一种「T 型知识结构」——广度上了解整个 AI 技术栈的各个组件及其边界，深度上在你选定的方向（比如 RAG 应用、Agent 编排、图像生成工作流）能做到生产级。
+</p>
+</div>
+
+<h3 class="sec-title-sm">📍 第一阶段：地基能力（所有方向都需要的）</h3>
+<div class="lp-steps">
+<div class="lp-step">
+<div class="lp-num">1</div><div class="lp-line"></div>
+<div class="lp-content"><h4>Python 基础——AI 世界的通用语</h4>
+<p>不需要精通到能写框架，但要能<b>读得懂代码、改得动参数、跑得通报错</b>。<br>
+<b>必学清单：</b>变量/函数/类、列表/字典/集合推导式、pip/conda 虚拟环境管理、文件读写（open/with/json）、异常处理（try/except）、类型提示（Type Hints，现代 Python 标配）、列表与字典的常用方法（map/filter/zip/sorted）。<br>
+<b>AI 场景高频出现：</b>用 <code>requests</code> 调 API、用 <code>json.loads()</code> 解析返回、用列表推导式清洗数据、用 <code>os.environ</code> 管理密钥、用 <code>argparse</code> 或 <code>click</code> 写命令行工具。<br>
+<b>学习方法：</b>找一段 RAG 或 Agent 的示例代码，逐行读懂。遇到不懂的函数就查——Claude/GPT 是最好的 Python 私教。两周足够达到「能干活」的水平。</p></div>
+</div>
+<div class="lp-step">
+<div class="lp-num">2</div><div class="lp-line"></div>
+<div class="lp-content"><h4>数学基础——够用就行，重在直觉</h4>
+<p>不是要成为数学家。目标是<b>理解 AI 核心概念背后的数学直觉</b>，能看懂论文里公式在说什么，知道出问题往哪个方向排查。<br>
+<b>线性代数（最重要）：</b>向量 = Embedding 的本质，矩阵乘法 = Transformer 中 Q×Kᵀ 的数学形式，点积 = 衡量「相似度」的工具，维度/形状 = 理解 Tensor 的 batch_size × seq_len × hidden_dim。知道「投影」和「线性组合」的含义即可。<br>
+<b>微积分：</b>导数 = 变化率（梯度下降中「往哪个方向走」），偏导数 = 多维函数中对一个变量的变化率，链式法则 = 反向传播的数学基础。不需要手算复杂导数——但要理解「梯度告诉你往哪走能减少损失」。<br>
+<b>概率与统计：</b>概率分布（Softmax 输出就是概率分布），条件概率与贝叶斯定理（分类模型的基础），期望与方差，交叉熵（分类任务最常用的损失函数）。<br>
+<b>推荐资源：</b>3Blue1Brown 的「线性代数的本质」「神经网络」系列（YouTube/B站）——用动画建立直觉，比任何教材都有效。花一周看完，AI 数学概念从此不再陌生。</p></div>
+</div>
+<div class="lp-step">
+<div class="lp-num">3</div><div class="lp-line"></div>
+<div class="lp-content"><h4>API 调用与数据格式</h4>
+<p>大量 AI 工作本质上是「调 API + 处理 JSON」。熟练使用 OpenAI/Anthropic SDK、理解 REST API 的请求/响应模式、JSON 解析、环境变量管理（.env 文件保存 API Key）、理解 HTTP 状态码和基本的 rate limit 处理。这些看起来不起眼，但 80% 的生产级 AI 应用就是在做这些。</p></div>
+</div>
+<div class="lp-step">
+<div class="lp-num">4</div><div class="lp-line"></div>
+<div class="lp-content"><h4>版本控制与基础工程素养</h4>
+<p>Git（至少会 clone/commit/push/pull——用 GitHub Desktop 降低门槛也行）、用 Markdown 写文档、理解虚拟环境（venv/conda——避免「在我电脑上能跑」综合症）、知道怎么读报错信息（Traceback 是最好的老师，不要怕红色）。</p></div>
+</div>
+</div>
+
+<h3 class="sec-title-sm">📍 第二阶段：AI 核心能力（能干活了）</h3>
+<div class="lp-steps">
+<div class="lp-step">
+<div class="lp-num">5</div><div class="lp-line"></div>
+<div class="lp-content"><h4>Prompt Engineering——不是玄学，是工程</h4>
+<p>深入理解：系统提示词 vs 用户提示词、Few-shot vs Zero-shot、Chain-of-Thought、结构化输出（JSON Mode / Function Calling）、Token 限制与上下文窗口管理。这是最被低估的技能——一个优秀的 Prompt 设计者能让同样的模型产出天差地别的结果。</p></div>
+</div>
+<div class="lp-step">
+<div class="lp-num">6</div><div class="lp-line"></div>
+<div class="lp-content"><h4>RAG 全流程——企业 AI 的标配</h4>
+<p>从零搭建一个 RAG 系统：文档加载（PDF/网页/数据库）→文本分割（chunk size 是关键调参）→Embedding 模型选择（OpenAI text-embedding-3 / BGE / Jina）→向量数据库（ChromaDB 入门，Milvus/Pinecone 生产）→检索策略（语义检索 + BM25 混合检索 + Rerank）。理解为什么 RAG 比直接问 LLM 好、也比微调便宜。</p></div>
+</div>
+<div class="lp-step">
+<div class="lp-num">7</div><div class="lp-line"></div>
+<div class="lp-content"><h4>Agent 编排——从「问答」到「自动化」</h4>
+<p>学会搭建 Agent：用 LangChain/LangGraph 或 CrewAI 把 LLM、工具、记忆、规划串联起来。理解 ReAct 模式（思考→行动→观察→调整）、Function Calling 机制、多 Agent 协作（一个 Agent 做研究，另一个做写作，第三个做审核）。这是你作为 AI 应用工程师的核心竞争力。</p></div>
+</div>
+</div>
+
+<h3 class="sec-title-sm">📍 第三阶段：深度学习入门（能训练模型了）</h3>
+<div class="lp-steps">
+<div class="lp-step">
+<div class="lp-num">8</div><div class="lp-line"></div>
+<div class="lp-content"><h4>理解机器学习的基本流程（不写公式也行）</h4>
+<p>亲自跑一遍完整的 ML Pipeline：加载数据（HuggingFace datasets / Kaggle）→ 数据清洗与预处理 → 划分训练集/验证集/测试集 → 选模型 → 训练 → 评估（准确率/召回率/F1）→ 调参 → 部署。用 scikit-learn 跑一个分类任务（比如泰坦尼克号幸存预测），整个过程不超过 100 行代码，但你会建立「建模」的肌肉记忆。</p></div>
+</div>
+<div class="lp-step">
+<div class="lp-num">9</div><div class="lp-line"></div>
+<div class="lp-content"><h4>PyTorch 基础（现代深度学习的通用语言）</h4>
+<p>Tensor 是什么（多维数组 + 可自动求导）、Dataset/DataLoader（怎么喂数据）、定义模型（nn.Module）、前向传播、损失函数、优化器、训练循环。推荐从 MNIST 手写数字识别开始——输入 28×28 图片，输出 0-9。这是一个完整的「端到端」体验。</p></div>
+</div>
+<div class="lp-step">
+<div class="lp-num">10</div><div class="lp-line"></div>
+<div class="lp-content"><h4>HuggingFace 生态——站在巨人肩膀上</h4>
+<p>HuggingFace 是 AI 时代的「应用商店」。学会：用 <code>transformers</code> 库加载预训练模型、Tokenizer 的工作原理、Fine-tune（用 Trainer API 或手动写训练循环）、PEFT/LoRA 微调、模型的保存与加载。从 HuggingFace 上找一个适合你场景的模型，用 LoRA 在自己的数据上微调——这是非科班选手能做出的最有价值的事情之一。</p></div>
+</div>
+</div>
+
+<h3 class="sec-title-sm">📍 第四阶段：生产化与进阶</h3>
+<div class="lp-steps">
+<div class="lp-step">
+<div class="lp-num">11</div><div class="lp-line"></div>
+<div class="lp-content"><h4>模型部署与服务化</h4>
+<p>FastAPI 搭建推理 API、Docker 容器化、GPU 推理优化（vLLM/TGI）、模型量化（GGUF/ GPTQ——让大模型在普通电脑上跑起来）、监控与日志。一个能稳定服务的 API 比一个在 Jupyter 里跑得漂亮的模型有价值 100 倍。</p></div>
+</div>
+<div class="lp-step">
+<div class="lp-num">12</div><div class="lp-line"></div>
+<div class="lp-content"><h4>进阶方向（按兴趣选一条深耕）</h4>
+<p><b>方向 A - RAG 专家：</b>深入向量检索（HyDE、Multi-Vector、ColBERT）、Rerank 策略、知识图谱+RAG 混合、Agentic RAG（让 Agent 自主决定什么时候检索、检索什么）。<br>
+<b>方向 B - Agent 架构师：</b>多 Agent 系统的可靠性设计、Human-in-the-loop、工具设计模式、长期记忆架构。<br>
+<b>方向 C - 多模态应用：</b>图像生成流程（ComfyUI/Stable Diffusion）、视频理解与生成、语音 AI（Whisper/TTS）。<br>
+<b>方向 D - 模型训练者：</b>深入理解 Transformer 变体、分布式训练（DeepSpeed/FSDP）、数据工程（数据质量 > 模型架构）、RLHF/DPO 对齐技术。</p></div>
+</div>
+</div>
+
+<h3 class="sec-title-sm">🧰 核心工具栈速查</h3>
+<div class="skill-tree">
+<div class="skill-node"><h5>🐍 Python 生态</h5><div class="st">Python 3.10+ · pip/conda · venv · Jupyter</div></div>
+<div class="skill-node"><h5>📐 数学 & 可视化</h5><div class="st">NumPy · SciPy · Matplotlib · 3Blue1Brown</div></div>
+<div class="skill-node"><h5>📊 数据处理</h5><div class="st">Pandas · JSON/CSV · 正则表达式 · Apache Parquet</div></div>
+<div class="skill-node"><h5>🤗 模型 & 数据</h5><div class="st">HuggingFace Hub · transformers · datasets · PEFT</div></div>
+<div class="skill-node"><h5>🔗 Agent 框架</h5><div class="st">LangChain · LangGraph · CrewAI · CoPaw</div></div>
+<div class="skill-node"><h5>🔍 向量 & RAG</h5><div class="st">ChromaDB · Milvus · Pinecone · Reranker</div></div>
+<div class="skill-node"><h5>🔌 LLM API</h5><div class="st">OpenAI SDK · Anthropic SDK · Ollama(本地)</div></div>
+<div class="skill-node"><h5>🏗️ 部署</h5><div class="st">FastAPI · Docker · vLLM · GGUF/量化</div></div>
+<div class="skill-node"><h5>🖼️ 多模态</h5><div class="st">ComfyUI · Stable Diffusion · Whisper · TTS</div></div>
+<div class="skill-node"><h5>🔧 训练</h5><div class="st">PyTorch · scikit-learn · DeepSpeed · FSDP</div></div>
+<div class="skill-node"><h5>📝 辅助</h5><div class="st">Git · GitHub Copilot · Cursor · Claude Code</div></div>
+</div>
+
+<h3 class="sec-title-sm">⚡ 非科班选手的独特优势</h3>
+<div class="card-grid">
+<div class="card"><span class="card-icon">🎯</span><h3>领域知识</h3><p>你懂法律/医疗/金融/教育的业务逻辑——这是纯 CS 背景的人最缺的。AI+领域知识 = 不可替代。</p></div>
+<div class="card"><span class="card-icon">🔧</span><h3>AI 优先思维</h3><p>科班出身倾向于「自己写代码解决」，你更习惯「先问 AI 能不能做」——在 2026 年，后者效率更高。</p></div>
+<div class="card"><span class="card-icon">🧪</span><h3>快速实验</h3><p>不需要理解每个细节才动手。借助 Agent 和 AI 编程工具，你可以在几小时内搭建一个原型来验证想法。</p></div>
+<div class="card"><span class="card-icon">🗣️</span><h3>沟通与产品感</h3><p>非技术背景意味着你更理解「普通人需要什么」——这是做出好产品的核心能力，纯工程师往往缺乏。</p></div>
+</div>
+
+<div class="insight">
+<b>最重要的建议：</b>不要试图按部就班学完所有理论再动手。选一个你真正想解决的问题（比如「帮我自动整理每天的行业新闻」），然后用 AI 工具边做边学。遇到不懂的，问 Claude/GPT——它们是最好的私人教师。三个月做一个真实项目，胜过一年看教程。
+</div>
+</section>
+
+<!-- ====== MODEL COMPARISON ====== -->
+<section class="section" id="models">
+<div class="sec-title">⚖️ 主流大模型横向对比</div>
+<div style="overflow-x:auto;">
+<table class="ctbl">
+<tr><th>模型</th><th>公司</th><th>参数规模</th><th>核心优势</th><th>开源</th></tr>
+<tr><td><b>GPT-4o</b></td><td>OpenAI</td><td>~1.8T（估计）</td><td>综合能力最强，生态最成熟</td><td>❌</td></tr>
+<tr><td><b>Claude 3.5 Sonnet</b></td><td>Anthropic</td><td>未公开</td><td>200K 长上下文，代码能力顶尖</td><td>❌</td></tr>
+<tr><td><b>Gemini 2.5 Pro</b></td><td>Google</td><td>未公开</td><td>100万 token 上下文，推理领先</td><td>❌</td></tr>
+<tr><td><b>Llama 3</b></td><td>Meta</td><td>8B/70B/405B</td><td>开源标杆，可自由商用</td><td>✅</td></tr>
+<tr><td><b>Qwen 2.5</b></td><td>阿里</td><td>0.5B-72B</td><td>中文最佳，多尺寸覆盖</td><td>✅</td></tr>
+<tr><td><b>DeepSeek-V3</b></td><td>深度求索</td><td>671B MoE</td><td>极高性价比，训练仅$5.5M</td><td>✅</td></tr>
+</table>
+</div>
+</section>
+
+<!-- ====== CLOSING ====== -->
+<section class="section">
+<div class="hlb">
+<h4>💡 总结</h4>
+<p style="font-size:0.88rem;">
+<b>宏观上</b>，AI 重塑生产力-生产关系-财富分配。算力即国力，数据即资产。普通人最好的策略：成为最早拥抱 AI 的那批人。<br><br>
+<b>技术上</b>，从感知机的线性分类到 Transformer 的全局注意力，从 RNN 的串行记忆到 Agent 的自主行动——每一步演进都有内在的逻辑必然性。建立技术直觉，比记住公式更重要。<br><br>
+<b>实践上</b>，非科班不是劣势——领域知识 + AI 工具 = 超能力。不要等「学完再动手」，选一个真实问题，用 AI 辅助边做边学。三个月一个项目，胜过一年教程。
+</p>
+</div>
+</section>
+
+<footer><p>AI 全景图谱 — 2026年5月 | 保持更新，保持敏锐 🚀</p></footer>
+
+</main>
+
+<script>
+// Nav scroll highlight
+const navs=document.querySelectorAll('.side-a');
+const secs=[];
+navs.forEach(a=>{const id=a.getAttribute('href');if(id&&id.startsWith('#')&&id!=='#hero'){const el=document.getElementById(id.slice(1));if(el)secs.push({el,link:a});}});
+window.addEventListener('scroll',()=>{let cur='';secs.forEach(({el,link})=>{if(window.scrollY>=el.offsetTop-80)cur=link.getAttribute('href');});navs.forEach(a=>a.classList.remove('active'));const act=document.querySelector('.side-a[href="'+cur+'"]');if(act)act.classList.add('active');else navs[0]?.classList.add('active');
+// Back-to-top
+const btt=document.getElementById('btt');
+if(btt)btt.classList.toggle('show',window.scrollY>400);
+});
+
+// KaTeX auto-render
+renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+
+// Back-to-top click
+document.getElementById('btt').addEventListener('click',()=>{window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+
+<button id="btt" title="回到顶部">↑</button>
+
+</body>
+</html>
