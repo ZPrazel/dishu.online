@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地书 · dishu.online</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg: #faf8f5;
+    --text: #2c2416;
+    --muted: #8c8273;
+    --accent: #c7512e;
+    --card-bg: #fff;
+    --border: #e8e2d5;
+  }
+
+  body {
+    font-family: "PingFang SC", "Noto Serif SC", "Source Han Serif SC", Georgia, serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 120px 0 60px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(48px, 8vw, 80px);
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: var(--text);
+    margin-bottom: 12px;
+  }
+  .hero .subtitle {
+    font-size: 18px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .hero .domain-line {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+  }
+
+  /* Divider */
+  .divider {
+    width: 40px;
+    height: 1px;
+    background: var(--border);
+    margin: 0 auto 48px;
+  }
+
+  /* Section */
+  section {
+    margin-bottom: 64px;
+  }
+  section h2 {
+    font-size: 14px;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent);
+  }
+  .card .icon {
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  .card h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+  .card p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .card .tag {
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 2px;
+    padding: 2px 8px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Footer */
+  footer {
+    padding: 48px 0;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer a {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  footer a:hover {
+    text-decoration: underline;
+  }
+
+  .quote {
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .hero { padding: 80px 0 40px; }
+    .card-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<main class="container">
+
+  <!-- Hero -->
+  <header class="hero">
+    <h1>地 书</h1>
+    <p class="subtitle">大地上的书写 · 数字中的诗意</p>
+    <p class="domain-line">dishu.online</p>
+  </header>
+
+  <div class="divider"></div>
+
+  <!-- What -->
+  <section>
+    <h2>关于</h2>
+    <p style="font-size:16px; color:var(--muted); max-width:560px;">
+      这里收集那些<strong style="color:var(--text);">用代码和机器写在大地上的诗</strong>——
+      AI生成的图像、3D打印的触感、以及每日值得被记录的世界切片。
+    </p>
+  </section>
+
+  <!-- Projects -->
+  <section>
+    <h2>正在做的事</h2>
+    <div class="card-grid">
+
+      <div class="card">
+        <div class="icon">🎨</div>
+        <h3>AI 生图</h3>
+        <p>Stability AI 驱动的图像创作，探索算法与美学的边界。</p>
+        <span class="tag">创作中</span>
+      </div>
+
+      <div class="card">
+        <div class="icon">🖨️</div>
+        <h3>3D 打印</h3>
+        <p>从像素到触感——AI生成的画面变成可以触摸的板画与浮雕。</p>
+        <span class="tag">实验中</span>
+      </div>
+
+      <div class="card">
+        <div class="icon">📰</div>
+        <h3>浮生通讯</h3>
+        <p>AI记者、编辑、总编协作的个人新闻简报，读懂世界发生了什么。</p>
+        <span class="tag">连载中</span>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Quote -->
+  <footer>
+    <p class="quote">"大地不言，写字的人替它说话。"</p>
+    <p>&copy; 2026 <a href="https://github.com/ZPrazel">ZPrazel</a> · dishu.online</p>
+  </footer>
+
+</main>
+
+</body>
+</html>
