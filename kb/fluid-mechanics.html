@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>流体力学认知地图 · Fluid Mechanics Cognitive Map</title>
+<meta name="description" content="流体力学认知地图，从连续介质、守恒律、边界层、湍流到激波、等熵流和工程计算工具。">
+<link rel="canonical" href="https://dishu.online/kb/fluid-mechanics.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="地书">
+<meta property="og:title" content="流体力学认知地图 · Fluid Mechanics Cognitive Map">
+<meta property="og:description" content="流体力学认知地图，从连续介质、守恒律、边界层、湍流到激波、等熵流和工程计算工具。">
+<meta property="og:url" content="https://dishu.online/kb/fluid-mechanics.html">
+<link rel="stylesheet" href="../assets/css/site.css">
 <script>
 MathJax = {
   tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']], tags:'ams' },
@@ -178,29 +186,10 @@ th { background:var(--accent2); font-weight:600; }
 .sidebar::-webkit-scrollbar-thumb { background:#ccc; border-radius:3px; }
 .highlight-match { background:#ffeb3b; padding:1px 3px; border-radius:2px; }
 </style>
-<style>
-.kb-back-btn {
-  position: fixed; bottom: 28px; left: 28px; z-index: 99999;
-  background: rgba(255,255,255,0.9); backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(139,94,60,0.2);
-  border-radius: 24px; padding: 8px 18px;
-  font-size: 13px; color: #8b5e3c; text-decoration: none;
-  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  transition: all 0.25s; display: inline-flex; align-items: center; gap: 6px;
-  letter-spacing: 0.04em;
-}
-.kb-back-btn:hover {
-  background: rgba(255,255,255,1);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.12);
-  transform: translateY(-2px);
-  border-color: rgba(139,94,60,0.4);
-}
-</style>
+<script src="../assets/js/site.js" defer></script>
 </head>
 <body>
-<a href="../index.html" class="kb-back-btn">鈫?鐭ヨ瘑搴?/a>
+<a href="../index.html" class="kb-back-btn">← 知识库</a>
 
 
 <div class="progbar" id="progbar"></div>
@@ -734,7 +723,7 @@ function togTheme(){
 (function(){
   const s=localStorage.getItem(tk);
   if(s) document.documentElement.setAttribute('data-theme',s);
-  else if(window.matchMedia('(prefers-color-scheze:dark)').matches)
+  else if(window.matchMedia('(prefers-color-scheme:dark)').matches)
     document.documentElement.setAttribute('data-theme','dark');
 })();
 
