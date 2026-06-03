@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>地书 · 个人知识操作系统</title>
+<meta name="description" content="地书是一个个人知识操作系统，沉淀 AI、世界常识、历史地理、旅行、户外、格斗、器物与流体力学等知识路线。">
+<link rel="canonical" href="https://dishu.online/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="地书">
+<meta property="og:title" content="地书 · 个人知识操作系统">
+<meta property="og:description" content="把知识整理成路线、清单、工具箱和判断框架，服务长期学习与实践。">
+<meta property="og:url" content="https://dishu.online/">
+<link rel="stylesheet" href="assets/css/site.css">
+<script src="assets/js/site.js" defer></script>
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: inherit; }
+.site-home { min-height: 100vh; padding: 28px; }
+.home-wrap { width: min(1120px, 100%); margin: 0 auto; }
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 14px 0 28px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand-mark { display: grid; place-items: center; width: 40px; height: 40px; border: 1px solid var(--site-border); border-radius: 8px; background: var(--site-surface); color: var(--site-accent-2); font-weight: 800; box-shadow: 0 8px 20px rgba(38,33,22,.06); }
+.brand strong { display: block; font-size: 17px; letter-spacing: .04em; }
+.brand span { display: block; color: var(--site-muted); font-size: 12px; margin-top: 2px; }
+.topnav { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+.topnav a { padding: 7px 11px; border: 1px solid transparent; border-radius: 999px; color: var(--site-muted); font-size: 13px; text-decoration: none; }
+.topnav a:hover { border-color: var(--site-border); background: rgba(255,255,255,.62); color: var(--site-text); }
+.hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr); gap: 28px; align-items: stretch; padding: 24px 0 34px; }
+.hero-main { padding: 42px; border: 1px solid var(--site-border); border-radius: var(--site-radius); background: rgba(255,253,248,.82); box-shadow: var(--site-shadow); }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; color: var(--site-accent); font-size: 13px; font-weight: 700; letter-spacing: .08em; }
+h1 { margin: 0; max-width: 720px; color: var(--site-ink); font-size: clamp(34px, 5.4vw, 62px); line-height: 1.08; letter-spacing: 0; }
+.hero-main p { max-width: 660px; margin: 18px 0 0; color: var(--site-muted); font-size: 16px; line-height: 1.85; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 9px 15px; border-radius: 7px; border: 1px solid var(--site-border); background: var(--site-surface); color: var(--site-text); text-decoration: none; font-size: 14px; font-weight: 700; }
+.btn.primary { background: var(--site-accent); color: #fff; border-color: var(--site-accent); }
+.btn:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(38,33,22,.10); }
+.status-panel { display: flex; flex-direction: column; gap: 14px; }
+.status-card { padding: 22px; border: 1px solid var(--site-border); border-radius: var(--site-radius); background: rgba(255,253,248,.78); box-shadow: 0 8px 20px rgba(38,33,22,.06); }
+.status-card h2, .section-head h2 { margin: 0; color: var(--site-ink); font-size: 20px; letter-spacing: 0; }
+.status-list { display: grid; gap: 10px; margin-top: 16px; }
+.status-item { display: flex; justify-content: space-between; gap: 14px; color: var(--site-muted); font-size: 14px; }
+.status-item strong { color: var(--site-text); font-size: 18px; }
+.continue-link { display: block; padding: 15px 0 0; color: var(--site-accent); font-weight: 800; text-decoration: none; }
+.section { padding: 34px 0; }
+.section-head { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 18px; }
+.section-head p { margin: 6px 0 0; color: var(--site-muted); font-size: 14px; line-height: 1.7; }
+.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.domain-card, .path-card { display: flex; flex-direction: column; min-height: 225px; padding: 22px; border: 1px solid var(--site-border); border-radius: var(--site-radius); background: rgba(255,253,248,.78); box-shadow: 0 8px 18px rgba(38,33,22,.055); text-decoration: none; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.domain-card:hover, .path-card:hover { transform: translateY(-3px); border-color: rgba(47,111,103,.36); box-shadow: 0 16px 30px rgba(38,33,22,.11); }
+.card-kicker { color: var(--site-soft); font-size: 12px; font-weight: 800; letter-spacing: .08em; }
+.domain-card h3, .path-card h3 { margin: 12px 0 8px; color: var(--site-ink); font-size: 20px; line-height: 1.35; }
+.domain-card p, .path-card p { margin: 0; color: var(--site-muted); font-size: 14px; line-height: 1.72; }
+.use-case { margin-top: auto; padding-top: 18px; color: var(--site-accent-2); font-size: 13px; line-height: 1.55; }
+.tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; }
+.tag { padding: 3px 9px; border-radius: 999px; background: rgba(47,111,103,.08); color: var(--site-accent); font-size: 12px; }
+.paths { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.path-card { min-height: 190px; }
+.note-band { display: grid; grid-template-columns: .9fr 1.1fr; gap: 22px; padding: 26px; border: 1px solid var(--site-border); border-radius: var(--site-radius); background: var(--site-ink); color: #f8f4ec; }
+.note-band h2 { margin: 0; font-size: 24px; }
+.note-band p { margin: 0; color: rgba(248,244,236,.76); line-height: 1.8; }
+.footer { padding: 34px 0 10px; color: var(--site-muted); font-size: 13px; text-align: center; }
+.footer a { color: var(--site-accent); text-decoration: none; }
+@media (max-width: 900px) { .site-home { padding: 18px; } .topbar { align-items: flex-start; flex-direction: column; } .hero, .note-band { grid-template-columns: 1fr; } .hero-main { padding: 28px; } .grid, .paths { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 620px) { .grid, .paths { grid-template-columns: 1fr; } .hero-main { padding: 22px; } .status-card { padding: 18px; } .section-head { align-items: flex-start; flex-direction: column; } .domain-card, .path-card { min-height: auto; } }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"地书","url":"https://dishu.online/","description":"个人知识操作系统，沉淀长期学习路线、工具箱和判断框架。"}</script>
+</head>
+<body class="site-shell">
+<div class="site-home"><div class="home-wrap">
+<header class="topbar"><a class="brand" href="./" aria-label="地书首页"><span class="brand-mark">地</span><span><strong>地书</strong><span>dishu.online · 个人知识操作系统</span></span></a><nav class="topnav" aria-label="首页导航"><a href="#domains">知识领域</a><a href="#paths">知识路线</a><a href="#future">长期方向</a></nav></header>
+<main>
+<section class="hero" id="top"><div class="hero-main"><div class="eyebrow">持续整理 · 自用优先 · 可产品化</div><h1>把知识整理成能反复使用的路线、清单和判断框架。</h1><p>地书不是资料仓库，而是一个给自己长期使用的知识操作系统：从世界常识到 AI，从历史地理到旅行户外，把零散输入沉淀成可执行的路径。</p><div class="hero-actions"><a class="btn primary" href="kb/ai-overview.html">继续学习 AI 全景</a><a class="btn" href="#domains">查看 9 个领域</a></div></div><aside class="status-panel" aria-label="知识库状态"><div class="status-card"><h2>当前状态</h2><div class="status-list"><div class="status-item"><span>知识领域</span><strong>9</strong></div><div class="status-item"><span>重点路线</span><strong>3</strong></div><div class="status-item"><span>更新策略</span><strong>长期</strong></div></div></div><div class="status-card"><h2>最近适合打开</h2><a class="continue-link" href="kb/ai-agent.html">AI Agent 入门完全指南 →</a><a class="continue-link" href="kb/outdoor.html">户外手册：装备与行动清单 →</a></div></aside></section>
+<section class="section" id="domains"><div class="section-head"><div><h2>知识领域</h2><p>每个入口都尽量回答一个实际问题：我该如何理解、选择、行动或复盘。</p></div></div><div class="grid">
+<a class="domain-card" href="kb/world-sense.html"><span class="card-kicker">认知与技术</span><h3>世界运行常识</h3><p>政治、经济、历史与技术变量的底层框架。</p><div class="use-case">适合：看新闻、判断趋势、建立宏观坐标。</div><div class="tags"><span class="tag">常识</span><span class="tag">宏观</span></div></a>
+<a class="domain-card" href="kb/ai-overview.html"><span class="card-kicker">认知与技术</span><h3>AI 全景图谱</h3><p>从产业格局、财富逻辑到技术脉络的系统地图。</p><div class="use-case">适合：快速建立 AI 时代的判断框架。</div><div class="tags"><span class="tag">AI</span><span class="tag">路线</span></div></a>
+<a class="domain-card" href="kb/ai-agent.html"><span class="card-kicker">认知与技术</span><h3>AI Agent 入门</h3><p>本地 Agent、网页聊天、MCP、Skill、CLI 与典型工作流。</p><div class="use-case">适合：把 AI 从聊天工具变成工作系统。</div><div class="tags"><span class="tag">Agent</span><span class="tag">工具</span></div></a>
+<a class="domain-card" href="kb/history-geo.html"><span class="card-kicker">人文与地理</span><h3>中国历史地理</h3><p>用地理、交通、边疆和都城理解历史演变。</p><div class="use-case">适合：读史、旅行、理解中国空间结构。</div><div class="tags"><span class="tag">历史</span><span class="tag">地理</span></div></a>
+<a class="domain-card" href="kb/artifacts.html"><span class="card-kicker">人文与地理</span><h3>器物志</h3><p>博物馆、文物、古建与石窟的入门观看方法。</p><div class="use-case">适合：逛馆、看古建、把审美变成方法。</div><div class="tags"><span class="tag">文物</span><span class="tag">古建</span></div></a>
+<a class="domain-card" href="kb/travel.html"><span class="card-kicker">人文与地理</span><h3>全国旅行入门</h3><p>路线、季节、预算、玩法和目的地选择框架。</p><div class="use-case">适合：从想去哪里，变成知道怎么去。</div><div class="tags"><span class="tag">旅行</span><span class="tag">规划</span></div></a>
+<a class="domain-card" href="kb/combat.html"><span class="card-kicker">身体与自然</span><h3>格斗修炼手册</h3><p>拳击、体能、防守、训练计划和冲突边界。</p><div class="use-case">适合：系统训练身体，而不是只收藏教程。</div><div class="tags"><span class="tag">训练</span><span class="tag">安全</span></div></a>
+<a class="domain-card" href="kb/outdoor.html"><span class="card-kicker">身体与自然</span><h3>户外手册</h3><p>自驾、露营、野炊、垂钓、徒步、摄影与生存基础。</p><div class="use-case">适合：把出门玩变成可复用的行动清单。</div><div class="tags"><span class="tag">户外</span><span class="tag">清单</span></div></a>
+<a class="domain-card" href="kb/fluid-mechanics.html"><span class="card-kicker">身体与自然</span><h3>流体力学认知地图</h3><p>从连续介质到边界层、湍流、激波和工程工具箱。</p><div class="use-case">适合：用认知地图进入一门硬学科。</div><div class="tags"><span class="tag">物理</span><span class="tag">工程</span></div></a>
+</div></section>
+<section class="section" id="paths"><div class="section-head"><div><h2>知识路线</h2><p>未来最有产品化潜力的不是孤立文章，而是能带人完成一段成长的路线。</p></div></div><div class="grid paths"><a class="path-card" href="kb/ai-overview.html#engineer"><span class="card-kicker">路线 01</span><h3>AI 应用工程师</h3><p>从 Python、Prompt、RAG、Agent 到生产化的非科班路径。</p></a><a class="path-card" href="kb/travel.html#routes"><span class="card-kicker">路线 02</span><h3>中国旅行能力</h3><p>把目的地、季节、预算和路线组合成可执行计划。</p></a><a class="path-card" href="kb/history-geo.html"><span class="card-kicker">路线 03</span><h3>历史地理通识</h3><p>用空间、交通、资源和边疆重读中国历史。</p></a></div></section>
+<section class="section" id="future"><div class="note-band"><h2>长期方向</h2><p>AI 会让普通知识越来越容易获得，但不会自动替你筛选重点、设计路径、形成判断、完成实践。地书要沉淀的是这些更耐用的部分：路线图、检查清单、工具箱、案例复盘和个人经验。</p></div></section>
+</main><footer class="footer"><p>© 2026 <a href="https://github.com/ZPrazel" target="_blank" rel="noopener noreferrer">ZPrazel</a> · 地书知识库 · 持续生长中</p></footer>
+</div></div>
+</body>
+</html>
